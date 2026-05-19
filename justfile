@@ -145,6 +145,7 @@ gmodule:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
         -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 gio:
     rm -f glib/gio/gio*.odin
 
@@ -163,6 +164,77 @@ gio:
 
     sed glib/gio/gio-Linux.odin -i \
         -e '0,/.*gio_runic "system:gio-2\.0"/ s#.*gio_runic "system:gio-2\.0".*##'
+    
+    just -f "{{ justfile() }}" gio-generate-type-casts
+
+[unix]
+gio-generate-type-casts:
+    #! /bin/bash
+
+    OUTPUT_FILE="./glib/gio/type_casts.odin"
+
+    cat > "$OUTPUT_FILE" << 'EOF'
+    package gio
+
+    import "base:intrinsics"
+    import glib ".."
+    import gobj "../gobject"
+
+    EOF
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" =~ ^TYPE_([A-Z0-9_]+)[[:space:]]*::[[:space:]]*(.+)_get_type[[:space:]]*$ ]]; then
+            UPPER_NAME="${BASH_REMATCH[1]}"
+            GET_TYPE_NAME="${BASH_REMATCH[2]}"
+            
+            # If an error quark exists I don't want to generate something
+            if grep "${GET_TYPE_NAME}_quark" "./glib/gio/gio.odin" > /dev/null; then
+                continue
+            fi
+            
+            PASCAL_NAME=$(echo "$GET_TYPE_NAME" | sed -r 's/(^|_)([a-z])/\U\2/g')
+            
+            CAST_PROC_NAME="$UPPER_NAME"
+            IS_PROC_NAME="IS_$UPPER_NAME"
+            
+            if printf "$PASCAL_NAME" | grep 'Dbus' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Dbus#DBus#')
+            elif printf "$PASCAL_NAME" | grep '[a-z]Fd[A-Z]' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#(.*)Fd(.*)#\1FD\2#')
+            elif printf "$PASCAL_NAME" | grep 'Io' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Io#IO#')
+            elif printf "$PASCAL_NAME" | grep 'Ip' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Ip#IP#')
+            fi
+
+            cat >> "$OUTPUT_FILE" << EOF
+    ${CAST_PROC_NAME} :: #force_inline proc "contextless" (
+    	ptr: \$Ptr,
+    ) -> ^${PASCAL_NAME} where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_cast(${PASCAL_NAME}, ptr, TYPE_${UPPER_NAME})
+    }
+
+    ${IS_PROC_NAME} :: #force_inline proc "contextless"(
+    	ptr: \$Ptr,
+    ) -> glib.boolean where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_is(ptr, TYPE_${UPPER_NAME})
+    }
+
+    EOF
+        fi
+    done < "./glib/gio/gio.odin"
+    
+    
+    cat >> "$OUTPUT_FILE" << 'EOF'
+    
+    @(private="file")
+    just_do_absolutely_nothing :: #force_inline proc "contextless" () -> gobj.Type { return TYPE_CREDENTIALS() }
+    
+    EOF
+    
+    if command -v 'odinfmt' > /dev/null 2>&1; then
+        odinfmt -w "$OUTPUT_FILE"
+    fi
 
 girepository:
     rm -f glib/girepository/girepository*.odin

@@ -631,11 +631,7 @@ main :: proc() {
 
     gobj.signal_connect(app, "activate", activate)
 
-    status := gio.application_run(
-        gobj.type_cast(gio.Application, app, gio.TYPE_APPLICATION),
-        0,
-        nil,
-    )
+    status := gio.application_run(gio.APPLICATION(app), 0, nil)
 
     assert(status == 0)
 }

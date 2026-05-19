@@ -77,11 +77,7 @@ main :: proc() {
     }
     defer for arg in argv do delete(arg)
 
-    status := gio.application_run(
-        gobj.type_cast(gio.Application, app, gio.TYPE_APPLICATION),
-        argc,
-        raw_data(argv),
-    )
+    status := gio.application_run(gio.APPLICATION(app), argc, raw_data(argv))
     if status != 0 {
         os.exit(int(status))
     }
