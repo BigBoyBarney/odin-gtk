@@ -1,6 +1,6 @@
 set windows-shell := ['powershell.exe']
 
-default: setup wrapper
+default: setup
 
 setup: glib-setup gdk-pixbuf-setup cairo-setup pango-setup graphene-setup gtk-setup adwaita-setup
 
@@ -8,7 +8,6 @@ bindings: glib-all gdk-pixbuf cairo pango-all graphene gtk gtk-layer-shell adwai
 glib-all: glib gobject gmodule gio girepository
 pango-all: pango pangocairo
 
-wrapper CC='cc': (gtk-wrapper CC) (adwaita-wrapper CC)
 build: glib-build cairo-build gtk-build
 
 clean: glib-clean gdk-pixbuf-clean gtk-clean adwaita-clean
@@ -412,19 +411,6 @@ gtk-generate-type-casts:
         odinfmt -w "$OUTPUT_FILE"
     fi
 
-[unix]
-gtk-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o -Ishared/gtk -Ishared/glib -Ishared/glib/glib -Ishared/glib/gmodule -Ishared/glib/_build -Ishared/glib/_build/glib -Ishared/gtk/_build -Ishared/cairo/src -Ishared/cairo/_build/src -Ishared/pango -Ishared/pango/_build -Ishared/gdk-pixbuf -Ishared/gdk-pixbuf/_build -Ishared/graphene/include -Ishared/graphene/_build/include -I/usr/include/harfbuzz gtk/gtk-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgtk-wrapper.a lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o
-
-[windows]
-gtk-wrapper CC='clang':
-    clang -c -O2 '-DGTK_COMPILATION' '-Ishared/gvsbuild/extract/include/gtk-4.0' '-Ishared/gvsbuild/extract/lib/gtk-4.0/include' '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule' '-Ishared/gvsbuild/extract/include/cairo' '-Ishared/gvsbuild/extract/include/pango-1.0' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0' '-Ishared/gvsbuild/extract/include/graphene-1.0' '-Ishared/gvsbuild/extract/lib/graphene-1.0/include' '-Ishared/gvsbuild/extract/include/harfbuzz' -o lib/{{ os() }}/{{ arch() }}/gtk-wrapper.obj gtk/gtk-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\gtk-wrapper.lib lib\{{ os() }}\{{ arch() }}\gtk-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\gtk-wrapper.obj
-
 gtk-layer-shell:
     {{ RUNIC }} gtk/layer-shell/rune.yml
 
@@ -445,6 +431,7 @@ adwaita-setup:
 
     rm -rf shared/adwaita/subprojects/.wraplock shared/adwaita/subprojects/libsass.wrap
 
+[unix]
 adwaita:
     {{ RUNIC }} adwaita/rune.yml
     sed adwaita/adwaita.odin -i \
@@ -452,20 +439,63 @@ adwaita:
         -e '/^TYPE/ {s/`(//; s/())`//; s/ adw_/ /}' \
         -e '/^DURATION_INFINITE/ {s/`//g; s/([a-zA-Z0-9_]\+)//g}' \
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Adw\1$##' \
-        -e 's#^_Adw\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e 's#^_Adw\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
+
+    just -f "{{ justfile() }}" adwaita-generate-type-casts
 
 [unix]
-adwaita-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o -Ishared/gtk -Ishared/glib -Ishared/glib/glib -Ishared/glib/gmodule -Ishared/glib/_build -Ishared/glib/_build/glib -Ishared/gtk/_build -Ishared/cairo/src -Ishared/cairo/_build/src -Ishared/pango -Ishared/pango/_build -Ishared/gdk-pixbuf -Ishared/gdk-pixbuf/_build -Ishared/graphene/include -Ishared/graphene/_build/include -Ishared/adwaita/_build/src -I/usr/include/harfbuzz adwaita/adwaita-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libadwaita-wrapper.a lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o
+adwaita-generate-type-casts:
+    #! /bin/bash
 
-[windows]
-adwaita-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/gtk-4.0' '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/cairo' '-Ishared/gvsbuild/extract/include/pango-1.0' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0' '-Ishared/gvsbuild/extract/include/graphene-1.0' '-Ishared/gvsbuild/extract/lib/graphene-1.0/include' '-Ishared/gvsbuild/extract/include/libadwaita-1' '-Ishared/gvsbuild/extract/include/harfbuzz' -o lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.obj adwaita/adwaita-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.lib lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.obj
+    OUTPUT_FILE="./adwaita/type_casts.odin"
+
+    cat > "$OUTPUT_FILE" << 'EOF'
+    package adwaita
+
+    import "base:intrinsics"
+    import glib "../glib"
+    import gobj "../glib/gobject"
+
+    EOF
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" =~ ^TYPE_([A-Z0-9_]+)[[:space:]]*::[[:space:]]*(.+)_get_type[[:space:]]*$ ]]; then
+            UPPER_NAME="${BASH_REMATCH[1]}"
+            GET_TYPE_NAME="${BASH_REMATCH[2]}"
+
+            PASCAL_NAME=$(echo "$GET_TYPE_NAME" | sed -r 's/(^|_)([a-z])/\U\2/g')
+
+            CAST_PROC_NAME="$UPPER_NAME"
+            IS_PROC_NAME="IS_$UPPER_NAME"
+
+            cat >> "$OUTPUT_FILE" << EOF
+    ${CAST_PROC_NAME} :: #force_inline proc "contextless" (
+    	ptr: \$Ptr,
+    ) -> ^${PASCAL_NAME} where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_cast(${PASCAL_NAME}, ptr, TYPE_${UPPER_NAME})
+    }
+
+    ${IS_PROC_NAME} :: #force_inline proc "contextless"(
+    	ptr: \$Ptr,
+    ) -> glib.boolean where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_is(ptr, TYPE_${UPPER_NAME})
+    }
+
+    EOF
+        fi
+    done < "./adwaita/adwaita.odin"
+
+
+    cat >> "$OUTPUT_FILE" << 'EOF'
+    
+    @(private="file")
+    just_do_absolutely_nothing :: #force_inline proc "contextless" () -> gobj.Type { return TYPE_BREAKPOINT() }
+    
+    EOF
+
+    if command -v 'odinfmt' > /dev/null 2>&1; then
+        odinfmt -w "$OUTPUT_FILE"
+    fi
 
 adwaita-clean:
     rm -rf \

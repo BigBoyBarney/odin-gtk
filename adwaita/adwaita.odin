@@ -942,12 +942,6 @@ foreign adwaita_runic {
     @(link_name = "adw_about_dialog_new")
     about_dialog_new :: proc() -> ^Dialog ---
 
-    @(link_name = "adw_about_dialog_new_from_appdata")
-    about_dialog_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^Dialog ---
-
-    @(link_name = "adw_about_dialog_get_appdata_resource_path")
-    about_dialog_get_appdata_resource_path :: proc(self: ^AboutDialog) -> cstring ---
-
     @(link_name = "adw_about_dialog_get_application_name")
     about_dialog_get_application_name :: proc(self: ^AboutDialog) -> cstring ---
 
@@ -1086,9 +1080,6 @@ foreign adwaita_runic {
     @(link_name = "adw_show_about_dialog")
     show_about_dialog :: proc(parent: ^gtk.Widget, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
-    @(link_name = "adw_show_about_dialog_from_appdata")
-    show_about_dialog_from_appdata :: proc(parent: ^gtk.Widget, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
-
     @(link_name = "adw_window_get_type")
     window_get_type :: proc() -> gobj.Type ---
 
@@ -1124,9 +1115,6 @@ foreign adwaita_runic {
 
     @(link_name = "adw_about_window_new")
     about_window_new :: proc() -> ^gtk.Widget ---
-
-    @(link_name = "adw_about_window_new_from_appdata")
-    about_window_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^gtk.Widget ---
 
     @(link_name = "adw_about_window_get_application_name")
     about_window_get_application_name :: proc(self: ^AboutWindow) -> cstring ---
@@ -1262,9 +1250,6 @@ foreign adwaita_runic {
 
     @(link_name = "adw_show_about_window")
     show_about_window :: proc(parent: ^gtk.Window, first_property_name: cstring, #c_vararg var_args: ..any) ---
-
-    @(link_name = "adw_show_about_window_from_appdata")
-    show_about_window_from_appdata :: proc(parent: ^gtk.Window, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
     @(link_name = "adw_accent_color_to_rgba")
     accent_color_to_rgba :: proc(self: AccentColor, rgba: ^gtk.RGBA) ---
@@ -4974,788 +4959,28 @@ foreign adwaita_runic {
     @(link_name = "adw_wrap_box_remove_all")
     wrap_box_remove_all :: proc(self: ^WrapBox) ---
 
-    @(link_name = "ADW_BREAKPOINT_wrapper")
-    BREAKPOINT :: proc(ptr: glib.pointer) -> ^Breakpoint ---
+}
 
-    @(link_name = "ADW_IS_BREAKPOINT_wrapper")
-    IS_BREAKPOINT :: proc(ptr: glib.pointer) -> glib.boolean ---
+when (ODIN_OS == .Linux) {
 
-    @(link_name = "ADW_DIALOG_wrapper")
-    DIALOG :: proc(ptr: glib.pointer) -> ^Dialog ---
+@(default_calling_convention = "c")
+foreign adwaita_runic {
+    @(link_name = "adw_about_dialog_new_from_appdata")
+    about_dialog_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^Dialog ---
 
-    @(link_name = "ADW_DIALOG_CLASS_wrapper")
-    DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^DialogClass ---
+    @(link_name = "adw_about_dialog_get_appdata_resource_path")
+    about_dialog_get_appdata_resource_path :: proc(self: ^AboutDialog) -> cstring ---
 
-    @(link_name = "ADW_IS_DIALOG_wrapper")
-    IS_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
+    @(link_name = "adw_show_about_dialog_from_appdata")
+    show_about_dialog_from_appdata :: proc(parent: ^gtk.Widget, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
-    @(link_name = "ADW_IS_DIALOG_CLASS_wrapper")
-    IS_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
+    @(link_name = "adw_about_window_new_from_appdata")
+    about_window_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^gtk.Widget ---
 
-    @(link_name = "ADW_DIALOG_GET_CLASS_wrapper")
-    DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^DialogClass ---
+    @(link_name = "adw_show_about_window_from_appdata")
+    show_about_window_from_appdata :: proc(parent: ^gtk.Window, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
-    @(link_name = "ADW_ABOUT_DIALOG_wrapper")
-    ABOUT_DIALOG :: proc(ptr: glib.pointer) -> ^AboutDialog ---
-
-    @(link_name = "ADW_IS_ABOUT_DIALOG_wrapper")
-    IS_ABOUT_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WINDOW_wrapper")
-    WINDOW :: proc(ptr: glib.pointer) -> ^Window ---
-
-    @(link_name = "ADW_WINDOW_CLASS_wrapper")
-    WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^WindowClass ---
-
-    @(link_name = "ADW_IS_WINDOW_wrapper")
-    IS_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_WINDOW_CLASS_wrapper")
-    IS_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WINDOW_GET_CLASS_wrapper")
-    WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^WindowClass ---
-
-    @(link_name = "ADW_ABOUT_WINDOW_wrapper")
-    ABOUT_WINDOW :: proc(ptr: glib.pointer) -> ^AboutWindow ---
-
-    @(link_name = "ADW_IS_ABOUT_WINDOW_wrapper")
-    IS_ABOUT_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_wrapper")
-    PREFERENCES_ROW :: proc(ptr: glib.pointer) -> ^PreferencesRow ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_CLASS_wrapper")
-    PREFERENCES_ROW_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesRowClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_ROW_wrapper")
-    IS_PREFERENCES_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_ROW_CLASS_wrapper")
-    IS_PREFERENCES_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_GET_CLASS_wrapper")
-    PREFERENCES_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesRowClass ---
-
-    @(link_name = "ADW_ACTION_ROW_wrapper")
-    ACTION_ROW :: proc(ptr: glib.pointer) -> ^ActionRow ---
-
-    @(link_name = "ADW_ACTION_ROW_CLASS_wrapper")
-    ACTION_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ActionRowClass ---
-
-    @(link_name = "ADW_IS_ACTION_ROW_wrapper")
-    IS_ACTION_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ACTION_ROW_CLASS_wrapper")
-    IS_ACTION_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ACTION_ROW_GET_CLASS_wrapper")
-    ACTION_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ActionRowClass ---
-
-    @(link_name = "ADW_ALERT_DIALOG_wrapper")
-    ALERT_DIALOG :: proc(ptr: glib.pointer) -> ^AlertDialog ---
-
-    @(link_name = "ADW_ALERT_DIALOG_CLASS_wrapper")
-    ALERT_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^AlertDialogClass ---
-
-    @(link_name = "ADW_IS_ALERT_DIALOG_wrapper")
-    IS_ALERT_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ALERT_DIALOG_CLASS_wrapper")
-    IS_ALERT_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ALERT_DIALOG_GET_CLASS_wrapper")
-    ALERT_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^AlertDialogClass ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_wrapper")
-    ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^AnimationTarget ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_CLASS_wrapper")
-    ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationTargetClass ---
-
-    @(link_name = "ADW_IS_ANIMATION_TARGET_wrapper")
-    IS_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ANIMATION_TARGET_CLASS_wrapper")
-    IS_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_GET_CLASS_wrapper")
-    ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationTargetClass ---
-
-    @(link_name = "ADW_NONE_ANIMATION_TARGET_wrapper")
-    NONE_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^NoneAnimationTarget ---
-
-    @(link_name = "ADW_NONE_ANIMATION_TARGET_CLASS_wrapper")
-    NONE_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^NoneAnimationTargetClass ---
-
-    @(link_name = "ADW_IS_NONE_ANIMATION_TARGET_wrapper")
-    IS_NONE_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_NONE_ANIMATION_TARGET_CLASS_wrapper")
-    IS_NONE_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_NONE_ANIMATION_TARGET_GET_CLASS_wrapper")
-    NONE_ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^NoneAnimationTargetClass ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_wrapper")
-    CALLBACK_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^CallbackAnimationTarget ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_CLASS_wrapper")
-    CALLBACK_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^CallbackAnimationTargetClass ---
-
-    @(link_name = "ADW_IS_CALLBACK_ANIMATION_TARGET_wrapper")
-    IS_CALLBACK_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_CALLBACK_ANIMATION_TARGET_CLASS_wrapper")
-    IS_CALLBACK_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_GET_CLASS_wrapper")
-    CALLBACK_ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^CallbackAnimationTargetClass ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_wrapper")
-    PROPERTY_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^PropertyAnimationTarget ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_CLASS_wrapper")
-    PROPERTY_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^PropertyAnimationTargetClass ---
-
-    @(link_name = "ADW_IS_PROPERTY_ANIMATION_TARGET_wrapper")
-    IS_PROPERTY_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PROPERTY_ANIMATION_TARGET_CLASS_wrapper")
-    IS_PROPERTY_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_GET_CLASS_wrapper")
-    PROPERTY_ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^PropertyAnimationTargetClass ---
-
-    @(link_name = "ADW_ANIMATION_wrapper")
-    ANIMATION :: proc(ptr: glib.pointer) -> ^Animation ---
-
-    @(link_name = "ADW_ANIMATION_CLASS_wrapper")
-    ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^AnimationClass ---
-
-    @(link_name = "ADW_IS_ANIMATION_wrapper")
-    IS_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ANIMATION_CLASS_wrapper")
-    IS_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ANIMATION_GET_CLASS_wrapper")
-    ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationClass ---
-
-    @(link_name = "ADW_STYLE_MANAGER_wrapper")
-    STYLE_MANAGER :: proc(ptr: glib.pointer) -> ^StyleManager ---
-
-    @(link_name = "ADW_IS_STYLE_MANAGER_wrapper")
-    IS_STYLE_MANAGER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_APPLICATION_wrapper")
-    APPLICATION :: proc(ptr: glib.pointer) -> ^Application ---
-
-    @(link_name = "ADW_APPLICATION_CLASS_wrapper")
-    APPLICATION_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationClass ---
-
-    @(link_name = "ADW_IS_APPLICATION_wrapper")
-    IS_APPLICATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_APPLICATION_CLASS_wrapper")
-    IS_APPLICATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_APPLICATION_GET_CLASS_wrapper")
-    APPLICATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationClass ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_wrapper")
-    APPLICATION_WINDOW :: proc(ptr: glib.pointer) -> ^ApplicationWindow ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_CLASS_wrapper")
-    APPLICATION_WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationWindowClass ---
-
-    @(link_name = "ADW_IS_APPLICATION_WINDOW_wrapper")
-    IS_APPLICATION_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_APPLICATION_WINDOW_CLASS_wrapper")
-    IS_APPLICATION_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_GET_CLASS_wrapper")
-    APPLICATION_WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationWindowClass ---
-
-    @(link_name = "ADW_AVATAR_wrapper")
-    AVATAR :: proc(ptr: glib.pointer) -> ^Avatar ---
-
-    @(link_name = "ADW_IS_AVATAR_wrapper")
-    IS_AVATAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BANNER_wrapper")
-    BANNER :: proc(ptr: glib.pointer) -> ^Banner ---
-
-    @(link_name = "ADW_IS_BANNER_wrapper")
-    IS_BANNER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BIN_wrapper")
-    BIN :: proc(ptr: glib.pointer) -> ^Bin ---
-
-    @(link_name = "ADW_BIN_CLASS_wrapper")
-    BIN_CLASS :: proc(ptr: glib.pointer) -> ^BinClass ---
-
-    @(link_name = "ADW_IS_BIN_wrapper")
-    IS_BIN :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_BIN_CLASS_wrapper")
-    IS_BIN_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BIN_GET_CLASS_wrapper")
-    BIN_GET_CLASS :: proc(ptr: glib.pointer) -> ^BinClass ---
-
-    @(link_name = "ADW_BOTTOM_SHEET_wrapper")
-    BOTTOM_SHEET :: proc(ptr: glib.pointer) -> ^BottomSheet ---
-
-    @(link_name = "ADW_IS_BOTTOM_SHEET_wrapper")
-    IS_BOTTOM_SHEET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_wrapper")
-    BREAKPOINT_BIN :: proc(ptr: glib.pointer) -> ^BreakpointBin ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_CLASS_wrapper")
-    BREAKPOINT_BIN_CLASS :: proc(ptr: glib.pointer) -> ^BreakpointBinClass ---
-
-    @(link_name = "ADW_IS_BREAKPOINT_BIN_wrapper")
-    IS_BREAKPOINT_BIN :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_BREAKPOINT_BIN_CLASS_wrapper")
-    IS_BREAKPOINT_BIN_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_GET_CLASS_wrapper")
-    BREAKPOINT_BIN_GET_CLASS :: proc(ptr: glib.pointer) -> ^BreakpointBinClass ---
-
-    @(link_name = "ADW_BUTTON_CONTENT_wrapper")
-    BUTTON_CONTENT :: proc(ptr: glib.pointer) -> ^ButtonContent ---
-
-    @(link_name = "ADW_IS_BUTTON_CONTENT_wrapper")
-    IS_BUTTON_CONTENT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BUTTON_ROW_wrapper")
-    BUTTON_ROW :: proc(ptr: glib.pointer) -> ^ButtonRow ---
-
-    @(link_name = "ADW_IS_BUTTON_ROW_wrapper")
-    IS_BUTTON_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CAROUSEL_wrapper")
-    CAROUSEL :: proc(ptr: glib.pointer) -> ^Carousel ---
-
-    @(link_name = "ADW_IS_CAROUSEL_wrapper")
-    IS_CAROUSEL :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CAROUSEL_INDICATOR_DOTS_wrapper")
-    CAROUSEL_INDICATOR_DOTS :: proc(ptr: glib.pointer) -> ^CarouselIndicatorDots ---
-
-    @(link_name = "ADW_IS_CAROUSEL_INDICATOR_DOTS_wrapper")
-    IS_CAROUSEL_INDICATOR_DOTS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CAROUSEL_INDICATOR_LINES_wrapper")
-    CAROUSEL_INDICATOR_LINES :: proc(ptr: glib.pointer) -> ^CarouselIndicatorLines ---
-
-    @(link_name = "ADW_IS_CAROUSEL_INDICATOR_LINES_wrapper")
-    IS_CAROUSEL_INDICATOR_LINES :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CLAMP_wrapper")
-    CLAMP :: proc(ptr: glib.pointer) -> ^Clamp ---
-
-    @(link_name = "ADW_IS_CLAMP_wrapper")
-    IS_CLAMP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CLAMP_LAYOUT_wrapper")
-    CLAMP_LAYOUT :: proc(ptr: glib.pointer) -> ^ClampLayout ---
-
-    @(link_name = "ADW_IS_CLAMP_LAYOUT_wrapper")
-    IS_CLAMP_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CLAMP_SCROLLABLE_wrapper")
-    CLAMP_SCROLLABLE :: proc(ptr: glib.pointer) -> ^ClampScrollable ---
-
-    @(link_name = "ADW_IS_CLAMP_SCROLLABLE_wrapper")
-    IS_CLAMP_SCROLLABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_COMBO_ROW_wrapper")
-    COMBO_ROW :: proc(ptr: glib.pointer) -> ^ComboRow ---
-
-    @(link_name = "ADW_COMBO_ROW_CLASS_wrapper")
-    COMBO_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ComboRowClass ---
-
-    @(link_name = "ADW_IS_COMBO_ROW_wrapper")
-    IS_COMBO_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_COMBO_ROW_CLASS_wrapper")
-    IS_COMBO_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_COMBO_ROW_GET_CLASS_wrapper")
-    COMBO_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ComboRowClass ---
-
-    @(link_name = "ADW_ENTRY_ROW_wrapper")
-    ENTRY_ROW :: proc(ptr: glib.pointer) -> ^EntryRow ---
-
-    @(link_name = "ADW_ENTRY_ROW_CLASS_wrapper")
-    ENTRY_ROW_CLASS :: proc(ptr: glib.pointer) -> ^EntryRowClass ---
-
-    @(link_name = "ADW_IS_ENTRY_ROW_wrapper")
-    IS_ENTRY_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ENTRY_ROW_CLASS_wrapper")
-    IS_ENTRY_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ENTRY_ROW_GET_CLASS_wrapper")
-    ENTRY_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^EntryRowClass ---
-
-    @(link_name = "ADW_ENUM_LIST_ITEM_wrapper")
-    ENUM_LIST_ITEM :: proc(ptr: glib.pointer) -> ^EnumListItem ---
-
-    @(link_name = "ADW_IS_ENUM_LIST_ITEM_wrapper")
-    IS_ENUM_LIST_ITEM :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ENUM_LIST_MODEL_wrapper")
-    ENUM_LIST_MODEL :: proc(ptr: glib.pointer) -> ^EnumListModel ---
-
-    @(link_name = "ADW_IS_ENUM_LIST_MODEL_wrapper")
-    IS_ENUM_LIST_MODEL :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_EXPANDER_ROW_wrapper")
-    EXPANDER_ROW :: proc(ptr: glib.pointer) -> ^ExpanderRow ---
-
-    @(link_name = "ADW_EXPANDER_ROW_CLASS_wrapper")
-    EXPANDER_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ExpanderRowClass ---
-
-    @(link_name = "ADW_IS_EXPANDER_ROW_wrapper")
-    IS_EXPANDER_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_EXPANDER_ROW_CLASS_wrapper")
-    IS_EXPANDER_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_EXPANDER_ROW_GET_CLASS_wrapper")
-    EXPANDER_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ExpanderRowClass ---
-
-    @(link_name = "ADW_FLAP_wrapper")
-    FLAP :: proc(ptr: glib.pointer) -> ^Flap ---
-
-    @(link_name = "ADW_IS_FLAP_wrapper")
-    IS_FLAP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_HEADER_BAR_wrapper")
-    HEADER_BAR :: proc(ptr: glib.pointer) -> ^HeaderBar ---
-
-    @(link_name = "ADW_IS_HEADER_BAR_wrapper")
-    IS_HEADER_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_STACK_PAGE_wrapper")
-    VIEW_STACK_PAGE :: proc(ptr: glib.pointer) -> ^ViewStackPage ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_PAGE_wrapper")
-    IS_VIEW_STACK_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_STACK_wrapper")
-    VIEW_STACK :: proc(ptr: glib.pointer) -> ^ViewStack ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_wrapper")
-    IS_VIEW_STACK :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_STACK_PAGES_wrapper")
-    VIEW_STACK_PAGES :: proc(ptr: glib.pointer) -> ^ViewStackPages ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_PAGES_wrapper")
-    IS_VIEW_STACK_PAGES :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_INLINE_VIEW_SWITCHER_wrapper")
-    INLINE_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> ^InlineViewSwitcher ---
-
-    @(link_name = "ADW_IS_INLINE_VIEW_SWITCHER_wrapper")
-    IS_INLINE_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_LAYOUT_wrapper")
-    LAYOUT :: proc(ptr: glib.pointer) -> ^Layout ---
-
-    @(link_name = "ADW_IS_LAYOUT_wrapper")
-    IS_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_LAYOUT_SLOT_wrapper")
-    LAYOUT_SLOT :: proc(ptr: glib.pointer) -> ^LayoutSlot ---
-
-    @(link_name = "ADW_IS_LAYOUT_SLOT_wrapper")
-    IS_LAYOUT_SLOT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_LEAFLET_PAGE_wrapper")
-    LEAFLET_PAGE :: proc(ptr: glib.pointer) -> ^LeafletPage ---
-
-    @(link_name = "ADW_IS_LEAFLET_PAGE_wrapper")
-    IS_LEAFLET_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_LEAFLET_wrapper")
-    LEAFLET :: proc(ptr: glib.pointer) -> ^Leaflet ---
-
-    @(link_name = "ADW_IS_LEAFLET_wrapper")
-    IS_LEAFLET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_wrapper")
-    MESSAGE_DIALOG :: proc(ptr: glib.pointer) -> ^MessageDialog ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_CLASS_wrapper")
-    MESSAGE_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^MessageDialogClass ---
-
-    @(link_name = "ADW_IS_MESSAGE_DIALOG_wrapper")
-    IS_MESSAGE_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_MESSAGE_DIALOG_CLASS_wrapper")
-    IS_MESSAGE_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_GET_CLASS_wrapper")
-    MESSAGE_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^MessageDialogClass ---
-
-    @(link_name = "ADW_MULTI_LAYOUT_VIEW_wrapper")
-    MULTI_LAYOUT_VIEW :: proc(ptr: glib.pointer) -> ^MultiLayoutView ---
-
-    @(link_name = "ADW_IS_MULTI_LAYOUT_VIEW_wrapper")
-    IS_MULTI_LAYOUT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_wrapper")
-    NAVIGATION_PAGE :: proc(ptr: glib.pointer) -> ^NavigationPage ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_CLASS_wrapper")
-    NAVIGATION_PAGE_CLASS :: proc(ptr: glib.pointer) -> ^NavigationPageClass ---
-
-    @(link_name = "ADW_IS_NAVIGATION_PAGE_wrapper")
-    IS_NAVIGATION_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_NAVIGATION_PAGE_CLASS_wrapper")
-    IS_NAVIGATION_PAGE_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_GET_CLASS_wrapper")
-    NAVIGATION_PAGE_GET_CLASS :: proc(ptr: glib.pointer) -> ^NavigationPageClass ---
-
-    @(link_name = "ADW_NAVIGATION_VIEW_wrapper")
-    NAVIGATION_VIEW :: proc(ptr: glib.pointer) -> ^NavigationView ---
-
-    @(link_name = "ADW_IS_NAVIGATION_VIEW_wrapper")
-    IS_NAVIGATION_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_NAVIGATION_SPLIT_VIEW_wrapper")
-    NAVIGATION_SPLIT_VIEW :: proc(ptr: glib.pointer) -> ^NavigationSplitView ---
-
-    @(link_name = "ADW_IS_NAVIGATION_SPLIT_VIEW_wrapper")
-    IS_NAVIGATION_SPLIT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_OVERLAY_SPLIT_VIEW_wrapper")
-    OVERLAY_SPLIT_VIEW :: proc(ptr: glib.pointer) -> ^OverlaySplitView ---
-
-    @(link_name = "ADW_IS_OVERLAY_SPLIT_VIEW_wrapper")
-    IS_OVERLAY_SPLIT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PASSWORD_ENTRY_ROW_wrapper")
-    PASSWORD_ENTRY_ROW :: proc(ptr: glib.pointer) -> ^PasswordEntryRow ---
-
-    @(link_name = "ADW_IS_PASSWORD_ENTRY_ROW_wrapper")
-    IS_PASSWORD_ENTRY_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_wrapper")
-    PREFERENCES_GROUP :: proc(ptr: glib.pointer) -> ^PreferencesGroup ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_CLASS_wrapper")
-    PREFERENCES_GROUP_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesGroupClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_GROUP_wrapper")
-    IS_PREFERENCES_GROUP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_GROUP_CLASS_wrapper")
-    IS_PREFERENCES_GROUP_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_GET_CLASS_wrapper")
-    PREFERENCES_GROUP_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesGroupClass ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_wrapper")
-    PREFERENCES_PAGE :: proc(ptr: glib.pointer) -> ^PreferencesPage ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_CLASS_wrapper")
-    PREFERENCES_PAGE_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesPageClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_PAGE_wrapper")
-    IS_PREFERENCES_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_PAGE_CLASS_wrapper")
-    IS_PREFERENCES_PAGE_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_GET_CLASS_wrapper")
-    PREFERENCES_PAGE_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesPageClass ---
-
-    @(link_name = "ADW_TOAST_wrapper")
-    TOAST :: proc(ptr: glib.pointer) -> ^Toast ---
-
-    @(link_name = "ADW_IS_TOAST_wrapper")
-    IS_TOAST :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_wrapper")
-    PREFERENCES_DIALOG :: proc(ptr: glib.pointer) -> ^PreferencesDialog ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_CLASS_wrapper")
-    PREFERENCES_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesDialogClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_DIALOG_wrapper")
-    IS_PREFERENCES_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_DIALOG_CLASS_wrapper")
-    IS_PREFERENCES_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_GET_CLASS_wrapper")
-    PREFERENCES_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesDialogClass ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_wrapper")
-    PREFERENCES_WINDOW :: proc(ptr: glib.pointer) -> ^PreferencesWindow ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_CLASS_wrapper")
-    PREFERENCES_WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesWindowClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_WINDOW_wrapper")
-    IS_PREFERENCES_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_WINDOW_CLASS_wrapper")
-    IS_PREFERENCES_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_GET_CLASS_wrapper")
-    PREFERENCES_WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesWindowClass ---
-
-    @(link_name = "ADW_SHORTCUT_LABEL_wrapper")
-    SHORTCUT_LABEL :: proc(ptr: glib.pointer) -> ^ShortcutLabel ---
-
-    @(link_name = "ADW_IS_SHORTCUT_LABEL_wrapper")
-    IS_SHORTCUT_LABEL :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SHORTCUTS_ITEM_wrapper")
-    SHORTCUTS_ITEM :: proc(ptr: glib.pointer) -> ^ShortcutsItem ---
-
-    @(link_name = "ADW_IS_SHORTCUTS_ITEM_wrapper")
-    IS_SHORTCUTS_ITEM :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SHORTCUTS_SECTION_wrapper")
-    SHORTCUTS_SECTION :: proc(ptr: glib.pointer) -> ^ShortcutsSection ---
-
-    @(link_name = "ADW_IS_SHORTCUTS_SECTION_wrapper")
-    IS_SHORTCUTS_SECTION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SHORTCUTS_DIALOG_wrapper")
-    SHORTCUTS_DIALOG :: proc(ptr: glib.pointer) -> ^ShortcutsDialog ---
-
-    @(link_name = "ADW_IS_SHORTCUTS_DIALOG_wrapper")
-    IS_SHORTCUTS_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SIDEBAR_ITEM_wrapper")
-    SIDEBAR_ITEM :: proc(ptr: glib.pointer) -> ^SidebarItem ---
-
-    @(link_name = "ADW_SIDEBAR_ITEM_CLASS_wrapper")
-    SIDEBAR_ITEM_CLASS :: proc(ptr: glib.pointer) -> ^SidebarItemClass ---
-
-    @(link_name = "ADW_IS_SIDEBAR_ITEM_wrapper")
-    IS_SIDEBAR_ITEM :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_SIDEBAR_ITEM_CLASS_wrapper")
-    IS_SIDEBAR_ITEM_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SIDEBAR_ITEM_GET_CLASS_wrapper")
-    SIDEBAR_ITEM_GET_CLASS :: proc(ptr: glib.pointer) -> ^SidebarItemClass ---
-
-    @(link_name = "ADW_SIDEBAR_SECTION_wrapper")
-    SIDEBAR_SECTION :: proc(ptr: glib.pointer) -> ^SidebarSection ---
-
-    @(link_name = "ADW_IS_SIDEBAR_SECTION_wrapper")
-    IS_SIDEBAR_SECTION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SIDEBAR_wrapper")
-    SIDEBAR :: proc(ptr: glib.pointer) -> ^Sidebar ---
-
-    @(link_name = "ADW_IS_SIDEBAR_wrapper")
-    IS_SIDEBAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPIN_ROW_wrapper")
-    SPIN_ROW :: proc(ptr: glib.pointer) -> ^SpinRow ---
-
-    @(link_name = "ADW_IS_SPIN_ROW_wrapper")
-    IS_SPIN_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPINNER_wrapper")
-    SPINNER :: proc(ptr: glib.pointer) -> ^Spinner ---
-
-    @(link_name = "ADW_IS_SPINNER_wrapper")
-    IS_SPINNER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPINNER_PAINTABLE_wrapper")
-    SPINNER_PAINTABLE :: proc(ptr: glib.pointer) -> ^SpinnerPaintable ---
-
-    @(link_name = "ADW_IS_SPINNER_PAINTABLE_wrapper")
-    IS_SPINNER_PAINTABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPLIT_BUTTON_wrapper")
-    SPLIT_BUTTON :: proc(ptr: glib.pointer) -> ^SplitButton ---
-
-    @(link_name = "ADW_IS_SPLIT_BUTTON_wrapper")
-    IS_SPLIT_BUTTON :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_wrapper")
-    SPRING_ANIMATION :: proc(ptr: glib.pointer) -> ^SpringAnimation ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_CLASS_wrapper")
-    SPRING_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^SpringAnimationClass ---
-
-    @(link_name = "ADW_IS_SPRING_ANIMATION_wrapper")
-    IS_SPRING_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_SPRING_ANIMATION_CLASS_wrapper")
-    IS_SPRING_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_GET_CLASS_wrapper")
-    SPRING_ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^SpringAnimationClass ---
-
-    @(link_name = "ADW_SQUEEZER_PAGE_wrapper")
-    SQUEEZER_PAGE :: proc(ptr: glib.pointer) -> ^SqueezerPage ---
-
-    @(link_name = "ADW_IS_SQUEEZER_PAGE_wrapper")
-    IS_SQUEEZER_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SQUEEZER_wrapper")
-    SQUEEZER :: proc(ptr: glib.pointer) -> ^Squeezer ---
-
-    @(link_name = "ADW_IS_SQUEEZER_wrapper")
-    IS_SQUEEZER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_STATUS_PAGE_wrapper")
-    STATUS_PAGE :: proc(ptr: glib.pointer) -> ^StatusPage ---
-
-    @(link_name = "ADW_IS_STATUS_PAGE_wrapper")
-    IS_STATUS_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SWIPEABLE_wrapper")
-    SWIPEABLE :: proc(ptr: glib.pointer) -> ^Swipeable ---
-
-    @(link_name = "ADW_IS_SWIPEABLE_wrapper")
-    IS_SWIPEABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SWIPEABLE_GET_IFACE_wrapper")
-    SWIPEABLE_GET_IFACE :: proc(ptr: glib.pointer) -> ^SwipeableInterface ---
-
-    @(link_name = "ADW_SWIPE_TRACKER_wrapper")
-    SWIPE_TRACKER :: proc(ptr: glib.pointer) -> ^SwipeTracker ---
-
-    @(link_name = "ADW_IS_SWIPE_TRACKER_wrapper")
-    IS_SWIPE_TRACKER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SWITCH_ROW_wrapper")
-    SWITCH_ROW :: proc(ptr: glib.pointer) -> ^SwitchRow ---
-
-    @(link_name = "ADW_IS_SWITCH_ROW_wrapper")
-    IS_SWITCH_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TAB_PAGE_wrapper")
-    TAB_PAGE :: proc(ptr: glib.pointer) -> ^TabPage ---
-
-    @(link_name = "ADW_IS_TAB_PAGE_wrapper")
-    IS_TAB_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TAB_VIEW_wrapper")
-    TAB_VIEW :: proc(ptr: glib.pointer) -> ^TabView ---
-
-    @(link_name = "ADW_IS_TAB_VIEW_wrapper")
-    IS_TAB_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TAB_BAR_wrapper")
-    TAB_BAR :: proc(ptr: glib.pointer) -> ^TabBar ---
-
-    @(link_name = "ADW_IS_TAB_BAR_wrapper")
-    IS_TAB_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TAB_BUTTON_wrapper")
-    TAB_BUTTON :: proc(ptr: glib.pointer) -> ^TabButton ---
-
-    @(link_name = "ADW_IS_TAB_BUTTON_wrapper")
-    IS_TAB_BUTTON :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TAB_OVERVIEW_wrapper")
-    TAB_OVERVIEW :: proc(ptr: glib.pointer) -> ^TabOverview ---
-
-    @(link_name = "ADW_IS_TAB_OVERVIEW_wrapper")
-    IS_TAB_OVERVIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_wrapper")
-    TIMED_ANIMATION :: proc(ptr: glib.pointer) -> ^TimedAnimation ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_CLASS_wrapper")
-    TIMED_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^TimedAnimationClass ---
-
-    @(link_name = "ADW_IS_TIMED_ANIMATION_wrapper")
-    IS_TIMED_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_TIMED_ANIMATION_CLASS_wrapper")
-    IS_TIMED_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_GET_CLASS_wrapper")
-    TIMED_ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^TimedAnimationClass ---
-
-    @(link_name = "ADW_TOAST_OVERLAY_wrapper")
-    TOAST_OVERLAY :: proc(ptr: glib.pointer) -> ^ToastOverlay ---
-
-    @(link_name = "ADW_IS_TOAST_OVERLAY_wrapper")
-    IS_TOAST_OVERLAY :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TOGGLE_wrapper")
-    TOGGLE :: proc(ptr: glib.pointer) -> ^Toggle ---
-
-    @(link_name = "ADW_IS_TOGGLE_wrapper")
-    IS_TOGGLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TOGGLE_GROUP_wrapper")
-    TOGGLE_GROUP :: proc(ptr: glib.pointer) -> ^ToggleGroup ---
-
-    @(link_name = "ADW_IS_TOGGLE_GROUP_wrapper")
-    IS_TOGGLE_GROUP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TOOLBAR_VIEW_wrapper")
-    TOOLBAR_VIEW :: proc(ptr: glib.pointer) -> ^ToolbarView ---
-
-    @(link_name = "ADW_IS_TOOLBAR_VIEW_wrapper")
-    IS_TOOLBAR_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_wrapper")
-    VIEW_SWITCHER :: proc(ptr: glib.pointer) -> ^ViewSwitcher ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_wrapper")
-    IS_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_BAR_wrapper")
-    VIEW_SWITCHER_BAR :: proc(ptr: glib.pointer) -> ^ViewSwitcherBar ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_BAR_wrapper")
-    IS_VIEW_SWITCHER_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_SIDEBAR_wrapper")
-    VIEW_SWITCHER_SIDEBAR :: proc(ptr: glib.pointer) -> ^ViewSwitcherSidebar ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_SIDEBAR_wrapper")
-    IS_VIEW_SWITCHER_SIDEBAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_TITLE_wrapper")
-    VIEW_SWITCHER_TITLE :: proc(ptr: glib.pointer) -> ^ViewSwitcherTitle ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_TITLE_wrapper")
-    IS_VIEW_SWITCHER_TITLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WINDOW_TITLE_wrapper")
-    WINDOW_TITLE :: proc(ptr: glib.pointer) -> ^WindowTitle ---
-
-    @(link_name = "ADW_IS_WINDOW_TITLE_wrapper")
-    IS_WINDOW_TITLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WRAP_LAYOUT_wrapper")
-    WRAP_LAYOUT :: proc(ptr: glib.pointer) -> ^WrapLayout ---
-
-    @(link_name = "ADW_IS_WRAP_LAYOUT_wrapper")
-    IS_WRAP_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WRAP_BOX_wrapper")
-    WRAP_BOX :: proc(ptr: glib.pointer) -> ^WrapBox ---
-
-    @(link_name = "ADW_IS_WRAP_BOX_wrapper")
-    IS_WRAP_BOX :: proc(ptr: glib.pointer) -> glib.boolean ---
+}
 
 }
 
@@ -5763,11 +4988,11 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
 
 when #config(ADWAITA_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "../lib/linux/x86_64/libadwaita.a", "../lib/linux/x86_64/libglib-2.0.a", "../lib/linux/x86_64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "../lib/linux/x86_64/libadwaita.a", "../lib/linux/x86_64/libglib-2.0.a" }
 } 
 } else {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0", "../lib/linux/x86_64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0" }
 } 
 }
 
@@ -5777,11 +5002,11 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
 
 when #config(ADWAITA_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import adwaita_runic { "../lib/linux/aarch64/libadwaita.a", "../lib/linux/aarch64/libglib-2.0.a", "../lib/linux/aarch64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "../lib/linux/aarch64/libadwaita.a", "../lib/linux/aarch64/libglib-2.0.a" }
 } 
 } else {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0", "../lib/linux/aarch64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0" }
 } 
 }
 
@@ -5789,9 +5014,7 @@ when #config(ADWAITA_STATIC, false) {
 
 when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
 
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "../lib/windows/x86_64/adwaita-1.lib", "../lib/windows/x86_64/adwaita-wrapper.lib" }
-} 
+foreign import adwaita_runic "../lib/windows/x86_64/adwaita-1.lib"
 
 }
 
