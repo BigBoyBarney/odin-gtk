@@ -2,8 +2,6 @@
 
 Odin Bindings to GTK4, libadwaita and associated libraries generated using [runic](https://github.com/Samudevv/runic)
 
-**DANGER: Variadic functions that must be terminated with NULL (nil in odin), like [`adwaita.show_about_dialog`](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.6/func.show_about_dialog.html), need to be treated with caution or they will segfault. Strings need to be explicitely converted to `cstring`, arrays need to be past as pointers `arr` -> `&arr[0]`. There may even be more things you need to pay attention to, therefore I suggest you to avoid them and use the non variadic options**
-
 | Library                                                      | Path                | License                                                                                    |
 | ------------------------------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------ |
 | [glib](https://gitlab.gnome.org/GNOME/glib)                  | `glib`              | [LGPL 2.1](https://gitlab.gnome.org/GNOME/glib/-/blob/main/LICENSES/LGPL-2.1-or-later.txt) |
@@ -19,6 +17,8 @@ Odin Bindings to GTK4, libadwaita and associated libraries generated using [runi
 | [gtk](https://gitlab.gnome.org/GNOME/gtk)                    | `gtk`               | [LGPL 2.1](https://gitlab.gnome.org/GNOME/gtk/-/blob/main/COPYING)                         |
 | [gtk4-layer-shell](https://github.com/wmww/gtk4-layer-shell) | `gtk/layer-shell`   | [MIT](https://github.com/wmww/gtk4-layer-shell/blob/main/LICENSE)                          |
 | [libadwaita](https://gitlab.gnome.org/GNOME/libadwaita)      | `adwaita`           | [LGPL 2.1](https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/COPYING)                  |
+
+**DANGER: Variadic functions that must be terminated with NULL (nil in odin), like [`adwaita.show_about_dialog`](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.6/func.show_about_dialog.html), need to be treated with caution or they will segfault. Strings need to be explicitely converted to `cstring`, arrays need to be past as pointers `arr` -> `&arr[0]`. There may even be more things you need to pay attention to, therefore I suggest you to avoid them and use the non variadic options**
 
 ## Supported Platforms
 
@@ -47,9 +47,22 @@ The libadwaita package on different linux distributions:
 | Ubuntu       | `libadwaita-1-dev` |
 | Alpine Linux | `libadwaita-dev`   |
 
-By default all the libraries will be linked dynamically. Installing the gtk package of your linux distribution should be fine. **Library files for some wrappers are provided, therefore the package can be used as is and does not need any further effort to work on the supported platforms**. But in case you want to rebuild them you need to follow these instructions:
 
-The build dependencies are:
+## Usage (Windows)
+
+Binaries can be built without any further effort. The repository provides all the different library files (which have been provided by [gvsbuild](https://github.com/wingtk/gvsbuild)) by itself. But to actually run the applications, the dynamic libraries are necessary. They can be downloaded using the following just recipe:
+
+```
+just install-windows-runtime INSTALL_DIR
+```
+
+Provide a directory for `INSTALL_DIR` and all the dynamic library files of the entire gtk stack will be installed into it. If you are having trouble installing `just` on windows, you can install it using `winget install --id Casey.Just --exact` or by downloading the binary from [the releases page](https://github.com/casey/just/releases).
+
+## How to generate the bindings
+
+The bindings are already generated and can be used as is. This is just to document how to generate bindings for future versions.
+
+The setup dependencies are:
 
 - [just](https://just.systems)
 - meson
@@ -80,22 +93,12 @@ sudo apk add just meson samurai python3 build-base harfbuzz-dev vulkan-headers
 First make sure that the submodules are checked out, if they aren't you can do it like this:
 
 ```
-git submodule init
-git submodule update
+git submodule update --init
 ```
 
 Then execute:
 
 ```
-just setup && just wrapper
+just setup
+just bindings
 ```
-
-## Usage (Windows)
-
-Binaries can be built without any further effort. The repository provides all the different library files (which have been provided by [gvsbuild](https://github.com/wingtk/gvsbuild)) by itself. But to actually run the applications, the dynamic libraries are necessary. They can be downloaded using the following just recipe:
-
-```
-just install-windows-runtime INSTALL_DIR
-```
-
-Provide a directory for `INSTALL_DIR` and all the dynamic library files of the entire gtk stack will be installed into it. If you are having trouble installing `just` on windows, you can install it using `winget install --id Casey.Just --exact` or by downloading the binary from [the releases page](https://github.com/casey/just/releases).
