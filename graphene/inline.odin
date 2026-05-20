@@ -22,13 +22,13 @@ import "core:math"
   + [x] "graphene_simd4f_clamp_scalar"
   + [x] "graphene_simd4f_min_val"
   + [x] "graphene_simd4f_max_val"
-  + [ ] "graphene_simd4x4f_init"
-  + [ ] "graphene_simd4x4f_init_identity"
-  + [ ] "graphene_simd4x4f_init_from_float"
-  + [ ] "graphene_simd4x4f_to_float"
-  + [ ] "graphene_simd4x4f_sum"
-  + [ ] "graphene_simd4x4f_vec4_mul"
-  + [ ] "graphene_simd4x4f_vec3_mul"
+  + [x] "graphene_simd4x4f_init"
+  + [x] "graphene_simd4x4f_init_identity"
+  + [x] "graphene_simd4x4f_init_from_float"
+  + [x] "graphene_simd4x4f_to_float"
+  + [x] "graphene_simd4x4f_sum"
+  + [x] "graphene_simd4x4f_vec4_mul"
+  + [x] "graphene_simd4x4f_vec3_mul"
   + [ ] "graphene_simd4x4f_point3_mul"
   + [ ] "graphene_simd4x4f_transpose"
   + [ ] "graphene_simd4x4f_inv_ortho_vec3_mul"
@@ -179,6 +179,100 @@ simd4f_max_val :: #force_inline proc "contextless" (v: simd4f_t) -> simd4f_t {
 
     return s
 }
+
+simd4x4f_init :: #force_inline proc "contextless" (
+    x, y, z, w: simd4f_t,
+) -> simd4x4f_t {
+    return simd4x4f_t{x = x, y = y, z = z, w = w}
+}
+
+simd4x4f_init_identity :: #force_inline proc "contextless" (m: ^simd4x4f_t) {
+    m^ = simd4x4f_init(
+        simd4f_init(1.0, 0.0, 0.0, 0.0),
+        simd4f_init(0.0, 1.0, 0.0, 0.0),
+        simd4f_init(0.0, 0.0, 1.0, 0.0),
+        simd4f_init(0.0, 0.0, 0.0, 1.0),
+    )
+}
+
+simd4x4f_init_from_float :: #force_inline proc "contextless" (
+    m: ^simd4x4f_t,
+    f: [^]f32,
+) {
+    m.x = simd4f_init_4f(&f[0])
+    m.y = simd4f_init_4f(&f[1])
+    m.z = simd4f_init_4f(&f[2])
+    m.w = simd4f_init_4f(&f[3])
+}
+
+simd4x4f_to_float :: #force_inline proc "contextless" (
+    m: ^simd4x4f_t,
+    v: [^]f32,
+) {
+    simd4f_dup_4f(m.x, &v[0])
+    simd4f_dup_4f(m.y, &v[1])
+    simd4f_dup_4f(m.z, &v[2])
+    simd4f_dup_4f(m.w, &v[3])
+}
+
+simd4x4f_sum :: #force_inline proc "contextless" (
+    a: ^simd4x4f_t,
+    res: ^simd4f_t,
+) {
+    s := simd4f_add(a.x, a.y)
+    s = simd4f_add(s, a.z)
+    s = simd4f_add(s, a.w)
+    res^ = s
+}
+
+simd4x4f_vec4_mul :: #force_inline proc "contextless" (
+    a: ^simd4x4f_t,
+    b: ^simd4f_t,
+    res: ^simd4f_t,
+) {
+    v := ^b
+    v_x := simd4f_splat_x(v)
+    v_y := simd4f_splat_y(v)
+    v_z := simd4f_splat_z(v)
+    v_w := simd4f_splat_w(v)
+
+    res^ = simd4f_add(
+        simd4f_add(simd4f_mul(a.x, v_x), simd4f_mul(a.y, v_y)),
+        simd4f_add(simd4f_mul(a.z, v_z), simd4f_mul(a.w, v_w)),
+    )
+}
+
+simd4x4f_vec3_mul :: #force_inline proc "contextless" (
+    m: ^simd4x4f_t,
+    v: ^simd4f_t,
+    res: ^simd4f_t,
+) {
+    v_x := simd4f_splat_x(v^)
+    v_y := simd4f_splat_y(v^)
+    v_z := simd4f_splat_z(v^)
+
+    r := simd4f_add(
+        simd4f_add(simd4f_mul(m.x, v_x), simd4f_mul(m.y, v_y)),
+        graphene_simd4f_mul(m.z, v_z),
+    )
+    res^ = simd4f_zero_w(r)
+}
+
+simd4x4f_point3_mul :: #force_inline proc "contextless" (const graphene_simd4x4f_t *m,
+                              const graphene_simd4f_t   *p,
+                              graphene_simd4f_t         *res)
+{
+  const graphene_simd4f_t v = *p;
+  const graphene_simd4f_t v_x = graphene_simd4f_splat_x (v);
+  const graphene_simd4f_t v_y = graphene_simd4f_splat_y (v);
+  const graphene_simd4f_t v_z = graphene_simd4f_splat_z (v);
+
+  *res = graphene_simd4f_add (graphene_simd4f_add (graphene_simd4f_mul (m->x, v_x),
+                                                   graphene_simd4f_mul (m->y, v_y)),
+                              graphene_simd4f_add (graphene_simd4f_mul (m->z, v_z),
+                                                   m->w));
+}
+
 
 simd4x4f_mul :: #force_inline proc "contextless" (a, b, res: ^simd4x4f_t) {
     res.x = simd4f_mul(a.x, b.x)
