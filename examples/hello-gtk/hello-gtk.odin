@@ -41,11 +41,7 @@ main :: proc() {
     defer delete(argv)
     defer for arg in argv do delete(arg)
 
-    status := gio.application_run(
-        gio.APPLICATION(app),
-        i32(len(argv)),
-        raw_data(argv),
-    )
+    status := gio.application_run(app)
     gobj.object_unref(app)
 
     if status != 0 {

@@ -6,7 +6,6 @@ import gio "../../glib/gio"
 import gobj "../../glib/gobject"
 import gtk "../../gtk"
 import "core:os"
-import "core:strings"
 
 activate_cb :: proc "c" (app: ^gtk.Application) {
     window := gtk.WINDOW(gtk.application_window_new(app))
@@ -69,15 +68,7 @@ main :: proc() {
 
     gobj.signal_connect(app, "activate", activate_cb)
 
-    argv := make([dynamic]cstring, len(os.args))
-    argc := i32(len(os.args))
-    defer delete(argv)
-    for arg, idx in os.args {
-        argv[idx] = strings.clone_to_cstring(arg)
-    }
-    defer for arg in argv do delete(arg)
-
-    status := gio.application_run(gio.APPLICATION(app), argc, raw_data(argv))
+    status := gio.application_run(app)
     if status != 0 {
         os.exit(int(status))
     }

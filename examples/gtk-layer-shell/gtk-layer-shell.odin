@@ -6,7 +6,6 @@ import gobj "../../glib/gobject"
 import gtk "../../gtk"
 import gtk_layer "../../gtk/layer-shell"
 import "core:os"
-import "core:strings"
 
 main :: proc() {
     context = glib.create_context()
@@ -19,18 +18,7 @@ main :: proc() {
 
     gobj.signal_connect(app, "activate", activate)
 
-    argv := make([]cstring, len(os.args))
-    for &arg, idx in argv {
-        arg = strings.clone_to_cstring(os.args[idx])
-    }
-    defer delete(argv)
-    defer for arg in argv do delete(arg)
-
-    status := gio.application_run(
-        cast(^gio.Application)app,
-        i32(len(argv)),
-        raw_data(argv),
-    )
+    status := gio.application_run(app)
 
     if status != 0 {
         os.exit(int(status))

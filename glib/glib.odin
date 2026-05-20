@@ -216,17 +216,17 @@ atomicrefcount :: int_
 Bytes :: struct #packed {}
 
 Array :: struct {
-    data: ^byte,
+    data: [^]byte,
     len: uint_,
 }
 
 ByteArray :: struct {
-    data: ^uint8,
+    data: [^]uint8,
     len: uint_,
 }
 
 PtrArray :: struct {
-    pdata: ^pointer,
+    pdata: [^]pointer,
     len: uint_,
 }
 
@@ -609,7 +609,7 @@ TestConfig :: struct {
 TestResult :: enum u32 {TEST_RUN_SUCCESS = 0, TEST_RUN_SKIPPED = 1, TEST_RUN_FAILURE = 2, TEST_RUN_INCOMPLETE = 3 }
 TestLogType :: enum u32 {TEST_LOG_NONE = 0, TEST_LOG_ERROR = 1, TEST_LOG_START_BINARY = 2, TEST_LOG_LIST_CASE = 3, TEST_LOG_SKIP_CASE = 4, TEST_LOG_START_CASE = 5, TEST_LOG_STOP_CASE = 6, TEST_LOG_MIN_RESULT = 7, TEST_LOG_MAX_RESULT = 8, TEST_LOG_MESSAGE = 9, TEST_LOG_START_SUITE = 10, TEST_LOG_STOP_SUITE = 11 }
 TestLogBuffer :: struct {
-    data: ^String,
+    data: [^]String,
     msgs: [^]SList,
 }
 TestLogFatalFunc :: #type proc "c" (log_domain: cstring, log_level: LogLevelFlags, message: cstring, user_data: pointer) -> boolean

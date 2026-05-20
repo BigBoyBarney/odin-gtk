@@ -101,7 +101,8 @@ glib:
         -e '/^URI_/s/\\" \\"//g' \
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
         -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
-        -e '/^NSEC_PER_SEC/ {s#`##g; s#(##g; s#)##g; s#0[^0-9]\+#0#}'
+        -e '/^NSEC_PER_SEC/ {s#`##g; s#(##g; s#)##g; s#0[^0-9]\+#0#}' \
+        -e 's#\(^\s\+[p]*data:\s*\)^#\1[^]#'
 
     sed 'glib/glib-Linux.odin' -i \
         -e '0,/glib_runic\s\+"system:glib-2.0"/ s#.*glib_runic\s\+"system:glib-2.0".*##'
@@ -160,7 +161,8 @@ gio:
         -e '/^VOLUME_IDENTIFIER_KIND_HAL_UDI/s/GLIB_DEPRECATED_MACRO//g' \
         -e '/^TLS_CHANNEL_BINDING_ERROR/s/bindinerror/binding_error/g' \
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
-        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
+        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e 's#\(^\s\+\)application_run\(\s*::\s*proc\)#\1@(private)\n\1g_application_run\2#'
 
     sed glib/gio/gio-Linux.odin -i \
         -e '0,/.*gio_runic "system:gio-2\.0"/ s#.*gio_runic "system:gio-2\.0".*##'

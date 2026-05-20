@@ -3557,7 +3557,8 @@ foreign gio_runic {
     application_open :: proc(application: ^Application, files: [^]^File, n_files: glib.int_, hint: cstring) ---
 
     @(link_name = "g_application_run")
-    application_run :: proc(application: ^Application, argc: i32, argv: ^cstring) -> i32 ---
+    @(private)
+    g_application_run :: proc(application: ^Application, argc: i32, argv: ^cstring) -> i32 ---
 
     @(link_name = "g_application_quit")
     application_quit :: proc(application: ^Application) ---
