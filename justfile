@@ -575,18 +575,13 @@ adwaita-clean:
     rm -rf \
        shared/adwaita/_build
 
-TMP_DIR := if os() == 'windows' {
-    'C:\temp'
-} else {
-    '/tmp'
-}
 EXE_END := if os() == 'windows' {
     '.exe'
 } else {
     ''
 }
-example NAME='hello-glib' KIND='shared': (make-directory TMP_DIR)
-    odin build {{ 'examples' / NAME }} -debug -error-pos-style:unix -vet -out:{{ TMP_DIR / NAME + EXE_END }} -define:GLIB_STATIC={{ if KIND == 'static' { 'true' } else { 'false' } }}
+example NAME='hello-glib' KIND='shared': (make-directory 'build')
+    odin build {{ 'examples' / NAME }} -debug -error-pos-style:unix -vet -out:{{ 'build' / NAME + EXE_END }} -define:GLIB_STATIC={{ if KIND == 'static' { 'true' } else { 'false' } }}
 
 check PACKAGE TARGET='':
     odin check {{ PACKAGE }} -error-pos-style:unix -vet -no-entry-point {{ if TARGET == '' { '' } else { '-target:' + TARGET } }}
