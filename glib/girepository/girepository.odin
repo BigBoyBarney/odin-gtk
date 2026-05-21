@@ -30,10 +30,10 @@ TYPE_VFUNC_INFO :: vfunc_info_get_type
 TYPE_REPOSITORY :: repository_get_type 
 REPOSITORY_ERROR :: repository_error_quark 
 
-_GIBaseInfo :: struct #packed {}
-BaseInfo :: _GIBaseInfo
-_GIBaseInfoClass :: struct #packed {}
-BaseInfoClass :: _GIBaseInfoClass
+BaseInfo :: struct #packed {}
+
+BaseInfoClass :: struct #packed {}
+
 BaseInfoStack :: struct {
     parent_instance: gobj.TypeInstance,
     dummy0: i32,
@@ -41,38 +41,38 @@ BaseInfoStack :: struct {
     dummy2: [2]u32,
     dummy3: [6]rawptr,
 }
-_GICallableInfo :: struct #packed {}
-CallableInfo :: _GICallableInfo
-_GIFunctionInfo :: struct #packed {}
-FunctionInfo :: _GIFunctionInfo
-_GICallbackInfo :: struct #packed {}
-CallbackInfo :: _GICallbackInfo
-_GIRegisteredTypeInfo :: struct #packed {}
-RegisteredTypeInfo :: _GIRegisteredTypeInfo
-_GIStructInfo :: struct #packed {}
-StructInfo :: _GIStructInfo
-_GIUnionInfo :: struct #packed {}
-UnionInfo :: _GIUnionInfo
-_GIEnumInfo :: struct #packed {}
-EnumInfo :: _GIEnumInfo
-_GIFlagsInfo :: struct #packed {}
-FlagsInfo :: _GIFlagsInfo
-_GIObjectInfo :: struct #packed {}
-ObjectInfo :: _GIObjectInfo
-_GIInterfaceInfo :: struct #packed {}
-InterfaceInfo :: _GIInterfaceInfo
-_GIConstantInfo :: struct #packed {}
-ConstantInfo :: _GIConstantInfo
-_GIValueInfo :: struct #packed {}
-ValueInfo :: _GIValueInfo
-_GISignalInfo :: struct #packed {}
-SignalInfo :: _GISignalInfo
-_GIVFuncInfo :: struct #packed {}
-VFuncInfo :: _GIVFuncInfo
-_GIPropertyInfo :: struct #packed {}
-PropertyInfo :: _GIPropertyInfo
-_GIFieldInfo :: struct #packed {}
-FieldInfo :: _GIFieldInfo
+CallableInfo :: struct #packed {}
+
+FunctionInfo :: struct #packed {}
+
+CallbackInfo :: struct #packed {}
+
+RegisteredTypeInfo :: struct #packed {}
+
+StructInfo :: struct #packed {}
+
+UnionInfo :: struct #packed {}
+
+EnumInfo :: struct #packed {}
+
+FlagsInfo :: struct #packed {}
+
+ObjectInfo :: struct #packed {}
+
+InterfaceInfo :: struct #packed {}
+
+ConstantInfo :: struct #packed {}
+
+ValueInfo :: struct #packed {}
+
+SignalInfo :: struct #packed {}
+
+VFuncInfo :: struct #packed {}
+
+PropertyInfo :: struct #packed {}
+
+FieldInfo :: struct #packed {}
+
 ArgInfo :: struct {
     parent: BaseInfoStack,
     padding: [6]rawptr,
@@ -81,116 +81,35 @@ TypeInfo :: struct {
     parent: BaseInfoStack,
     padding: [6]rawptr,
 }
-_GIUnresolvedInfo :: struct #packed {}
-UnresolvedInfo :: _GIUnresolvedInfo
-Argument :: _GIArgument
-_GITypelib :: struct #packed {}
-Typelib :: _GITypelib
+UnresolvedInfo :: struct #packed {}
+
+
+Transfer :: enum u32 {NOTHING = 0, CONTAINER = 1, EVERYTHING = 2 }
+Direction :: enum u32 {IN = 0, OUT = 1, INOUT = 2 }
+ScopeType :: enum u32 {INVALID = 0, CALL = 1, ASYNC = 2, NOTIFIED = 3, FOREVER = 4 }
+TypeTag :: enum u32 {VOID = 0, BOOLEAN = 1, INT8 = 2, UINT8 = 3, INT16 = 4, UINT16 = 5, INT32 = 6, UINT32 = 7, INT64 = 8, UINT64 = 9, FLOAT = 10, DOUBLE = 11, GTYPE = 12, UTF8 = 13, FILENAME = 14, ARRAY = 15, INTERFACE = 16, GLIST = 17, GSLIST = 18, GHASH = 19, ERROR = 20, UNICHAR = 21 }
+ArrayType :: enum u32 {C = 0, ARRAY = 1, PTR_ARRAY = 2, BYTE_ARRAY = 3 }
+FieldInfoFlags :: enum u32 {NONE = 0, FIELD_IS_READABLE = 1, FIELD_IS_WRITABLE = 2 }
+VFuncInfoFlags :: enum u32 {VFUNC_INFO_FLAGS_NONE = 0, VFUNC_MUST_CHAIN_UP = 1, VFUNC_MUST_OVERRIDE = 2, VFUNC_MUST_NOT_OVERRIDE = 4 }
+FunctionInfoFlags :: enum u32 {NONE = 0, FUNCTION_IS_METHOD = 1, FUNCTION_IS_CONSTRUCTOR = 2, FUNCTION_IS_GETTER = 4, FUNCTION_IS_SETTER = 8, FUNCTION_WRAPS_VFUNC = 16, FUNCTION_IS_ASYNC = 32 }
+Typelib :: struct #packed {}
+
 AttributeIter :: struct {
     data: rawptr,
     _dummy: [4]rawptr,
 }
+InvokeError :: enum u32 {FAILED = 0, SYMBOL_NOT_FOUND = 1, ARGUMENT_MISMATCH = 2 }
 ObjectInfoRefFunction :: #type proc "c" (object: rawptr) -> rawptr
 ObjectInfoUnrefFunction :: #type proc "c" (object: rawptr)
 ObjectInfoSetValueFunction :: #type proc "c" (value: ^gobj.Value, object: rawptr)
 ObjectInfoGetValueFunction :: #type proc "c" (value: ^gobj.Value) -> rawptr
-_GIRepository :: struct #packed {}
-Repository :: _GIRepository
+Repository :: struct #packed {}
+
 RepositoryClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-Repository_autoptr :: ^Repository
-Repository_listautoptr :: ^glib.List
-Repository_slistautoptr :: ^glib.SList
-Repository_queueautoptr :: ^glib.Queue
-RepositoryClass_autoptr :: ^RepositoryClass
-RepositoryClass_listautoptr :: ^glib.List
-RepositoryClass_slistautoptr :: ^glib.SList
-RepositoryClass_queueautoptr :: ^glib.Queue
-Typelib_autoptr :: ^Typelib
-Typelib_listautoptr :: ^glib.List
-Typelib_slistautoptr :: ^glib.SList
-Typelib_queueautoptr :: ^glib.Queue
-BaseInfo_autoptr :: ^BaseInfo
-BaseInfo_listautoptr :: ^glib.List
-BaseInfo_slistautoptr :: ^glib.SList
-BaseInfo_queueautoptr :: ^glib.Queue
-ArgInfo_autoptr :: ^ArgInfo
-ArgInfo_listautoptr :: ^glib.List
-ArgInfo_slistautoptr :: ^glib.SList
-ArgInfo_queueautoptr :: ^glib.Queue
-CallableInfo_autoptr :: ^CallableInfo
-CallableInfo_listautoptr :: ^glib.List
-CallableInfo_slistautoptr :: ^glib.SList
-CallableInfo_queueautoptr :: ^glib.Queue
-CallbackInfo_autoptr :: ^CallbackInfo
-CallbackInfo_listautoptr :: ^glib.List
-CallbackInfo_slistautoptr :: ^glib.SList
-CallbackInfo_queueautoptr :: ^glib.Queue
-ConstantInfo_autoptr :: ^ConstantInfo
-ConstantInfo_listautoptr :: ^glib.List
-ConstantInfo_slistautoptr :: ^glib.SList
-ConstantInfo_queueautoptr :: ^glib.Queue
-EnumInfo_autoptr :: ^EnumInfo
-EnumInfo_listautoptr :: ^glib.List
-EnumInfo_slistautoptr :: ^glib.SList
-EnumInfo_queueautoptr :: ^glib.Queue
-FieldInfo_autoptr :: ^FieldInfo
-FieldInfo_listautoptr :: ^glib.List
-FieldInfo_slistautoptr :: ^glib.SList
-FieldInfo_queueautoptr :: ^glib.Queue
-FlagsInfo_autoptr :: ^FlagsInfo
-FlagsInfo_listautoptr :: ^glib.List
-FlagsInfo_slistautoptr :: ^glib.SList
-FlagsInfo_queueautoptr :: ^glib.Queue
-FunctionInfo_autoptr :: ^FunctionInfo
-FunctionInfo_listautoptr :: ^glib.List
-FunctionInfo_slistautoptr :: ^glib.SList
-FunctionInfo_queueautoptr :: ^glib.Queue
-InterfaceInfo_autoptr :: ^InterfaceInfo
-InterfaceInfo_listautoptr :: ^glib.List
-InterfaceInfo_slistautoptr :: ^glib.SList
-InterfaceInfo_queueautoptr :: ^glib.Queue
-ObjectInfo_autoptr :: ^ObjectInfo
-ObjectInfo_listautoptr :: ^glib.List
-ObjectInfo_slistautoptr :: ^glib.SList
-ObjectInfo_queueautoptr :: ^glib.Queue
-PropertyInfo_autoptr :: ^PropertyInfo
-PropertyInfo_listautoptr :: ^glib.List
-PropertyInfo_slistautoptr :: ^glib.SList
-PropertyInfo_queueautoptr :: ^glib.Queue
-RegisteredTypeInfo_autoptr :: ^RegisteredTypeInfo
-RegisteredTypeInfo_listautoptr :: ^glib.List
-RegisteredTypeInfo_slistautoptr :: ^glib.SList
-RegisteredTypeInfo_queueautoptr :: ^glib.Queue
-SignalInfo_autoptr :: ^SignalInfo
-SignalInfo_listautoptr :: ^glib.List
-SignalInfo_slistautoptr :: ^glib.SList
-SignalInfo_queueautoptr :: ^glib.Queue
-StructInfo_autoptr :: ^StructInfo
-StructInfo_listautoptr :: ^glib.List
-StructInfo_slistautoptr :: ^glib.SList
-StructInfo_queueautoptr :: ^glib.Queue
-TypeInfo_autoptr :: ^TypeInfo
-TypeInfo_listautoptr :: ^glib.List
-TypeInfo_slistautoptr :: ^glib.SList
-TypeInfo_queueautoptr :: ^glib.Queue
-UnionInfo_autoptr :: ^UnionInfo
-UnionInfo_listautoptr :: ^glib.List
-UnionInfo_slistautoptr :: ^glib.SList
-UnionInfo_queueautoptr :: ^glib.Queue
-UnresolvedInfo_autoptr :: ^UnresolvedInfo
-UnresolvedInfo_listautoptr :: ^glib.List
-UnresolvedInfo_slistautoptr :: ^glib.SList
-UnresolvedInfo_queueautoptr :: ^glib.Queue
-ValueInfo_autoptr :: ^ValueInfo
-ValueInfo_listautoptr :: ^glib.List
-ValueInfo_slistautoptr :: ^glib.SList
-ValueInfo_queueautoptr :: ^glib.Queue
-VFuncInfo_autoptr :: ^VFuncInfo
-VFuncInfo_listautoptr :: ^glib.List
-VFuncInfo_slistautoptr :: ^glib.SList
-VFuncInfo_queueautoptr :: ^glib.Queue
+RepositoryLoadFlags :: enum u32 {NONE = 0, LAZY = 1 }
+RepositoryError :: enum u32 {TYPELIB_NOT_FOUND = 0, NAMESPACE_MISMATCH = 1, NAMESPACE_VERSION_CONFLICT = 2, LIBRARY_NOT_FOUND = 3 }
 
 @(default_calling_convention = "c")
 foreign girepository_runic {
@@ -378,7 +297,7 @@ foreign girepository_runic {
     callable_info_load_arg :: proc(info: ^CallableInfo, n: u32, arg: ^ArgInfo) ---
 
     @(link_name = "gi_callable_info_invoke")
-    callable_info_invoke :: proc(info: ^CallableInfo, function: rawptr, in_args: [^]Argument, n_in_args: u64, out_args: [^]Argument, n_out_args: u64, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
+    callable_info_invoke :: proc(info: ^CallableInfo, function: rawptr, in_args: [^]Argument, n_in_args: uint, out_args: [^]Argument, n_out_args: uint, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
 
     @(link_name = "gi_callable_info_get_instance_ownership_transfer")
     callable_info_get_instance_ownership_transfer :: proc(info: ^CallableInfo) -> Transfer ---
@@ -402,7 +321,7 @@ foreign girepository_runic {
     constant_info_free_value :: proc(info: ^ConstantInfo, value: ^Argument) ---
 
     @(link_name = "gi_constant_info_get_value")
-    constant_info_get_value :: proc(info: ^ConstantInfo, value: ^Argument) -> u64 ---
+    constant_info_get_value :: proc(info: ^ConstantInfo, value: ^Argument) -> uint ---
 
     @(link_name = "gi_enum_info_get_n_values")
     enum_info_get_n_values :: proc(info: ^EnumInfo) -> u32 ---
@@ -426,10 +345,10 @@ foreign girepository_runic {
     field_info_get_flags :: proc(info: ^FieldInfo) -> FieldInfoFlags ---
 
     @(link_name = "gi_field_info_get_size")
-    field_info_get_size :: proc(info: ^FieldInfo) -> u64 ---
+    field_info_get_size :: proc(info: ^FieldInfo) -> uint ---
 
     @(link_name = "gi_field_info_get_offset")
-    field_info_get_offset :: proc(info: ^FieldInfo) -> u64 ---
+    field_info_get_offset :: proc(info: ^FieldInfo) -> uint ---
 
     @(link_name = "gi_field_info_get_type_info")
     field_info_get_type_info :: proc(info: ^FieldInfo) -> ^TypeInfo ---
@@ -456,7 +375,7 @@ foreign girepository_runic {
     invoke_error_quark :: proc() -> glib.Quark ---
 
     @(link_name = "gi_function_info_invoke")
-    function_info_invoke :: proc(info: ^FunctionInfo, in_args: [^]Argument, n_in_args: u64, out_args: [^]Argument, n_out_args: u64, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
+    function_info_invoke :: proc(info: ^FunctionInfo, in_args: [^]Argument, n_in_args: uint, out_args: [^]Argument, n_out_args: uint, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
 
     @(link_name = "gi_interface_info_get_n_prerequisites")
     interface_info_get_n_prerequisites :: proc(info: ^InterfaceInfo) -> u32 ---
@@ -663,10 +582,10 @@ foreign girepository_runic {
     struct_info_find_method :: proc(info: ^StructInfo, name: cstring) -> ^FunctionInfo ---
 
     @(link_name = "gi_struct_info_get_size")
-    struct_info_get_size :: proc(info: ^StructInfo) -> u64 ---
+    struct_info_get_size :: proc(info: ^StructInfo) -> uint ---
 
     @(link_name = "gi_struct_info_get_alignment")
-    struct_info_get_alignment :: proc(info: ^StructInfo) -> u64 ---
+    struct_info_get_alignment :: proc(info: ^StructInfo) -> uint ---
 
     @(link_name = "gi_struct_info_is_gtype_struct")
     struct_info_is_gtype_struct :: proc(info: ^StructInfo) -> glib.boolean ---
@@ -699,7 +618,7 @@ foreign girepository_runic {
     type_info_get_array_length_index :: proc(info: ^TypeInfo, out_length_index: ^u32) -> glib.boolean ---
 
     @(link_name = "gi_type_info_get_array_fixed_size")
-    type_info_get_array_fixed_size :: proc(info: ^TypeInfo, out_size: ^u64) -> glib.boolean ---
+    type_info_get_array_fixed_size :: proc(info: ^TypeInfo, out_size: ^uint) -> glib.boolean ---
 
     @(link_name = "gi_type_info_is_zero_terminated")
     type_info_is_zero_terminated :: proc(info: ^TypeInfo) -> glib.boolean ---
@@ -738,22 +657,22 @@ foreign girepository_runic {
     union_info_is_discriminated :: proc(info: ^UnionInfo) -> glib.boolean ---
 
     @(link_name = "gi_union_info_get_discriminator_offset")
-    union_info_get_discriminator_offset :: proc(info: ^UnionInfo, out_offset: ^u64) -> glib.boolean ---
+    union_info_get_discriminator_offset :: proc(info: ^UnionInfo, out_offset: ^uint) -> glib.boolean ---
 
     @(link_name = "gi_union_info_get_discriminator_type")
     union_info_get_discriminator_type :: proc(info: ^UnionInfo) -> ^TypeInfo ---
 
     @(link_name = "gi_union_info_get_discriminator")
-    union_info_get_discriminator :: proc(info: ^UnionInfo, n: u64) -> ^ConstantInfo ---
+    union_info_get_discriminator :: proc(info: ^UnionInfo, n: uint) -> ^ConstantInfo ---
 
     @(link_name = "gi_union_info_find_method")
     union_info_find_method :: proc(info: ^UnionInfo, name: cstring) -> ^FunctionInfo ---
 
     @(link_name = "gi_union_info_get_size")
-    union_info_get_size :: proc(info: ^UnionInfo) -> u64 ---
+    union_info_get_size :: proc(info: ^UnionInfo) -> uint ---
 
     @(link_name = "gi_union_info_get_alignment")
-    union_info_get_alignment :: proc(info: ^UnionInfo) -> u64 ---
+    union_info_get_alignment :: proc(info: ^UnionInfo) -> uint ---
 
     @(link_name = "gi_union_info_get_copy_function_name")
     union_info_get_copy_function_name :: proc(info: ^UnionInfo) -> cstring ---
@@ -768,7 +687,7 @@ foreign girepository_runic {
     vfunc_info_get_flags :: proc(info: ^VFuncInfo) -> VFuncInfoFlags ---
 
     @(link_name = "gi_vfunc_info_get_offset")
-    vfunc_info_get_offset :: proc(info: ^VFuncInfo) -> u64 ---
+    vfunc_info_get_offset :: proc(info: ^VFuncInfo) -> uint ---
 
     @(link_name = "gi_vfunc_info_get_signal")
     vfunc_info_get_signal :: proc(info: ^VFuncInfo) -> ^SignalInfo ---
@@ -780,7 +699,7 @@ foreign girepository_runic {
     vfunc_info_get_address :: proc(info: ^VFuncInfo, implementor_gtype: gobj.Type, error: ^^glib.Error) -> rawptr ---
 
     @(link_name = "gi_vfunc_info_invoke")
-    vfunc_info_invoke :: proc(info: ^VFuncInfo, implementor: gobj.Type, in_args: [^]Argument, n_in_args: u64, out_args: [^]Argument, n_out_args: u64, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
+    vfunc_info_invoke :: proc(info: ^VFuncInfo, implementor: gobj.Type, in_args: [^]Argument, n_in_args: uint, out_args: [^]Argument, n_out_args: uint, return_value: ^Argument, error: ^^glib.Error) -> glib.boolean ---
 
     @(link_name = "gi_repository_get_type")
     repository_get_type :: proc() -> gobj.Type ---
@@ -795,10 +714,10 @@ foreign girepository_runic {
     repository_prepend_library_path :: proc(repository: ^Repository, directory: cstring) ---
 
     @(link_name = "gi_repository_get_search_path")
-    repository_get_search_path :: proc(repository: ^Repository, n_paths_out: ^u64) -> ^cstring ---
+    repository_get_search_path :: proc(repository: ^Repository, n_paths_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_get_library_path")
-    repository_get_library_path :: proc(repository: ^Repository, n_paths_out: ^u64) -> ^cstring ---
+    repository_get_library_path :: proc(repository: ^Repository, n_paths_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_load_typelib")
     repository_load_typelib :: proc(repository: ^Repository, typelib: ^Typelib, flags: RepositoryLoadFlags, error: ^^glib.Error) -> cstring ---
@@ -810,7 +729,7 @@ foreign girepository_runic {
     repository_find_by_name :: proc(repository: ^Repository, namespace_: cstring, name: cstring) -> ^BaseInfo ---
 
     @(link_name = "gi_repository_enumerate_versions")
-    repository_enumerate_versions :: proc(repository: ^Repository, namespace_: cstring, n_versions_out: ^u64) -> ^cstring ---
+    repository_enumerate_versions :: proc(repository: ^Repository, namespace_: cstring, n_versions_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_require")
     repository_require :: proc(repository: ^Repository, namespace_: cstring, version: cstring, flags: RepositoryLoadFlags, error: ^^glib.Error) -> ^Typelib ---
@@ -819,19 +738,19 @@ foreign girepository_runic {
     repository_require_private :: proc(repository: ^Repository, typelib_dir: cstring, namespace_: cstring, version: cstring, flags: RepositoryLoadFlags, error: ^^glib.Error) -> ^Typelib ---
 
     @(link_name = "gi_repository_get_immediate_dependencies")
-    repository_get_immediate_dependencies :: proc(repository: ^Repository, namespace_: cstring, n_dependencies_out: ^u64) -> ^cstring ---
+    repository_get_immediate_dependencies :: proc(repository: ^Repository, namespace_: cstring, n_dependencies_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_get_dependencies")
-    repository_get_dependencies :: proc(repository: ^Repository, namespace_: cstring, n_dependencies_out: ^u64) -> ^cstring ---
+    repository_get_dependencies :: proc(repository: ^Repository, namespace_: cstring, n_dependencies_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_get_loaded_namespaces")
-    repository_get_loaded_namespaces :: proc(repository: ^Repository, n_namespaces_out: ^u64) -> ^cstring ---
+    repository_get_loaded_namespaces :: proc(repository: ^Repository, n_namespaces_out: ^uint) -> ^cstring ---
 
     @(link_name = "gi_repository_find_by_gtype")
     repository_find_by_gtype :: proc(repository: ^Repository, gtype: gobj.Type) -> ^BaseInfo ---
 
     @(link_name = "gi_repository_get_object_gtype_interfaces")
-    repository_get_object_gtype_interfaces :: proc(repository: ^Repository, gtype: gobj.Type, n_interfaces_out: ^u64, interfaces_out: ^^^InterfaceInfo) ---
+    repository_get_object_gtype_interfaces :: proc(repository: ^Repository, gtype: gobj.Type, n_interfaces_out: ^uint, interfaces_out: ^^^InterfaceInfo) ---
 
     @(link_name = "gi_repository_get_n_infos")
     repository_get_n_infos :: proc(repository: ^Repository, namespace_: cstring) -> u32 ---
@@ -846,7 +765,7 @@ foreign girepository_runic {
     repository_get_typelib_path :: proc(repository: ^Repository, namespace_: cstring) -> cstring ---
 
     @(link_name = "gi_repository_get_shared_libraries")
-    repository_get_shared_libraries :: proc(repository: ^Repository, namespace_: cstring, out_n_elements: [^]u64) -> ^cstring ---
+    repository_get_shared_libraries :: proc(repository: ^Repository, namespace_: cstring, out_n_elements: [^]uint) -> ^cstring ---
 
     @(link_name = "gi_repository_get_c_prefix")
     repository_get_c_prefix :: proc(repository: ^Repository, namespace_: cstring) -> cstring ---
@@ -866,18 +785,19 @@ foreign girepository_runic {
     @(link_name = "gi_cclosure_marshal_generic")
     cclosure_marshal_generic :: proc(closure: ^gobj.Closure, return_gvalue: ^gobj.Value, n_param_values: u32, param_values: [^]gobj.Value, invocation_hint: rawptr, marshal_data: rawptr) ---
 
+    @(link_name = "gi_repository_dup_default")
+    repository_dup_default :: proc() -> ^Repository ---
+
 }
 
 when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
 
 when #config(GLIB_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import girepository_runic { "../../lib/linux/x86_64/libgirepository-2.0.a", "../../lib/linux/x86_64/libgirepository-wrapper.a", "system:ffi", "system:pcre2-8" }
+    foreign import girepository_runic { "../../lib/linux/x86_64/libgirepository-2.0.a", "system:ffi", "system:pcre2-8" }
 } 
 } else {
-    when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import girepository_runic { "system:girepository-2.0", "../../lib/linux/x86_64/libgirepository-wrapper.a" }
-} 
+    foreign import girepository_runic "system:girepository-2.0"
 }
 
 }
@@ -886,21 +806,17 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
 
 when #config(GLIB_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import girepository_runic { "../../lib/linux/aarch64/libgirepository-2.0.a", "../../lib/linux/aarch64/libgirepository-wrapper.a", "system:ffi", "system:pcre2-8" }
+    foreign import girepository_runic { "../../lib/linux/aarch64/libgirepository-2.0.a", "system:ffi", "system:pcre2-8" }
 } 
 } else {
-    when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import girepository_runic { "system:girepository-2.0", "../../lib/linux/aarch64/libgirepository-wrapper.a" }
-} 
+    foreign import girepository_runic "system:girepository-2.0"
 }
 
 }
 
 when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
 
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-    foreign import girepository_runic { "../../lib/windows/x86_64/girepository-2.0.lib", "../../lib/windows/x86_64/girepository-wrapper.lib" }
-} 
+foreign import girepository_runic "../../lib/windows/x86_64/girepository-2.0.lib"
 
 }
 

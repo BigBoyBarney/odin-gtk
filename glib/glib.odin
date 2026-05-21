@@ -202,138 +202,154 @@ HFunc :: #type proc "c" (key: pointer, value: pointer, user_data: pointer)
 CopyFunc :: #type proc "c" (src: constpointer, data: pointer) -> pointer
 FreeFunc :: #type proc "c" (data: pointer)
 TranslateFunc :: #type proc "c" (str: cstring, data: pointer) -> cstring
-_GDoubleIEEE754 :: double
-DoubleIEEE754 :: _GDoubleIEEE754
-_GFloatIEEE754 :: float
-FloatIEEE754 :: _GFloatIEEE754
-_GTimeVal :: struct {
+DoubleIEEE754 :: double
+
+FloatIEEE754 :: float
+
+TimeVal :: struct {
     tv_sec: long,
     tv_usec: long,
 }
-TimeVal :: _GTimeVal
+
 refcount :: int_
 atomicrefcount :: int_
-_GBytes :: struct #packed {}
-Bytes :: _GBytes
-_GArray :: struct {
-    data: ^byte,
+Bytes :: struct #packed {}
+
+Array :: struct {
+    data: [^]byte,
     len: uint_,
 }
-Array :: _GArray
-_GByteArray :: struct {
-    data: ^uint8,
+
+ByteArray :: struct {
+    data: [^]uint8,
     len: uint_,
 }
-ByteArray :: _GByteArray
-_GPtrArray :: struct {
-    pdata: ^pointer,
+
+PtrArray :: struct {
+    pdata: [^]pointer,
     len: uint_,
 }
-PtrArray :: _GPtrArray
+
 Quark :: uint32
-_GError :: struct {
+Error :: struct {
     domain: Quark,
     code: int_,
     message: cstring,
 }
-Error :: _GError
+
 ErrorInitFunc :: #type proc "c" (error: ^Error)
 ErrorCopyFunc :: #type proc "c" (src_error: ^Error, dest_error: ^Error)
 ErrorClearFunc :: #type proc "c" (error: ^Error)
-_GDebugKey :: struct {
+UserDirectory :: enum u32 {DESKTOP = 0, DOCUMENTS = 1, DOWNLOAD = 2, MUSIC = 3, PICTURES = 4, PUBLIC_SHARE = 5, TEMPLATES = 6, VIDEOS = 7, USER_N_DIRECTORIES = 8 }
+DebugKey :: struct {
     key: cstring,
     value: uint_,
 }
-DebugKey :: _GDebugKey
+
+FormatSizeFlags :: enum u32 {FORMAT_SIZE_DEFAULT = 0, FORMAT_SIZE_LONG_FORMAT = 1, FORMAT_SIZE_IEC_UNITS = 2, FORMAT_SIZE_BITS = 4, FORMAT_SIZE_ONLY_VALUE = 8, FORMAT_SIZE_ONLY_UNIT = 16 }
 VoidFunc :: #type proc "c" ()
+ThreadError :: enum u32 {AGAIN = 0 }
 ThreadFunc :: #type proc "c" (data: pointer) -> pointer
-_GThread :: struct {
+ThreadPriority :: enum u32 {LOW = 0, NORMAL = 1, HIGH = 2, URGENT = 3 }
+Thread :: struct {
     func: ThreadFunc,
     data: pointer,
     joinable: boolean,
     priority: ThreadPriority,
 }
-Thread :: _GThread
-_GMutex :: struct #raw_union {
+
+Mutex :: struct #raw_union {
     p: pointer,
     i: [2]uint_,
 }
-Mutex :: _GMutex
-_GRecMutex :: struct {
+
+RecMutex :: struct {
     p: pointer,
     i: [2]uint_,
 }
-RecMutex :: _GRecMutex
-_GRWLock :: struct {
+
+RWLock :: struct {
     p: pointer,
     i: [2]uint_,
 }
-RWLock :: _GRWLock
-_GCond :: struct {
+
+Cond :: struct {
     p: pointer,
     i: [2]uint_,
 }
-Cond :: _GCond
-_GPrivate :: struct {
+
+Private :: struct {
     p: pointer,
     notify: DestroyNotify,
     future: [2]pointer,
 }
-Private :: _GPrivate
-_GOnce :: struct {
+
+OnceStatus :: enum u32 {NOTCALLED = 0, PROGRESS = 1, READY = 2 }
+Once :: struct {
     status: OnceStatus,
     retval: pointer,
 }
-Once :: _GOnce
+
 MutexLocker :: rawptr
 RecMutexLocker :: rawptr
 RWLockWriterLocker :: rawptr
 RWLockReaderLocker :: rawptr
-_GAsyncQueue :: struct #packed {}
-AsyncQueue :: _GAsyncQueue
-_GTimeZone :: struct #packed {}
-TimeZone :: _GTimeZone
+AsyncQueue :: struct #packed {}
+
+TimeZone :: struct #packed {}
+
+TimeType :: enum u32 {STANDARD = 0, DAYLIGHT = 1, UNIVERSAL = 2 }
 TimeSpan :: int64
-_GDateTime :: struct #packed {}
-DateTime :: _GDateTime
-_GBookmarkFile :: struct #packed {}
-BookmarkFile :: _GBookmarkFile
-_GChecksum :: struct #packed {}
-Checksum :: _GChecksum
-_GIConv :: struct #packed {}
-IConv :: ^_GIConv
-_GData :: struct #packed {}
-Data :: _GData
+DateTime :: struct #packed {}
+
+BookmarkFileError :: enum u32 {INVALID_URI = 0, INVALID_VALUE = 1, APP_NOT_REGISTERED = 2, URI_NOT_FOUND = 3, READ = 4, UNKNOWN_ENCODING = 5, WRITE = 6, FILE_NOT_FOUND = 7 }
+BookmarkFile :: struct #packed {}
+
+ChecksumType :: enum u32 {CHECKSUM_MD5 = 0, CHECKSUM_SHA1 = 1, CHECKSUM_SHA256 = 2, CHECKSUM_SHA512 = 3, CHECKSUM_SHA384 = 4 }
+Checksum :: struct #packed {}
+
+ConvertError :: enum u32 {NO_CONVERSION = 0, ILLEGAL_SEQUENCE = 1, FAILED = 2, PARTIAL_INPUT = 3, BAD_URI = 4, NOT_ABSOLUTE_PATH = 5, NO_MEMORY = 6, EMBEDDED_NUL = 7 }
+IConv :: ^struct #packed {}
+Data :: struct #packed {}
+
 DataForeachFunc :: #type proc "c" (key_id: Quark, data: pointer, user_data: pointer)
 DuplicateFunc :: #type proc "c" (data: pointer, user_data: pointer) -> pointer
 Time :: int32
 DateYear :: uint16
 DateDay :: uint8
-_GDate :: [8]u8
-Date :: _GDate
-_GDir :: struct #packed {}
-Dir :: _GDir
-MemVTable :: _GMemVTable
-Node :: _GNode
+Date :: [8]u8
+
+DateDMY :: enum u32 {DATE_DAY = 0, DATE_MONTH = 1, DATE_YEAR = 2 }
+DateWeekday :: enum u32 {DATE_BAD_WEEKDAY = 0, DATE_MONDAY = 1, DATE_TUESDAY = 2, DATE_WEDNESDAY = 3, DATE_THURSDAY = 4, DATE_FRIDAY = 5, DATE_SATURDAY = 6, DATE_SUNDAY = 7 }
+DateMonth :: enum u32 {DATE_BAD_MONTH = 0, DATE_JANUARY = 1, DATE_FEBRUARY = 2, DATE_MARCH = 3, DATE_APRIL = 4, DATE_MAY = 5, DATE_JUNE = 6, DATE_JULY = 7, DATE_AUGUST = 8, DATE_SEPTEMBER = 9, DATE_OCTOBER = 10, DATE_NOVEMBER = 11, DATE_DECEMBER = 12 }
+Dir :: struct #packed {}
+
+FileError :: enum u32 {EXIST = 0, ISDIR = 1, ACCES = 2, NAMETOOLONG = 3, NOENT = 4, NOTDIR = 5, NXIO = 6, NODEV = 7, ROFS = 8, TXTBSY = 9, FAULT = 10, LOOP = 11, NOSPC = 12, NOMEM = 13, MFILE = 14, NFILE = 15, BADF = 16, INVAL = 17, PIPE = 18, AGAIN = 19, INTR = 20, IO = 21, PERM = 22, NOSYS = 23, FAILED = 24 }
+FileTest :: enum u32 {IS_REGULAR = 1, IS_SYMLINK = 2, IS_DIR = 4, IS_EXECUTABLE = 8, EXISTS = 16 }
+FileSetContentsFlags :: enum u32 {FILE_SET_CONTENTS_NONE = 0, FILE_SET_CONTENTS_CONSISTENT = 1, FILE_SET_CONTENTS_DURABLE = 2, FILE_SET_CONTENTS_ONLY_EXISTING = 4 }
+
+
+TraverseFlags :: enum u32 {TRAVERSE_LEAVES = 1, TRAVERSE_NON_LEAVES = 2, TRAVERSE_ALL = 3, TRAVERSE_MASK = 3, TRAVERSE_LEAFS = 1, TRAVERSE_NON_LEAFS = 2 }
+TraverseType :: enum u32 {IN_ORDER = 0, PRE_ORDER = 1, POST_ORDER = 2, LEVEL_ORDER = 3 }
 NodeTraverseFunc :: #type proc "c" (node: ^Node, data: pointer) -> boolean
 NodeForeachFunc :: #type proc "c" (node: ^Node, data: pointer)
-_GNode :: struct {
+Node :: struct {
     data: pointer,
     next: ^Node,
     prev: ^Node,
     parent: ^Node,
     children: ^Node,
 }
-List :: _GList
-_GList :: struct {
+
+List :: struct {
     data: pointer,
     next: ^List,
     prev: ^List,
 }
-_GHashTable :: struct #packed {}
-HashTable :: _GHashTable
+HashTable :: struct #packed {}
+
 HRFunc :: #type proc "c" (key: pointer, value: pointer, user_data: pointer) -> boolean
-_GHashTableIter :: struct {
+HashTableIter :: struct {
     dummy1: pointer,
     dummy2: pointer,
     dummy3: pointer,
@@ -341,10 +357,10 @@ _GHashTableIter :: struct {
     dummy5: boolean,
     dummy6: pointer,
 }
-HashTableIter :: _GHashTableIter
-_GHmac :: struct #packed {}
-Hmac :: _GHmac
-Hook :: _GHook
+
+Hmac :: struct #packed {}
+
+
 HookList :: struct #packed {}
 HookCompareFunc :: #type proc "c" (new_hook: ^Hook, sibling: ^Hook) -> int_
 HookFindFunc :: #type proc "c" (hook: ^Hook, data: pointer) -> boolean
@@ -353,7 +369,8 @@ HookCheckMarshaller :: #type proc "c" (hook: ^Hook, marshal_data: pointer) -> bo
 HookFunc :: #type proc "c" (data: pointer)
 HookCheckFunc :: #type proc "c" (data: pointer) -> boolean
 HookFinalizeFunc :: #type proc "c" (hook_list: ^HookList, hook: ^Hook)
-_GHook :: struct {
+HookFlagMask :: enum u32 {HOOK_FLAG_ACTIVE = 1, HOOK_FLAG_IN_CALL = 2, HOOK_FLAG_RESERVED1 = 4, HOOK_FLAG_RESERVED2 = 8, HOOK_FLAG_MASK = 15 }
+Hook :: struct {
     data: pointer,
     next: ^Hook,
     prev: ^Hook,
@@ -363,27 +380,29 @@ _GHook :: struct {
     func: pointer,
     destroy: DestroyNotify,
 }
-PollFD :: _GPollFD
+
 PollFunc :: #type proc "c" (ufds: [^]PollFD, nfsd: uint_, timeout_: int_) -> int_
-SList :: _GSList
-_GSList :: struct {
+
+SList :: struct {
     data: pointer,
     next: ^SList,
 }
-_GMainContext :: struct #packed {}
-MainContext :: _GMainContext
-_GMainLoop :: struct #packed {}
-MainLoop :: _GMainLoop
-Source :: _GSource
-_GSourcePrivate :: struct #packed {}
-SourcePrivate :: _GSourcePrivate
-SourceCallbackFuncs :: _GSourceCallbackFuncs
-SourceFuncs :: _GSourceFuncs
+IOCondition :: enum u32 {IO_IN = 1, IO_OUT = 4, IO_PRI = 2, IO_ERR = 8, IO_HUP = 16, IO_NVAL = 32 }
+MainContextFlags :: enum u32 {NONE = 0, OWNERLESS_POLLING = 1 }
+MainContext :: struct #packed {}
+
+MainLoop :: struct #packed {}
+
+
+SourcePrivate :: struct #packed {}
+
+
+
 SourceFunc :: #type proc "c" (user_data: pointer) -> boolean
 SourceOnceFunc :: #type proc "c" (user_data: pointer)
 ChildWatchFunc :: #type proc "c" (pid: Pid, wait_status: int_, user_data: pointer)
 SourceDisposeFunc :: #type proc "c" (source: ^Source)
-_GSource :: struct {
+Source :: struct {
     callback_data: pointer,
     callback_funcs: [^]SourceCallbackFuncs,
     source_funcs: [^]SourceFuncs,
@@ -403,7 +422,7 @@ SourceFuncsPrepareFunc :: #type proc "c" (source: ^Source, timeout_: ^int_) -> b
 SourceFuncsCheckFunc :: #type proc "c" (source: ^Source) -> boolean
 SourceFuncsDispatchFunc :: #type proc "c" (source: ^Source, callback: SourceFunc, user_data: pointer) -> boolean
 SourceFuncsFinalizeFunc :: #type proc "c" (source: ^Source)
-_GSourceFuncs :: struct {
+SourceFuncs :: struct {
     prepare: SourceFuncsPrepareFunc,
     check: SourceFuncsCheckFunc,
     dispatch: SourceFuncsDispatchFunc,
@@ -415,53 +434,72 @@ MainContextPusher :: rawptr
 ClearHandleFunc :: #type proc "c" (handle_id: uint_)
 unichar :: uint32
 unichar2 :: uint16
-UnicodeScript :: enum i32 {INVALID_CODE = -1, COMMON = 0, INHERITED = 1, ARABIC = 2, ARMENIAN = 3, BENGALI = 4, BOPOMOFO = 5, CHEROKEE = 6, COPTIC = 7, CYRILLIC = 8, DESERET = 9, DEVANAGARI = 10, ETHIOPIC = 11, GEORGIAN = 12, GOTHIC = 13, GREEK = 14, GUJARATI = 15, GURMUKHI = 16, HAN = 17, HANGUL = 18, HEBREW = 19, HIRAGANA = 20, KANNADA = 21, KATAKANA = 22, KHMER = 23, LAO = 24, LATIN = 25, MALAYALAM = 26, MONGOLIAN = 27, MYANMAR = 28, OGHAM = 29, OLD_ITALIC = 30, ORIYA = 31, RUNIC = 32, SINHALA = 33, SYRIAC = 34, TAMIL = 35, TELUGU = 36, THAANA = 37, THAI = 38, TIBETAN = 39, CANADIAN_ABORIGINAL = 40, YI = 41, TAGALOG = 42, HANUNOO = 43, BUHID = 44, TAGBANWA = 45, BRAILLE = 46, CYPRIOT = 47, LIMBU = 48, OSMANYA = 49, SHAVIAN = 50, LINEAR_B = 51, TAI_LE = 52, UGARITIC = 53, NEW_TAI_LUE = 54, BUGINESE = 55, GLAGOLITIC = 56, TIFINAGH = 57, SYLOTI_NAGRI = 58, OLD_PERSIAN = 59, KHAROSHTHI = 60, UNKNOWN = 61, BALINESE = 62, CUNEIFORM = 63, PHOENICIAN = 64, PHAGS_PA = 65, NKO = 66, KAYAH_LI = 67, LEPCHA = 68, REJANG = 69, SUNDANESE = 70, SAURASHTRA = 71, CHAM = 72, OL_CHIKI = 73, VAI = 74, CARIAN = 75, LYCIAN = 76, LYDIAN = 77, AVESTAN = 78, BAMUM = 79, EGYPTIAN_HIEROGLYPHS = 80, IMPERIAL_ARAMAIC = 81, INSCRIPTIONAL_PAHLAVI = 82, INSCRIPTIONAL_PARTHIAN = 83, JAVANESE = 84, KAITHI = 85, LISU = 86, MEETEI_MAYEK = 87, OLD_SOUTH_ARABIAN = 88, OLD_TURKIC = 89, SAMARITAN = 90, TAI_THAM = 91, TAI_VIET = 92, BATAK = 93, BRAHMI = 94, MANDAIC = 95, CHAKMA = 96, MEROITIC_CURSIVE = 97, MEROITIC_HIEROGLYPHS = 98, MIAO = 99, SHARADA = 100, SORA_SOMPENG = 101, TAKRI = 102, BASSA_VAH = 103, CAUCASIAN_ALBANIAN = 104, DUPLOYAN = 105, ELBASAN = 106, GRANTHA = 107, KHOJKI = 108, KHUDAWADI = 109, LINEAR_A = 110, MAHAJANI = 111, MANICHAEAN = 112, MENDE_KIKAKUI = 113, MODI = 114, MRO = 115, NABATAEAN = 116, OLD_NORTH_ARABIAN = 117, OLD_PERMIC = 118, PAHAWH_HMONG = 119, PALMYRENE = 120, PAU_CIN_HAU = 121, PSALTER_PAHLAVI = 122, SIDDHAM = 123, TIRHUTA = 124, WARANG_CITI = 125, AHOM = 126, ANATOLIAN_HIEROGLYPHS = 127, HATRAN = 128, MULTANI = 129, OLD_HUNGARIAN = 130, SIGNWRITING = 131, ADLAM = 132, BHAIKSUKI = 133, MARCHEN = 134, NEWA = 135, OSAGE = 136, TANGUT = 137, MASARAM_GONDI = 138, NUSHU = 139, SOYOMBO = 140, ZANABAZAR_SQUARE = 141, DOGRA = 142, GUNJALA_GONDI = 143, HANIFI_ROHINGYA = 144, MAKASAR = 145, MEDEFAIDRIN = 146, OLD_SOGDIAN = 147, SOGDIAN = 148, ELYMAIC = 149, NANDINAGARI = 150, NYIAKENG_PUACHUE_HMONG = 151, WANCHO = 152, CHORASMIAN = 153, DIVES_AKURU = 154, KHITAN_SMALL_SCRIPT = 155, YEZIDI = 156, CYPRO_MINOAN = 157, OLD_UYGHUR = 158, TANGSA = 159, TOTO = 160, VITHKUQI = 161, MATH = 162, KAWI = 163, NAG_MUNDARI = 164, TODHRI = 165, GARAY = 166, TULU_TIGALARI = 167, SUNUWAR = 168, GURUNG_KHEMA = 169, KIRAT_RAI = 170, OL_ONAL = 171 }
+UnicodeType :: enum u32 {UNICODE_CONTROL = 0, UNICODE_FORMAT = 1, UNICODE_UNASSIGNED = 2, UNICODE_PRIVATE_USE = 3, UNICODE_SURROGATE = 4, UNICODE_LOWERCASE_LETTER = 5, UNICODE_MODIFIER_LETTER = 6, UNICODE_OTHER_LETTER = 7, UNICODE_TITLECASE_LETTER = 8, UNICODE_UPPERCASE_LETTER = 9, UNICODE_SPACING_MARK = 10, UNICODE_ENCLOSING_MARK = 11, UNICODE_NON_SPACING_MARK = 12, UNICODE_DECIMAL_NUMBER = 13, UNICODE_LETTER_NUMBER = 14, UNICODE_OTHER_NUMBER = 15, UNICODE_CONNECT_PUNCTUATION = 16, UNICODE_DASH_PUNCTUATION = 17, UNICODE_CLOSE_PUNCTUATION = 18, UNICODE_FINAL_PUNCTUATION = 19, UNICODE_INITIAL_PUNCTUATION = 20, UNICODE_OTHER_PUNCTUATION = 21, UNICODE_OPEN_PUNCTUATION = 22, UNICODE_CURRENCY_SYMBOL = 23, UNICODE_MODIFIER_SYMBOL = 24, UNICODE_MATH_SYMBOL = 25, UNICODE_OTHER_SYMBOL = 26, UNICODE_LINE_SEPARATOR = 27, UNICODE_PARAGRAPH_SEPARATOR = 28, UNICODE_SPACE_SEPARATOR = 29 }
+UnicodeBreakType :: enum u32 {UNICODE_BREAK_MANDATORY = 0, UNICODE_BREAK_CARRIAGE_RETURN = 1, UNICODE_BREAK_LINE_FEED = 2, UNICODE_BREAK_COMBINING_MARK = 3, UNICODE_BREAK_SURROGATE = 4, UNICODE_BREAK_ZERO_WIDTH_SPACE = 5, UNICODE_BREAK_INSEPARABLE = 6, UNICODE_BREAK_NON_BREAKING_GLUE = 7, UNICODE_BREAK_CONTINGENT = 8, UNICODE_BREAK_SPACE = 9, UNICODE_BREAK_AFTER = 10, UNICODE_BREAK_BEFORE = 11, UNICODE_BREAK_BEFORE_AND_AFTER = 12, UNICODE_BREAK_HYPHEN = 13, UNICODE_BREAK_NON_STARTER = 14, UNICODE_BREAK_OPEN_PUNCTUATION = 15, UNICODE_BREAK_CLOSE_PUNCTUATION = 16, UNICODE_BREAK_QUOTATION = 17, UNICODE_BREAK_EXCLAMATION = 18, UNICODE_BREAK_IDEOGRAPHIC = 19, UNICODE_BREAK_NUMERIC = 20, UNICODE_BREAK_INFIX_SEPARATOR = 21, UNICODE_BREAK_SYMBOL = 22, UNICODE_BREAK_ALPHABETIC = 23, UNICODE_BREAK_PREFIX = 24, UNICODE_BREAK_POSTFIX = 25, UNICODE_BREAK_COMPLEX_CONTEXT = 26, UNICODE_BREAK_AMBIGUOUS = 27, UNICODE_BREAK_UNKNOWN = 28, UNICODE_BREAK_NEXT_LINE = 29, UNICODE_BREAK_WORD_JOINER = 30, UNICODE_BREAK_HANGUL_L_JAMO = 31, UNICODE_BREAK_HANGUL_V_JAMO = 32, UNICODE_BREAK_HANGUL_T_JAMO = 33, UNICODE_BREAK_HANGUL_LV_SYLLABLE = 34, UNICODE_BREAK_HANGUL_LVT_SYLLABLE = 35, UNICODE_BREAK_CLOSE_PARANTHESIS = 36, UNICODE_BREAK_CLOSE_PARENTHESIS = 36, UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER = 37, UNICODE_BREAK_HEBREW_LETTER = 38, UNICODE_BREAK_REGIONAL_INDICATOR = 39, UNICODE_BREAK_EMOJI_BASE = 40, UNICODE_BREAK_EMOJI_MODIFIER = 41, UNICODE_BREAK_ZERO_WIDTH_JOINER = 42, UNICODE_BREAK_AKSARA = 43, UNICODE_BREAK_AKSARA_PRE_BASE = 44, UNICODE_BREAK_AKSARA_START = 45, UNICODE_BREAK_VIRAMA_FINAL = 46, UNICODE_BREAK_VIRAMA = 47, UNICODE_BREAK_UNAMBIGUOUS_HYPHEN = 48 }
+UnicodeScript :: enum i32 {INVALID_CODE = -1, COMMON = 0, INHERITED = 1, ARABIC = 2, ARMENIAN = 3, BENGALI = 4, BOPOMOFO = 5, CHEROKEE = 6, COPTIC = 7, CYRILLIC = 8, DESERET = 9, DEVANAGARI = 10, ETHIOPIC = 11, GEORGIAN = 12, GOTHIC = 13, GREEK = 14, GUJARATI = 15, GURMUKHI = 16, HAN = 17, HANGUL = 18, HEBREW = 19, HIRAGANA = 20, KANNADA = 21, KATAKANA = 22, KHMER = 23, LAO = 24, LATIN = 25, MALAYALAM = 26, MONGOLIAN = 27, MYANMAR = 28, OGHAM = 29, OLD_ITALIC = 30, ORIYA = 31, RUNIC = 32, SINHALA = 33, SYRIAC = 34, TAMIL = 35, TELUGU = 36, THAANA = 37, THAI = 38, TIBETAN = 39, CANADIAN_ABORIGINAL = 40, YI = 41, TAGALOG = 42, HANUNOO = 43, BUHID = 44, TAGBANWA = 45, BRAILLE = 46, CYPRIOT = 47, LIMBU = 48, OSMANYA = 49, SHAVIAN = 50, LINEAR_B = 51, TAI_LE = 52, UGARITIC = 53, NEW_TAI_LUE = 54, BUGINESE = 55, GLAGOLITIC = 56, TIFINAGH = 57, SYLOTI_NAGRI = 58, OLD_PERSIAN = 59, KHAROSHTHI = 60, UNKNOWN = 61, BALINESE = 62, CUNEIFORM = 63, PHOENICIAN = 64, PHAGS_PA = 65, NKO = 66, KAYAH_LI = 67, LEPCHA = 68, REJANG = 69, SUNDANESE = 70, SAURASHTRA = 71, CHAM = 72, OL_CHIKI = 73, VAI = 74, CARIAN = 75, LYCIAN = 76, LYDIAN = 77, AVESTAN = 78, BAMUM = 79, EGYPTIAN_HIEROGLYPHS = 80, IMPERIAL_ARAMAIC = 81, INSCRIPTIONAL_PAHLAVI = 82, INSCRIPTIONAL_PARTHIAN = 83, JAVANESE = 84, KAITHI = 85, LISU = 86, MEETEI_MAYEK = 87, OLD_SOUTH_ARABIAN = 88, OLD_TURKIC = 89, SAMARITAN = 90, TAI_THAM = 91, TAI_VIET = 92, BATAK = 93, BRAHMI = 94, MANDAIC = 95, CHAKMA = 96, MEROITIC_CURSIVE = 97, MEROITIC_HIEROGLYPHS = 98, MIAO = 99, SHARADA = 100, SORA_SOMPENG = 101, TAKRI = 102, BASSA_VAH = 103, CAUCASIAN_ALBANIAN = 104, DUPLOYAN = 105, ELBASAN = 106, GRANTHA = 107, KHOJKI = 108, KHUDAWADI = 109, LINEAR_A = 110, MAHAJANI = 111, MANICHAEAN = 112, MENDE_KIKAKUI = 113, MODI = 114, MRO = 115, NABATAEAN = 116, OLD_NORTH_ARABIAN = 117, OLD_PERMIC = 118, PAHAWH_HMONG = 119, PALMYRENE = 120, PAU_CIN_HAU = 121, PSALTER_PAHLAVI = 122, SIDDHAM = 123, TIRHUTA = 124, WARANG_CITI = 125, AHOM = 126, ANATOLIAN_HIEROGLYPHS = 127, HATRAN = 128, MULTANI = 129, OLD_HUNGARIAN = 130, SIGNWRITING = 131, ADLAM = 132, BHAIKSUKI = 133, MARCHEN = 134, NEWA = 135, OSAGE = 136, TANGUT = 137, MASARAM_GONDI = 138, NUSHU = 139, SOYOMBO = 140, ZANABAZAR_SQUARE = 141, DOGRA = 142, GUNJALA_GONDI = 143, HANIFI_ROHINGYA = 144, MAKASAR = 145, MEDEFAIDRIN = 146, OLD_SOGDIAN = 147, SOGDIAN = 148, ELYMAIC = 149, NANDINAGARI = 150, NYIAKENG_PUACHUE_HMONG = 151, WANCHO = 152, CHORASMIAN = 153, DIVES_AKURU = 154, KHITAN_SMALL_SCRIPT = 155, YEZIDI = 156, CYPRO_MINOAN = 157, OLD_UYGHUR = 158, TANGSA = 159, TOTO = 160, VITHKUQI = 161, MATH = 162, KAWI = 163, NAG_MUNDARI = 164, TODHRI = 165, GARAY = 166, TULU_TIGALARI = 167, SUNUWAR = 168, GURUNG_KHEMA = 169, KIRAT_RAI = 170, OL_ONAL = 171, SIDETIC = 172, TOLONG_SIKI = 173, TAI_YO = 174, BERIA_ERFE = 175 }
+NormalizeMode :: enum u32 {NORMALIZE_DEFAULT = 0, NORMALIZE_NFD = 0, NORMALIZE_DEFAULT_COMPOSE = 1, NORMALIZE_NFC = 1, NORMALIZE_ALL = 2, NORMALIZE_NFKD = 2, NORMALIZE_ALL_COMPOSE = 3, NORMALIZE_NFKC = 3 }
+AsciiType :: enum u32 {ASCII_ALNUM = 1, ASCII_ALPHA = 2, ASCII_CNTRL = 4, ASCII_DIGIT = 8, ASCII_GRAPH = 16, ASCII_LOWER = 32, ASCII_PRINT = 64, ASCII_PUNCT = 128, ASCII_SPACE = 256, ASCII_UPPER = 512, ASCII_XDIGIT = 1024 }
 Strv :: ^cstring
-_GString :: struct {
+NumberParserError :: enum u32 {INVALID = 0, OUT_OF_BOUNDS = 1 }
+String :: struct {
     str: cstring,
     len: size,
     allocated_len: size,
 }
-String :: _GString
+
 IOChannel :: struct #packed {}
-IOFuncs :: _GIOFuncs
+IOStatus :: enum u32 {ERROR = 0, NORMAL = 1, EOF = 2, AGAIN = 3 }
+SeekType :: enum u32 {SEEK_CUR = 0, SEEK_SET = 1, SEEK_END = 2 }
+IOFlags :: enum u32 {IO_FLAG_NONE = 0, IO_FLAG_APPEND = 1, IO_FLAG_NONBLOCK = 2, IO_FLAG_IS_READABLE = 4, IO_FLAG_IS_WRITABLE = 8, IO_FLAG_IS_WRITEABLE = 8, IO_FLAG_IS_SEEKABLE = 16, IO_FLAG_MASK = 31, IO_FLAG_GET_MASK = 31, IO_FLAG_SET_MASK = 3 }
+
+IOError :: enum u32 {NONE = 0, AGAIN = 1, INVAL = 2, UNKNOWN = 3 }
+IOChannelError :: enum u32 {FBIG = 0, INVAL = 1, IO = 2, ISDIR = 3, NOSPC = 4, NXIO = 5, OVERFLOW = 6, PIPE = 7, FAILED = 8 }
 IOFunc :: #type proc "c" (source: ^IOChannel, condition: IOCondition, data: pointer) -> boolean
-_GKeyFile :: struct #packed {}
-KeyFile :: _GKeyFile
-_GMappedFile :: struct #packed {}
-MappedFile :: _GMappedFile
-_GMarkupParseContext :: struct #packed {}
-MarkupParseContext :: _GMarkupParseContext
-MarkupParser :: _GMarkupParser
-_GVariantType :: struct #packed {}
-VariantType :: _GVariantType
-_GVariant :: struct #packed {}
-Variant :: _GVariant
-_GVariantIter :: struct {
+KeyFileError :: enum u32 {UNKNOWN_ENCODING = 0, PARSE = 1, NOT_FOUND = 2, KEY_NOT_FOUND = 3, GROUP_NOT_FOUND = 4, INVALID_VALUE = 5 }
+KeyFile :: struct #packed {}
+
+KeyFileFlags :: enum u32 {KEY_FILE_NONE = 0, KEY_FILE_KEEP_COMMENTS = 1, KEY_FILE_KEEP_TRANSLATIONS = 2 }
+MappedFile :: struct #packed {}
+
+MarkupError :: enum u32 {BAD_UTF8 = 0, EMPTY = 1, PARSE = 2, UNKNOWN_ELEMENT = 3, UNKNOWN_ATTRIBUTE = 4, INVALID_CONTENT = 5, MISSING_ATTRIBUTE = 6 }
+MarkupParseFlags :: enum u32 {MARKUP_DEFAULT_FLAGS = 0, MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1, MARKUP_TREAT_CDATA_AS_TEXT = 2, MARKUP_PREFIX_ERROR_POSITION = 4, MARKUP_IGNORE_QUALIFIED = 8 }
+MarkupParseContext :: struct #packed {}
+
+
+MarkupCollectType :: enum u32 {MARKUP_COLLECT_INVALID = 0, MARKUP_COLLECT_STRING = 1, MARKUP_COLLECT_STRDUP = 2, MARKUP_COLLECT_BOOLEAN = 3, MARKUP_COLLECT_TRISTATE = 4, MARKUP_COLLECT_OPTIONAL = 65536 }
+VariantType :: struct #packed {}
+
+Variant :: struct #packed {}
+
+VariantClass :: enum u32 {BOOLEAN = 98, BYTE = 121, INT16 = 110, UINT16 = 113, INT32 = 105, UINT32 = 117, INT64 = 120, UINT64 = 116, HANDLE = 104, DOUBLE = 100, STRING = 115, OBJECT_PATH = 111, SIGNATURE = 103, VARIANT = 118, MAYBE = 109, ARRAY = 97, TUPLE = 40, DICT_ENTRY = 123 }
+VariantIter :: struct {
     x: [16]uintptr_,
 }
-VariantIter :: _GVariantIter
-VariantBuilder :: _GVariantBuilder
+
+
+VariantParseError :: enum u32 {FAILED = 0, BASIC_TYPE_EXPECTED = 1, CANNOT_INFER_TYPE = 2, DEFINITE_TYPE_EXPECTED = 3, INPUT_NOT_AT_END = 4, INVALID_CHARACTER = 5, INVALID_FORMAT_STRING = 6, INVALID_OBJECT_PATH = 7, INVALID_SIGNATURE = 8, INVALID_TYPE_STRING = 9, NO_COMMON_TYPE = 10, NUMBER_OUT_OF_RANGE = 11, NUMBER_TOO_BIG = 12, TYPE_ERROR = 13, UNEXPECTED_TOKEN = 14, UNKNOWN_KEYWORD = 15, UNTERMINATED_STRING_CONSTANT = 16, VALUE_EXPECTED = 17, RECURSION = 18 }
 u_union_anon_25 :: struct #raw_union {
     s: s_struct_anon_24,
     x: [16]uintptr_,
 }
-VariantDict :: _GVariantDict
+
 LogLevelFlags :: enum i32 {LOG_FLAG_RECURSION = 1, LOG_FLAG_FATAL = 2, LOG_LEVEL_ERROR = 4, LOG_LEVEL_CRITICAL = 8, LOG_LEVEL_WARNING = 16, LOG_LEVEL_MESSAGE = 32, LOG_LEVEL_INFO = 64, LOG_LEVEL_DEBUG = 128, LOG_LEVEL_MASK = -4 }
 LogFunc :: #type proc "c" (log_domain: cstring, log_level: LogLevelFlags, message: cstring, user_data: pointer)
-_GLogField :: struct {
+LogWriterOutput :: enum u32 {LOG_WRITER_HANDLED = 1, LOG_WRITER_UNHANDLED = 0 }
+LogField :: struct {
     key: cstring,
     value: constpointer,
     length: ssize,
 }
-LogField :: _GLogField
+
 LogWriterFunc :: #type proc "c" (log_level: LogLevelFlags, fields: [^]LogField, n_fields: size, user_data: pointer) -> LogWriterOutput
 PrintFunc :: #type proc "c" (string_p: cstring)
-_GOptionContext :: struct #packed {}
-OptionContext :: _GOptionContext
-_GOptionGroup :: struct #packed {}
-OptionGroup :: _GOptionGroup
-_GOptionEntry :: struct {
+OptionContext :: struct #packed {}
+
+OptionGroup :: struct #packed {}
+
+OptionArg :: enum u32 {NONE = 0, STRING = 1, INT = 2, CALLBACK = 3, FILENAME = 4, STRING_ARRAY = 5, FILENAME_ARRAY = 6, DOUBLE = 7, INT64 = 8 }
+OptionEntry :: struct {
     long_name: cstring,
     short_name: char,
     flags: int_,
@@ -470,33 +508,38 @@ _GOptionEntry :: struct {
     description: cstring,
     arg_description: cstring,
 }
-OptionEntry :: _GOptionEntry
+
+OptionFlags :: enum u32 {OPTION_FLAG_NONE = 0, OPTION_FLAG_HIDDEN = 1, OPTION_FLAG_IN_MAIN = 2, OPTION_FLAG_REVERSE = 4, OPTION_FLAG_NO_ARG = 8, OPTION_FLAG_FILENAME = 16, OPTION_FLAG_OPTIONAL_ARG = 32, OPTION_FLAG_NOALIAS = 64, OPTION_FLAG_DEPRECATED = 128 }
 OptionArgFunc :: #type proc "c" (option_name: cstring, value: cstring, data: pointer, error: ^^Error) -> boolean
 OptionParseFunc :: #type proc "c" (context_p: ^OptionContext, group: ^OptionGroup, data: pointer, error: ^^Error) -> boolean
 OptionErrorFunc :: #type proc "c" (context_p: ^OptionContext, group: ^OptionGroup, data: pointer, error: ^^Error)
-_GPathBuf :: struct {
+OptionError :: enum u32 {UNKNOWN_OPTION = 0, BAD_VALUE = 1, FAILED = 2 }
+PathBuf :: struct {
     dummy: [8]pointer,
 }
-PathBuf :: _GPathBuf
-_GPatternSpec :: struct #packed {}
-PatternSpec :: _GPatternSpec
-_GQueue :: struct {
+
+PatternSpec :: struct #packed {}
+
+Queue :: struct {
     head: ^List,
     tail: ^List,
     length: uint_,
 }
-Queue :: _GQueue
-_GRand :: struct #packed {}
-Rand :: _GRand
+
+Rand :: struct #packed {}
+
 RefString :: char
-_GRegex :: struct #packed {}
-Regex :: _GRegex
-_GMatchInfo :: struct #packed {}
-MatchInfo :: _GMatchInfo
+RegexError :: enum u32 {COMPILE = 0, OPTIMIZE = 1, REPLACE = 2, MATCH = 3, INTERNAL = 4, STRAY_BACKSLASH = 101, MISSING_CONTROL_CHAR = 102, UNRECOGNIZED_ESCAPE = 103, QUANTIFIERS_OUT_OF_ORDER = 104, QUANTIFIER_TOO_BIG = 105, UNTERMINATED_CHARACTER_CLASS = 106, INVALID_ESCAPE_IN_CHARACTER_CLASS = 107, RANGE_OUT_OF_ORDER = 108, NOTHING_TO_REPEAT = 109, UNRECOGNIZED_CHARACTER = 112, POSIX_NAMED_CLASS_OUTSIDE_CLASS = 113, UNMATCHED_PARENTHESIS = 114, INEXISTENT_SUBPATTERN_REFERENCE = 115, UNTERMINATED_COMMENT = 118, EXPRESSION_TOO_LARGE = 120, MEMORY_ERROR = 121, VARIABLE_LENGTH_LOOKBEHIND = 125, MALFORMED_CONDITION = 126, TOO_MANY_CONDITIONAL_BRANCHES = 127, ASSERTION_EXPECTED = 128, UNKNOWN_POSIX_CLASS_NAME = 130, POSIX_COLLATING_ELEMENTS_NOT_SUPPORTED = 131, HEX_CODE_TOO_LARGE = 134, INVALID_CONDITION = 135, SINGLE_BYTE_MATCH_IN_LOOKBEHIND = 136, INFINITE_LOOP = 140, MISSING_SUBPATTERN_NAME_TERMINATOR = 142, DUPLICATE_SUBPATTERN_NAME = 143, MALFORMED_PROPERTY = 146, UNKNOWN_PROPERTY = 147, SUBPATTERN_NAME_TOO_LONG = 148, TOO_MANY_SUBPATTERNS = 149, INVALID_OCTAL_VALUE = 151, TOO_MANY_BRANCHES_IN_DEFINE = 154, DEFINE_REPETION = 155, INCONSISTENT_NEWLINE_OPTIONS = 156, MISSING_BACK_REFERENCE = 157, INVALID_RELATIVE_REFERENCE = 158, BACKTRACKING_CONTROL_VERB_ARGUMENT_FORBIDDEN = 159, UNKNOWN_BACKTRACKING_CONTROL_VERB = 160, NUMBER_TOO_BIG = 161, MISSING_SUBPATTERN_NAME = 162, MISSING_DIGIT = 163, INVALID_DATA_CHARACTER = 164, EXTRA_SUBPATTERN_NAME = 165, BACKTRACKING_CONTROL_VERB_ARGUMENT_REQUIRED = 166, INVALID_CONTROL_CHAR = 168, MISSING_NAME = 169, NOT_SUPPORTED_IN_CLASS = 171, TOO_MANY_FORWARD_REFERENCES = 172, NAME_TOO_LONG = 175, CHARACTER_VALUE_TOO_LARGE = 176 }
+RegexCompileFlags :: enum u32 {REGEX_DEFAULT = 0, REGEX_CASELESS = 1, REGEX_MULTILINE = 2, REGEX_DOTALL = 4, REGEX_EXTENDED = 8, REGEX_ANCHORED = 16, REGEX_DOLLAR_ENDONLY = 32, REGEX_UNGREEDY = 512, REGEX_RAW = 2048, REGEX_NO_AUTO_CAPTURE = 4096, REGEX_OPTIMIZE = 8192, REGEX_FIRSTLINE = 262144, REGEX_DUPNAMES = 524288, REGEX_NEWLINE_CR = 1048576, REGEX_NEWLINE_LF = 2097152, REGEX_NEWLINE_RESERVED1 = 4194304, REGEX_NEWLINE_CRLF = 3145728, REGEX_NEWLINE_ANYCRLF = 5242880, REGEX_BSR_ANYCRLF = 8388608, REGEX_JAVASCRIPT_COMPAT = 33554432 }
+RegexMatchFlags :: enum u32 {REGEX_MATCH_DEFAULT = 0, REGEX_MATCH_ANCHORED = 16, REGEX_MATCH_NOTBOL = 128, REGEX_MATCH_NOTEOL = 256, REGEX_MATCH_NOTEMPTY = 1024, REGEX_MATCH_PARTIAL = 32768, REGEX_MATCH_NEWLINE_CR = 1048576, REGEX_MATCH_NEWLINE_LF = 2097152, REGEX_MATCH_NEWLINE_CRLF = 3145728, REGEX_MATCH_NEWLINE_ANY = 4194304, REGEX_MATCH_NEWLINE_ANYCRLF = 5242880, REGEX_MATCH_BSR_ANYCRLF = 8388608, REGEX_MATCH_BSR_ANY = 16777216, REGEX_MATCH_PARTIAL_SOFT = 32768, REGEX_MATCH_PARTIAL_HARD = 134217728, REGEX_MATCH_NOTEMPTY_ATSTART = 268435456 }
+Regex :: struct #packed {}
+
+MatchInfo :: struct #packed {}
+
 RegexEvalCallback :: #type proc "c" (match_info: ^MatchInfo, result: ^String, user_data: pointer) -> boolean
-Scanner :: _GScanner
+
 ScannerConfig :: struct #packed {}
-_GTokenValue :: struct #raw_union {
+TokenValue :: struct #raw_union {
     v_symbol: pointer,
     v_identifier: cstring,
     v_binary: ulong,
@@ -510,9 +553,11 @@ _GTokenValue :: struct #raw_union {
     v_char: uchar,
     v_error: uint_,
 }
-TokenValue :: _GTokenValue
+
 ScannerMsgFunc :: #type proc "c" (scanner: ^Scanner, message: cstring, error: boolean)
-_GScanner :: struct {
+ErrorType :: enum u32 {ERR_UNKNOWN = 0, ERR_UNEXP_EOF = 1, ERR_UNEXP_EOF_IN_STRING = 2, ERR_UNEXP_EOF_IN_COMMENT = 3, ERR_NON_DIGIT_IN_CONST = 4, ERR_DIGIT_RADIX = 5, ERR_FLOAT_RADIX = 6, ERR_FLOAT_MALFORMED = 7 }
+TokenType :: enum u32 {TOKEN_EOF = 0, TOKEN_LEFT_PAREN = 40, TOKEN_RIGHT_PAREN = 41, TOKEN_LEFT_CURLY = 123, TOKEN_RIGHT_CURLY = 125, TOKEN_LEFT_BRACE = 91, TOKEN_RIGHT_BRACE = 93, TOKEN_EQUAL_SIGN = 61, TOKEN_COMMA = 44, TOKEN_NONE = 256, TOKEN_ERROR = 257, TOKEN_CHAR = 258, TOKEN_BINARY = 259, TOKEN_OCTAL = 260, TOKEN_INT = 261, TOKEN_HEX = 262, TOKEN_FLOAT = 263, TOKEN_STRING = 264, TOKEN_SYMBOL = 265, TOKEN_IDENTIFIER = 266, TOKEN_IDENTIFIER_NULL = 267, TOKEN_COMMENT_SINGLE = 268, TOKEN_COMMENT_MULTI = 269, TOKEN_LAST = 270 }
+Scanner :: struct {
     user_data: pointer,
     max_parse_errors: uint_,
     parse_errors: uint_,
@@ -535,19 +580,24 @@ _GScanner :: struct {
     scope_id: uint_,
     msg_handler: ScannerMsgFunc,
 }
-_GSequence :: struct #packed {}
-Sequence :: _GSequence
-_GSequenceNode :: struct #packed {}
-SequenceIter :: _GSequenceNode
+Sequence :: struct #packed {}
+
+SequenceIter :: SequenceNode
 SequenceIterCompareFunc :: #type proc "c" (a: ^SequenceIter, b: ^SequenceIter, data: pointer) -> int_
+ShellError :: enum u32 {BAD_QUOTING = 0, EMPTY_STRING = 1, FAILED = 2 }
+SliceConfig :: enum u32 {ALWAYS_MALLOC = 1, BYPASS_MAGAZINES = 2, WORKING_SET_MSECS = 3, COLOR_INCREMENT = 4, CHUNK_SIZES = 5, CONTENTION_COUNTER = 6 }
+SpawnError :: enum u32 {FORK = 0, READ = 1, CHDIR = 2, ACCES = 3, PERM = 4, TOO_BIG = 5, _2BIG = 5, NOEXEC = 6, NAMETOOLONG = 7, NOENT = 8, NOMEM = 9, NOTDIR = 10, LOOP = 11, TXTBUSY = 12, IO = 13, NFILE = 14, MFILE = 15, INVAL = 16, ISDIR = 17, LIBBAD = 18, FAILED = 19 }
 SpawnChildSetupFunc :: #type proc "c" (data: pointer)
-_GStringChunk :: struct #packed {}
-StringChunk :: _GStringChunk
-_GStrvBuilder :: struct #packed {}
-StrvBuilder :: _GStrvBuilder
+SpawnFlags :: enum u32 {SPAWN_DEFAULT = 0, SPAWN_LEAVE_DESCRIPTORS_OPEN = 1, SPAWN_DO_NOT_REAP_CHILD = 2, SPAWN_SEARCH_PATH = 4, SPAWN_STDOUT_TO_DEV_NULL = 8, SPAWN_STDERR_TO_DEV_NULL = 16, SPAWN_CHILD_INHERITS_STDIN = 32, SPAWN_FILE_AND_ARGV_ZERO = 64, SPAWN_SEARCH_PATH_FROM_ENVP = 128, SPAWN_CLOEXEC_PIPES = 256, SPAWN_CHILD_INHERITS_STDOUT = 512, SPAWN_CHILD_INHERITS_STDERR = 1024, SPAWN_STDIN_FROM_DEV_NULL = 2048 }
+StringChunk :: struct #packed {}
+
+StrvBuilder :: struct #packed {}
+
 TestFunc :: #type proc "c" ()
 TestDataFunc :: #type proc "c" (user_data: constpointer)
 TestFixtureFunc :: #type proc "c" (fixture: pointer, user_data: constpointer)
+TestTrapFlags :: enum u32 {TEST_TRAP_DEFAULT = 0, TEST_TRAP_SILENCE_STDOUT = 128, TEST_TRAP_SILENCE_STDERR = 256, TEST_TRAP_INHERIT_STDIN = 512 }
+TestSubprocessFlags :: enum u32 {TEST_SUBPROCESS_DEFAULT = 0, TEST_SUBPROCESS_INHERIT_STDIN = 1, TEST_SUBPROCESS_INHERIT_STDOUT = 2, TEST_SUBPROCESS_INHERIT_STDERR = 4, TEST_SUBPROCESS_INHERIT_DESCRIPTORS = 8 }
 TestConfig :: struct {
     test_initialized: boolean,
     test_quick: boolean,
@@ -556,66 +606,73 @@ TestConfig :: struct {
     test_quiet: boolean,
     test_undefined: boolean,
 }
+TestResult :: enum u32 {TEST_RUN_SUCCESS = 0, TEST_RUN_SKIPPED = 1, TEST_RUN_FAILURE = 2, TEST_RUN_INCOMPLETE = 3 }
+TestLogType :: enum u32 {TEST_LOG_NONE = 0, TEST_LOG_ERROR = 1, TEST_LOG_START_BINARY = 2, TEST_LOG_LIST_CASE = 3, TEST_LOG_SKIP_CASE = 4, TEST_LOG_START_CASE = 5, TEST_LOG_STOP_CASE = 6, TEST_LOG_MIN_RESULT = 7, TEST_LOG_MAX_RESULT = 8, TEST_LOG_MESSAGE = 9, TEST_LOG_START_SUITE = 10, TEST_LOG_STOP_SUITE = 11 }
 TestLogBuffer :: struct {
-    data: ^String,
+    data: [^]String,
     msgs: [^]SList,
 }
 TestLogFatalFunc :: #type proc "c" (log_domain: cstring, log_level: LogLevelFlags, message: cstring, user_data: pointer) -> boolean
-_GThreadPool :: struct {
+TestFileType :: enum u32 {TEST_DIST = 0, TEST_BUILT = 1 }
+ThreadPool :: struct {
     func: Func,
     user_data: pointer,
     exclusive: boolean,
 }
-ThreadPool :: _GThreadPool
-_GTimer :: struct #packed {}
-Timer :: _GTimer
-TrashStack :: _GTrashStack
-_GTrashStack :: struct {
+
+Timer :: struct #packed {}
+
+
+TrashStack :: struct {
     next: ^TrashStack,
 }
-_GTree :: struct #packed {}
-Tree :: _GTree
-_GTreeNode :: struct #packed {}
-TreeNode :: _GTreeNode
+Tree :: struct #packed {}
+
+TreeNode :: struct #packed {}
+
 TraverseFunc :: #type proc "c" (key: pointer, value: pointer, data: pointer) -> boolean
 TraverseNodeFunc :: #type proc "c" (node: ^TreeNode, data: pointer) -> boolean
-_GUri :: struct #packed {}
-Uri :: _GUri
-_GUriParamsIter :: struct {
+Uri :: struct #packed {}
+
+UriFlags :: enum u32 {NONE = 0, PARSE_RELAXED = 1, HAS_PASSWORD = 2, HAS_AUTH_PARAMS = 4, ENCODED = 8, NON_DNS = 16, ENCODED_QUERY = 32, ENCODED_PATH = 64, ENCODED_FRAGMENT = 128, SCHEME_NORMALIZE = 256 }
+UriHideFlags :: enum u32 {URI_HIDE_NONE = 0, URI_HIDE_USERINFO = 1, URI_HIDE_PASSWORD = 2, URI_HIDE_AUTH_PARAMS = 4, URI_HIDE_QUERY = 8, URI_HIDE_FRAGMENT = 16 }
+UriParamsFlags :: enum u32 {URI_PARAMS_NONE = 0, URI_PARAMS_CASE_INSENSITIVE = 1, URI_PARAMS_WWW_FORM = 2, URI_PARAMS_PARSE_RELAXED = 4 }
+UriParamsIter :: struct {
     dummy0: int_,
     dummy1: pointer,
     dummy2: pointer,
     dummy3: [256]uint8,
 }
-UriParamsIter :: _GUriParamsIter
-_GAllocator :: struct #packed {}
-Allocator :: _GAllocator
-_GMemChunk :: struct #packed {}
-MemChunk :: _GMemChunk
-_GCache :: struct #packed {}
-Cache :: _GCache
+
+UriError :: enum u32 {FAILED = 0, BAD_SCHEME = 1, BAD_USER = 2, BAD_PASSWORD = 3, BAD_AUTH_PARAMS = 4, BAD_HOST = 5, BAD_PORT = 6, BAD_PATH = 7, BAD_QUERY = 8, BAD_FRAGMENT = 9 }
+Allocator :: struct #packed {}
+
+MemChunk :: struct #packed {}
+
+Cache :: struct #packed {}
+
 CacheNewFunc :: #type proc "c" (key: pointer) -> pointer
 CacheDupFunc :: #type proc "c" (value: pointer) -> pointer
 CacheDestroyFunc :: #type proc "c" (value: pointer)
 CompletionFunc :: #type proc "c" (item: pointer) -> cstring
 CompletionStrncmpFunc :: #type proc "c" (s1: cstring, s2: cstring, n: size) -> int_
-_GCompletion :: struct {
+Completion :: struct {
     items: [^]List,
     func: CompletionFunc,
     prefix: cstring,
     cache: ^List,
     strncmp_func: CompletionStrncmpFunc,
 }
-Completion :: _GCompletion
-_GRelation :: struct #packed {}
-Relation :: _GRelation
-_GTuples :: struct {
+
+Relation :: struct #packed {}
+
+Tuples :: struct {
     len: uint_,
 }
-Tuples :: _GTuples
-ThreadFunctions :: _GThreadFunctions
-StaticRecMutex :: _GStaticRecMutex
-_GStaticRWLock :: struct {
+
+
+
+StaticRWLock :: struct {
     mutex: StaticMutex,
     read_cond: ^Cond,
     write_cond: ^Cond,
@@ -624,219 +681,12 @@ _GStaticRWLock :: struct {
     want_to_read: uint_,
     want_to_write: uint_,
 }
-StaticRWLock :: _GStaticRWLock
-_GStaticPrivate :: struct {
+
+StaticPrivate :: struct {
     index: uint_,
 }
-StaticPrivate :: _GStaticPrivate
-AsyncQueue_autoptr :: ^AsyncQueue
-AsyncQueue_listautoptr :: ^List
-AsyncQueue_slistautoptr :: ^SList
-AsyncQueue_queueautoptr :: ^Queue
-BookmarkFile_autoptr :: ^BookmarkFile
-BookmarkFile_listautoptr :: ^List
-BookmarkFile_slistautoptr :: ^SList
-BookmarkFile_queueautoptr :: ^Queue
-Bytes_autoptr :: ^Bytes
-Bytes_listautoptr :: ^List
-Bytes_slistautoptr :: ^SList
-Bytes_queueautoptr :: ^Queue
-Checksum_autoptr :: ^Checksum
-Checksum_listautoptr :: ^List
-Checksum_slistautoptr :: ^SList
-Checksum_queueautoptr :: ^Queue
-DateTime_autoptr :: ^DateTime
-DateTime_listautoptr :: ^List
-DateTime_slistautoptr :: ^SList
-DateTime_queueautoptr :: ^Queue
-Date_autoptr :: ^Date
-Date_listautoptr :: ^List
-Date_slistautoptr :: ^SList
-Date_queueautoptr :: ^Queue
-Dir_autoptr :: ^Dir
-Dir_listautoptr :: ^List
-Dir_slistautoptr :: ^SList
-Dir_queueautoptr :: ^Queue
-Error_autoptr :: ^Error
-Error_listautoptr :: ^List
-Error_slistautoptr :: ^SList
-Error_queueautoptr :: ^Queue
-HashTable_autoptr :: ^HashTable
-HashTable_listautoptr :: ^List
-HashTable_slistautoptr :: ^SList
-HashTable_queueautoptr :: ^Queue
-Hmac_autoptr :: ^Hmac
-Hmac_listautoptr :: ^List
-Hmac_slistautoptr :: ^SList
-Hmac_queueautoptr :: ^Queue
-IOChannel_autoptr :: ^IOChannel
-IOChannel_listautoptr :: ^List
-IOChannel_slistautoptr :: ^SList
-IOChannel_queueautoptr :: ^Queue
-KeyFile_autoptr :: ^KeyFile
-KeyFile_listautoptr :: ^List
-KeyFile_slistautoptr :: ^SList
-KeyFile_queueautoptr :: ^Queue
-List_autoptr :: ^List
-List_listautoptr :: ^List
-List_slistautoptr :: ^SList
-List_queueautoptr :: ^Queue
-Array_autoptr :: ^Array
-Array_listautoptr :: ^List
-Array_slistautoptr :: ^SList
-Array_queueautoptr :: ^Queue
-PtrArray_autoptr :: ^PtrArray
-PtrArray_listautoptr :: ^List
-PtrArray_slistautoptr :: ^SList
-PtrArray_queueautoptr :: ^Queue
-ByteArray_autoptr :: ^ByteArray
-ByteArray_listautoptr :: ^List
-ByteArray_slistautoptr :: ^SList
-ByteArray_queueautoptr :: ^Queue
-MainContext_autoptr :: ^MainContext
-MainContext_listautoptr :: ^List
-MainContext_slistautoptr :: ^SList
-MainContext_queueautoptr :: ^Queue
-MainContextPusher_autoptr :: ^MainContextPusher
-MainContextPusher_listautoptr :: ^List
-MainContextPusher_slistautoptr :: ^SList
-MainContextPusher_queueautoptr :: ^Queue
-MainLoop_autoptr :: ^MainLoop
-MainLoop_listautoptr :: ^List
-MainLoop_slistautoptr :: ^SList
-MainLoop_queueautoptr :: ^Queue
-Source_autoptr :: ^Source
-Source_listautoptr :: ^List
-Source_slistautoptr :: ^SList
-Source_queueautoptr :: ^Queue
-MappedFile_autoptr :: ^MappedFile
-MappedFile_listautoptr :: ^List
-MappedFile_slistautoptr :: ^SList
-MappedFile_queueautoptr :: ^Queue
-MarkupParseContext_autoptr :: ^MarkupParseContext
-MarkupParseContext_listautoptr :: ^List
-MarkupParseContext_slistautoptr :: ^SList
-MarkupParseContext_queueautoptr :: ^Queue
-Node_autoptr :: ^Node
-Node_listautoptr :: ^List
-Node_slistautoptr :: ^SList
-Node_queueautoptr :: ^Queue
-OptionContext_autoptr :: ^OptionContext
-OptionContext_listautoptr :: ^List
-OptionContext_slistautoptr :: ^SList
-OptionContext_queueautoptr :: ^Queue
-OptionGroup_autoptr :: ^OptionGroup
-OptionGroup_listautoptr :: ^List
-OptionGroup_slistautoptr :: ^SList
-OptionGroup_queueautoptr :: ^Queue
-PatternSpec_autoptr :: ^PatternSpec
-PatternSpec_listautoptr :: ^List
-PatternSpec_slistautoptr :: ^SList
-PatternSpec_queueautoptr :: ^Queue
-Queue_autoptr :: ^Queue
-Queue_listautoptr :: ^List
-Queue_slistautoptr :: ^SList
-Queue_queueautoptr :: ^Queue
-Rand_autoptr :: ^Rand
-Rand_listautoptr :: ^List
-Rand_slistautoptr :: ^SList
-Rand_queueautoptr :: ^Queue
-Regex_autoptr :: ^Regex
-Regex_listautoptr :: ^List
-Regex_slistautoptr :: ^SList
-Regex_queueautoptr :: ^Queue
-MatchInfo_autoptr :: ^MatchInfo
-MatchInfo_listautoptr :: ^List
-MatchInfo_slistautoptr :: ^SList
-MatchInfo_queueautoptr :: ^Queue
-Scanner_autoptr :: ^Scanner
-Scanner_listautoptr :: ^List
-Scanner_slistautoptr :: ^SList
-Scanner_queueautoptr :: ^Queue
-Sequence_autoptr :: ^Sequence
-Sequence_listautoptr :: ^List
-Sequence_slistautoptr :: ^SList
-Sequence_queueautoptr :: ^Queue
-SList_autoptr :: ^SList
-SList_listautoptr :: ^List
-SList_slistautoptr :: ^SList
-SList_queueautoptr :: ^Queue
-String_autoptr :: ^String
-String_listautoptr :: ^List
-String_slistautoptr :: ^SList
-String_queueautoptr :: ^Queue
-StringChunk_autoptr :: ^StringChunk
-StringChunk_listautoptr :: ^List
-StringChunk_slistautoptr :: ^SList
-StringChunk_queueautoptr :: ^Queue
-StrvBuilder_autoptr :: ^StrvBuilder
-StrvBuilder_listautoptr :: ^List
-StrvBuilder_slistautoptr :: ^SList
-StrvBuilder_queueautoptr :: ^Queue
-Thread_autoptr :: ^Thread
-Thread_listautoptr :: ^List
-Thread_slistautoptr :: ^SList
-Thread_queueautoptr :: ^Queue
-MutexLocker_autoptr :: ^MutexLocker
-MutexLocker_listautoptr :: ^List
-MutexLocker_slistautoptr :: ^SList
-MutexLocker_queueautoptr :: ^Queue
-RecMutexLocker_autoptr :: ^RecMutexLocker
-RecMutexLocker_listautoptr :: ^List
-RecMutexLocker_slistautoptr :: ^SList
-RecMutexLocker_queueautoptr :: ^Queue
-RWLockWriterLocker_autoptr :: ^RWLockWriterLocker
-RWLockWriterLocker_listautoptr :: ^List
-RWLockWriterLocker_slistautoptr :: ^SList
-RWLockWriterLocker_queueautoptr :: ^Queue
-RWLockReaderLocker_autoptr :: ^RWLockReaderLocker
-RWLockReaderLocker_listautoptr :: ^List
-RWLockReaderLocker_slistautoptr :: ^SList
-RWLockReaderLocker_queueautoptr :: ^Queue
-Timer_autoptr :: ^Timer
-Timer_listautoptr :: ^List
-Timer_slistautoptr :: ^SList
-Timer_queueautoptr :: ^Queue
-TimeZone_autoptr :: ^TimeZone
-TimeZone_listautoptr :: ^List
-TimeZone_slistautoptr :: ^SList
-TimeZone_queueautoptr :: ^Queue
-Tree_autoptr :: ^Tree
-Tree_listautoptr :: ^List
-Tree_slistautoptr :: ^SList
-Tree_queueautoptr :: ^Queue
-Variant_autoptr :: ^Variant
-Variant_listautoptr :: ^List
-Variant_slistautoptr :: ^SList
-Variant_queueautoptr :: ^Queue
-VariantBuilder_autoptr :: ^VariantBuilder
-VariantBuilder_listautoptr :: ^List
-VariantBuilder_slistautoptr :: ^SList
-VariantBuilder_queueautoptr :: ^Queue
-VariantIter_autoptr :: ^VariantIter
-VariantIter_listautoptr :: ^List
-VariantIter_slistautoptr :: ^SList
-VariantIter_queueautoptr :: ^Queue
-VariantDict_autoptr :: ^VariantDict
-VariantDict_listautoptr :: ^List
-VariantDict_slistautoptr :: ^SList
-VariantDict_queueautoptr :: ^Queue
-VariantType_autoptr :: ^VariantType
-VariantType_listautoptr :: ^List
-VariantType_slistautoptr :: ^SList
-VariantType_queueautoptr :: ^Queue
-RefString_autoptr :: ^RefString
-RefString_listautoptr :: ^List
-RefString_slistautoptr :: ^SList
-RefString_queueautoptr :: ^Queue
-Uri_autoptr :: ^Uri
-Uri_listautoptr :: ^List
-Uri_slistautoptr :: ^SList
-Uri_queueautoptr :: ^Queue
-PathBuf_autoptr :: ^PathBuf
-PathBuf_listautoptr :: ^List
-PathBuf_slistautoptr :: ^SList
-PathBuf_queueautoptr :: ^Queue
+
+SequenceNode :: struct #packed {}
 TestCase :: struct #packed {}
 TestSuite :: struct #packed {}
 
@@ -1517,11 +1367,17 @@ foreign glib_runic {
     @(link_name = "g_bit_lock")
     bit_lock :: proc(address: [^]int_, lock_bit: int_) ---
 
+    @(link_name = "g_bit_lock_and_get")
+    bit_lock_and_get :: proc(address: [^]int_, lock_bit: uint_, out_val: ^int_) ---
+
     @(link_name = "g_bit_trylock")
     bit_trylock :: proc(address: [^]int_, lock_bit: int_) -> boolean ---
 
     @(link_name = "g_bit_unlock")
     bit_unlock :: proc(address: [^]int_, lock_bit: int_) ---
+
+    @(link_name = "g_bit_unlock_and_set")
+    bit_unlock_and_set :: proc(address: [^]int_, lock_bit: uint_, new_val: int_, preserve_mask: int_) ---
 
     @(link_name = "g_pointer_bit_lock")
     pointer_bit_lock :: proc(address: rawptr, lock_bit: int_) ---
@@ -2147,6 +2003,9 @@ foreign glib_runic {
     @(link_name = "g_date_get_sunday_week_of_year")
     date_get_sunday_week_of_year :: proc(date: ^Date) -> uint_ ---
 
+    @(link_name = "g_date_get_week_of_year")
+    date_get_week_of_year :: proc(date: ^Date, first_day_of_week: DateWeekday) -> uint_ ---
+
     @(link_name = "g_date_get_iso8601_week_of_year")
     date_get_iso8601_week_of_year :: proc(date: ^Date) -> uint_ ---
 
@@ -2215,6 +2074,9 @@ foreign glib_runic {
 
     @(link_name = "g_date_get_sunday_weeks_in_year")
     date_get_sunday_weeks_in_year :: proc(year: DateYear) -> uint8 ---
+
+    @(link_name = "g_date_get_weeks_in_year")
+    date_get_weeks_in_year :: proc(year: DateYear, first_day_of_week: DateWeekday) -> uint8 ---
 
     @(link_name = "g_date_days_between")
     date_days_between :: proc(date1: ^Date, date2: ^Date) -> int_ ---
@@ -2376,7 +2238,7 @@ foreign glib_runic {
     free :: proc(mem: pointer) ---
 
     @(link_name = "g_free_sized")
-    free_sized :: proc(mem: pointer, size_p: u64) ---
+    free_sized :: proc(mem: pointer, size_p: uint) ---
 
     @(link_name = "g_clear_pointer")
     clear_pointer :: proc(pp: ^pointer, destroy: DestroyNotify) ---
@@ -2427,7 +2289,7 @@ foreign glib_runic {
     aligned_free :: proc(mem: pointer) ---
 
     @(link_name = "g_aligned_free_sized")
-    aligned_free_sized :: proc(mem: pointer, alignment: u64, size_p: u64) ---
+    aligned_free_sized :: proc(mem: pointer, alignment: uint, size_p: uint) ---
 
     @(link_name = "g_mem_set_vtable")
     mem_set_vtable :: proc(vtable: ^MemVTable) ---
@@ -3107,6 +2969,9 @@ foreign glib_runic {
     @(link_name = "g_source_get_context")
     source_get_context :: proc(source: ^Source) -> ^MainContext ---
 
+    @(link_name = "g_source_dup_context")
+    source_dup_context :: proc(source: ^Source) -> ^MainContext ---
+
     @(link_name = "g_source_set_callback")
     source_set_callback :: proc(source: ^Source, func: SourceFunc, data: pointer, notify: DestroyNotify) ---
 
@@ -3172,6 +3037,9 @@ foreign glib_runic {
 
     @(link_name = "g_get_monotonic_time")
     get_monotonic_time :: proc() -> int64 ---
+
+    @(link_name = "g_get_monotonic_time_ns")
+    get_monotonic_time_ns :: proc() -> u64 ---
 
     @(link_name = "g_get_real_time")
     get_real_time :: proc() -> int64 ---
@@ -3635,6 +3503,9 @@ foreign glib_runic {
     @(link_name = "g_string_sized_new")
     string_sized_new :: proc(dfl_size: size) -> ^String ---
 
+    @(link_name = "g_string_copy")
+    string_copy :: proc(string_p: ^String) -> ^String ---
+
     @(link_name = "g_string_free")
     string_free :: proc(string_p: ^String, free_segment: boolean) -> cstring ---
 
@@ -4060,6 +3931,12 @@ foreign glib_runic {
 
     @(link_name = "g_markup_parse_context_get_position")
     markup_parse_context_get_position :: proc(context_p: ^MarkupParseContext, line_number: ^int_, char_number: ^int_) ---
+
+    @(link_name = "g_markup_parse_context_get_offset")
+    markup_parse_context_get_offset :: proc(context_p: ^MarkupParseContext) -> size ---
+
+    @(link_name = "g_markup_parse_context_get_tag_start")
+    markup_parse_context_get_tag_start :: proc(context_p: ^MarkupParseContext, line_number: ^size, char_number: ^size, offset_p: ^size) ---
 
     @(link_name = "g_markup_parse_context_get_user_data")
     markup_parse_context_get_user_data :: proc(context_p: ^MarkupParseContext) -> pointer ---
@@ -4565,6 +4442,9 @@ foreign glib_runic {
     @(link_name = "g_log_set_always_fatal")
     log_set_always_fatal :: proc(fatal_mask: LogLevelFlags) -> LogLevelFlags ---
 
+    @(link_name = "g_log_get_always_fatal")
+    log_get_always_fatal :: proc() -> LogLevelFlags ---
+
     @(link_name = "g_log_structured")
     log_structured :: proc(log_domain: cstring, log_level: LogLevelFlags, #c_vararg var_args: ..any) ---
 
@@ -4812,7 +4692,7 @@ foreign glib_runic {
     qsort_with_data :: proc(pbase: constpointer, total_elems: int_, size_p: size, compare_func: CompareDataFunc, user_data: pointer) ---
 
     @(link_name = "g_sort_array")
-    sort_array :: proc(array: rawptr, n_elements: u64, element_size: u64, compare_func: CompareDataFunc, user_data: rawptr) ---
+    sort_array :: proc(array: rawptr, n_elements: uint, element_size: uint, compare_func: CompareDataFunc, user_data: rawptr) ---
 
     @(link_name = "g_queue_new")
     queue_new :: proc() -> ^Queue ---
@@ -5591,6 +5471,9 @@ foreign glib_runic {
     @(link_name = "g_test_trap_has_passed")
     test_trap_has_passed :: proc() -> boolean ---
 
+    @(link_name = "g_test_trap_has_skipped")
+    test_trap_has_skipped :: proc() -> boolean ---
+
     @(link_name = "g_test_trap_reached_timeout")
     test_trap_reached_timeout :: proc() -> boolean ---
 
@@ -6266,1029 +6149,6 @@ foreign glib_runic {
     @(link_name = "g_cond_timed_wait")
     cond_timed_wait :: proc(cond: ^Cond, mutex: ^Mutex, abs_time: ^TimeVal) -> boolean ---
 
-    @(link_name = "g_bit_nth_lsf_impl_wrapper")
-    bit_nth_lsf_impl :: proc(mask: ulong, nth_bit: int_) -> int_ ---
-
-    @(link_name = "g_bit_nth_msf_impl_wrapper")
-    bit_nth_msf_impl :: proc(mask: ulong, nth_bit: int_) -> int_ ---
-
-    @(link_name = "g_bit_storage_impl_wrapper")
-    bit_storage_impl :: proc(number: ulong) -> uint_ ---
-
-    @(link_name = "g_mutex_locker_new_wrapper")
-    mutex_locker_new :: proc(mutex: ^Mutex) -> ^MutexLocker ---
-
-    @(link_name = "g_mutex_locker_free_wrapper")
-    mutex_locker_free :: proc(locker: ^MutexLocker) ---
-
-    @(link_name = "g_rec_mutex_locker_new_wrapper")
-    rec_mutex_locker_new :: proc(rec_mutex: ^RecMutex) -> ^RecMutexLocker ---
-
-    @(link_name = "g_rec_mutex_locker_free_wrapper")
-    rec_mutex_locker_free :: proc(locker: ^RecMutexLocker) ---
-
-    @(link_name = "g_rw_lock_writer_locker_new_wrapper")
-    rw_lock_writer_locker_new :: proc(rw_lock: ^RWLock) -> ^RWLockWriterLocker ---
-
-    @(link_name = "g_rw_lock_writer_locker_free_wrapper")
-    rw_lock_writer_locker_free :: proc(locker: ^RWLockWriterLocker) ---
-
-    @(link_name = "g_rw_lock_reader_locker_new_wrapper")
-    rw_lock_reader_locker_new :: proc(rw_lock: ^RWLock) -> ^RWLockReaderLocker ---
-
-    @(link_name = "g_rw_lock_reader_locker_free_wrapper")
-    rw_lock_reader_locker_free :: proc(locker: ^RWLockReaderLocker) ---
-
-    @(link_name = "g_steal_pointer_wrapper")
-    steal_pointer :: proc(pp: pointer) -> pointer ---
-
-    @(link_name = "g_main_context_pusher_new_wrapper")
-    main_context_pusher_new :: proc(main_context: ^MainContext) -> ^MainContextPusher ---
-
-    @(link_name = "g_main_context_pusher_free_wrapper")
-    main_context_pusher_free :: proc(pusher: ^MainContextPusher) ---
-
-    @(link_name = "g_steal_handle_id_wrapper")
-    steal_handle_id :: proc(handle_pointer: ^u32) -> u32 ---
-
-    @(link_name = "g_steal_fd_wrapper")
-    steal_fd :: proc(fd_ptr: ^i32) -> i32 ---
-
-    @(link_name = "g_set_str_wrapper")
-    set_str :: proc(str_pointer: ^cstring, new_str: cstring) -> boolean ---
-
-    @(link_name = "g_string_append_c_inline_wrapper")
-    string_append_c_inline :: proc(gstring: ^String, c: char) -> ^String ---
-
-    @(link_name = "g_string_append_len_inline_wrapper")
-    string_append_len_inline :: proc(gstring: ^String, val: cstring, len: ssize) -> ^String ---
-
-    @(link_name = "g_string_truncate_inline_wrapper")
-    string_truncate_inline :: proc(gstring: ^String, len: size) -> ^String ---
-
-    @(link_name = "g_autoptr_cleanup_generic_gfree_wrapper")
-    autoptr_cleanup_generic_gfree :: proc(p: rawptr) ---
-
-    @(link_name = "g_autoptr_cleanup_gstring_free_wrapper")
-    autoptr_cleanup_gstring_free :: proc(string_p: ^String) ---
-
-    @(link_name = "glib_autoptr_clear_GAsyncQueue_wrapper")
-    autoptr_clear_GAsyncQueue :: proc(_ptr: ^AsyncQueue) ---
-
-    @(link_name = "glib_autoptr_cleanup_GAsyncQueue_wrapper")
-    autoptr_cleanup_GAsyncQueue :: proc(_ptr: ^^AsyncQueue) ---
-
-    @(link_name = "glib_autoptr_destroy_GAsyncQueue_wrapper")
-    autoptr_destroy_GAsyncQueue :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GAsyncQueue_wrapper")
-    listautoptr_cleanup_GAsyncQueue :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GAsyncQueue_wrapper")
-    slistautoptr_cleanup_GAsyncQueue :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GAsyncQueue_wrapper")
-    queueautoptr_cleanup_GAsyncQueue :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GBookmarkFile_wrapper")
-    autoptr_clear_GBookmarkFile :: proc(_ptr: ^BookmarkFile) ---
-
-    @(link_name = "glib_autoptr_cleanup_GBookmarkFile_wrapper")
-    autoptr_cleanup_GBookmarkFile :: proc(_ptr: ^^BookmarkFile) ---
-
-    @(link_name = "glib_autoptr_destroy_GBookmarkFile_wrapper")
-    autoptr_destroy_GBookmarkFile :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GBookmarkFile_wrapper")
-    listautoptr_cleanup_GBookmarkFile :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GBookmarkFile_wrapper")
-    slistautoptr_cleanup_GBookmarkFile :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GBookmarkFile_wrapper")
-    queueautoptr_cleanup_GBookmarkFile :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GBytes_wrapper")
-    autoptr_clear_GBytes :: proc(_ptr: ^Bytes) ---
-
-    @(link_name = "glib_autoptr_cleanup_GBytes_wrapper")
-    autoptr_cleanup_GBytes :: proc(_ptr: ^^Bytes) ---
-
-    @(link_name = "glib_autoptr_destroy_GBytes_wrapper")
-    autoptr_destroy_GBytes :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GBytes_wrapper")
-    listautoptr_cleanup_GBytes :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GBytes_wrapper")
-    slistautoptr_cleanup_GBytes :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GBytes_wrapper")
-    queueautoptr_cleanup_GBytes :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GChecksum_wrapper")
-    autoptr_clear_GChecksum :: proc(_ptr: ^Checksum) ---
-
-    @(link_name = "glib_autoptr_cleanup_GChecksum_wrapper")
-    autoptr_cleanup_GChecksum :: proc(_ptr: ^^Checksum) ---
-
-    @(link_name = "glib_autoptr_destroy_GChecksum_wrapper")
-    autoptr_destroy_GChecksum :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GChecksum_wrapper")
-    listautoptr_cleanup_GChecksum :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GChecksum_wrapper")
-    slistautoptr_cleanup_GChecksum :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GChecksum_wrapper")
-    queueautoptr_cleanup_GChecksum :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GDateTime_wrapper")
-    autoptr_clear_GDateTime :: proc(_ptr: ^DateTime) ---
-
-    @(link_name = "glib_autoptr_cleanup_GDateTime_wrapper")
-    autoptr_cleanup_GDateTime :: proc(_ptr: ^^DateTime) ---
-
-    @(link_name = "glib_autoptr_destroy_GDateTime_wrapper")
-    autoptr_destroy_GDateTime :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GDateTime_wrapper")
-    listautoptr_cleanup_GDateTime :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GDateTime_wrapper")
-    slistautoptr_cleanup_GDateTime :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GDateTime_wrapper")
-    queueautoptr_cleanup_GDateTime :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GDate_wrapper")
-    autoptr_clear_GDate :: proc(_ptr: ^Date) ---
-
-    @(link_name = "glib_autoptr_cleanup_GDate_wrapper")
-    autoptr_cleanup_GDate :: proc(_ptr: ^^Date) ---
-
-    @(link_name = "glib_autoptr_destroy_GDate_wrapper")
-    autoptr_destroy_GDate :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GDate_wrapper")
-    listautoptr_cleanup_GDate :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GDate_wrapper")
-    slistautoptr_cleanup_GDate :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GDate_wrapper")
-    queueautoptr_cleanup_GDate :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GDir_wrapper")
-    autoptr_clear_GDir :: proc(_ptr: ^Dir) ---
-
-    @(link_name = "glib_autoptr_cleanup_GDir_wrapper")
-    autoptr_cleanup_GDir :: proc(_ptr: ^^Dir) ---
-
-    @(link_name = "glib_autoptr_destroy_GDir_wrapper")
-    autoptr_destroy_GDir :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GDir_wrapper")
-    listautoptr_cleanup_GDir :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GDir_wrapper")
-    slistautoptr_cleanup_GDir :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GDir_wrapper")
-    queueautoptr_cleanup_GDir :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GError_wrapper")
-    autoptr_clear_GError :: proc(_ptr: ^Error) ---
-
-    @(link_name = "glib_autoptr_cleanup_GError_wrapper")
-    autoptr_cleanup_GError :: proc(_ptr: ^^Error) ---
-
-    @(link_name = "glib_autoptr_destroy_GError_wrapper")
-    autoptr_destroy_GError :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GError_wrapper")
-    listautoptr_cleanup_GError :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GError_wrapper")
-    slistautoptr_cleanup_GError :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GError_wrapper")
-    queueautoptr_cleanup_GError :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GHashTable_wrapper")
-    autoptr_clear_GHashTable :: proc(_ptr: ^HashTable) ---
-
-    @(link_name = "glib_autoptr_cleanup_GHashTable_wrapper")
-    autoptr_cleanup_GHashTable :: proc(_ptr: ^^HashTable) ---
-
-    @(link_name = "glib_autoptr_destroy_GHashTable_wrapper")
-    autoptr_destroy_GHashTable :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GHashTable_wrapper")
-    listautoptr_cleanup_GHashTable :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GHashTable_wrapper")
-    slistautoptr_cleanup_GHashTable :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GHashTable_wrapper")
-    queueautoptr_cleanup_GHashTable :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GHmac_wrapper")
-    autoptr_clear_GHmac :: proc(_ptr: ^Hmac) ---
-
-    @(link_name = "glib_autoptr_cleanup_GHmac_wrapper")
-    autoptr_cleanup_GHmac :: proc(_ptr: ^^Hmac) ---
-
-    @(link_name = "glib_autoptr_destroy_GHmac_wrapper")
-    autoptr_destroy_GHmac :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GHmac_wrapper")
-    listautoptr_cleanup_GHmac :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GHmac_wrapper")
-    slistautoptr_cleanup_GHmac :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GHmac_wrapper")
-    queueautoptr_cleanup_GHmac :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GIOChannel_wrapper")
-    autoptr_clear_GIOChannel :: proc(_ptr: ^IOChannel) ---
-
-    @(link_name = "glib_autoptr_cleanup_GIOChannel_wrapper")
-    autoptr_cleanup_GIOChannel :: proc(_ptr: ^^IOChannel) ---
-
-    @(link_name = "glib_autoptr_destroy_GIOChannel_wrapper")
-    autoptr_destroy_GIOChannel :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GIOChannel_wrapper")
-    listautoptr_cleanup_GIOChannel :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GIOChannel_wrapper")
-    slistautoptr_cleanup_GIOChannel :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GIOChannel_wrapper")
-    queueautoptr_cleanup_GIOChannel :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GKeyFile_wrapper")
-    autoptr_clear_GKeyFile :: proc(_ptr: ^KeyFile) ---
-
-    @(link_name = "glib_autoptr_cleanup_GKeyFile_wrapper")
-    autoptr_cleanup_GKeyFile :: proc(_ptr: ^^KeyFile) ---
-
-    @(link_name = "glib_autoptr_destroy_GKeyFile_wrapper")
-    autoptr_destroy_GKeyFile :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GKeyFile_wrapper")
-    listautoptr_cleanup_GKeyFile :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GKeyFile_wrapper")
-    slistautoptr_cleanup_GKeyFile :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GKeyFile_wrapper")
-    queueautoptr_cleanup_GKeyFile :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GList_wrapper")
-    autoptr_clear_GList :: proc(_ptr: ^List) ---
-
-    @(link_name = "glib_autoptr_cleanup_GList_wrapper")
-    autoptr_cleanup_GList :: proc(_ptr: ^^List) ---
-
-    @(link_name = "glib_autoptr_destroy_GList_wrapper")
-    autoptr_destroy_GList :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GList_wrapper")
-    listautoptr_cleanup_GList :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GList_wrapper")
-    slistautoptr_cleanup_GList :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GList_wrapper")
-    queueautoptr_cleanup_GList :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GArray_wrapper")
-    autoptr_clear_GArray :: proc(_ptr: ^Array) ---
-
-    @(link_name = "glib_autoptr_cleanup_GArray_wrapper")
-    autoptr_cleanup_GArray :: proc(_ptr: ^^Array) ---
-
-    @(link_name = "glib_autoptr_destroy_GArray_wrapper")
-    autoptr_destroy_GArray :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GArray_wrapper")
-    listautoptr_cleanup_GArray :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GArray_wrapper")
-    slistautoptr_cleanup_GArray :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GArray_wrapper")
-    queueautoptr_cleanup_GArray :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GPtrArray_wrapper")
-    autoptr_clear_GPtrArray :: proc(_ptr: ^PtrArray) ---
-
-    @(link_name = "glib_autoptr_cleanup_GPtrArray_wrapper")
-    autoptr_cleanup_GPtrArray :: proc(_ptr: ^^PtrArray) ---
-
-    @(link_name = "glib_autoptr_destroy_GPtrArray_wrapper")
-    autoptr_destroy_GPtrArray :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GPtrArray_wrapper")
-    listautoptr_cleanup_GPtrArray :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GPtrArray_wrapper")
-    slistautoptr_cleanup_GPtrArray :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GPtrArray_wrapper")
-    queueautoptr_cleanup_GPtrArray :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GByteArray_wrapper")
-    autoptr_clear_GByteArray :: proc(_ptr: ^ByteArray) ---
-
-    @(link_name = "glib_autoptr_cleanup_GByteArray_wrapper")
-    autoptr_cleanup_GByteArray :: proc(_ptr: ^^ByteArray) ---
-
-    @(link_name = "glib_autoptr_destroy_GByteArray_wrapper")
-    autoptr_destroy_GByteArray :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GByteArray_wrapper")
-    listautoptr_cleanup_GByteArray :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GByteArray_wrapper")
-    slistautoptr_cleanup_GByteArray :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GByteArray_wrapper")
-    queueautoptr_cleanup_GByteArray :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMainContext_wrapper")
-    autoptr_clear_GMainContext :: proc(_ptr: ^MainContext) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMainContext_wrapper")
-    autoptr_cleanup_GMainContext :: proc(_ptr: ^^MainContext) ---
-
-    @(link_name = "glib_autoptr_destroy_GMainContext_wrapper")
-    autoptr_destroy_GMainContext :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMainContext_wrapper")
-    listautoptr_cleanup_GMainContext :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMainContext_wrapper")
-    slistautoptr_cleanup_GMainContext :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMainContext_wrapper")
-    queueautoptr_cleanup_GMainContext :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMainContextPusher_wrapper")
-    autoptr_clear_GMainContextPusher :: proc(_ptr: ^MainContextPusher) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMainContextPusher_wrapper")
-    autoptr_cleanup_GMainContextPusher :: proc(_ptr: ^^MainContextPusher) ---
-
-    @(link_name = "glib_autoptr_destroy_GMainContextPusher_wrapper")
-    autoptr_destroy_GMainContextPusher :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMainContextPusher_wrapper")
-    listautoptr_cleanup_GMainContextPusher :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMainContextPusher_wrapper")
-    slistautoptr_cleanup_GMainContextPusher :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMainContextPusher_wrapper")
-    queueautoptr_cleanup_GMainContextPusher :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMainLoop_wrapper")
-    autoptr_clear_GMainLoop :: proc(_ptr: ^MainLoop) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMainLoop_wrapper")
-    autoptr_cleanup_GMainLoop :: proc(_ptr: ^^MainLoop) ---
-
-    @(link_name = "glib_autoptr_destroy_GMainLoop_wrapper")
-    autoptr_destroy_GMainLoop :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMainLoop_wrapper")
-    listautoptr_cleanup_GMainLoop :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMainLoop_wrapper")
-    slistautoptr_cleanup_GMainLoop :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMainLoop_wrapper")
-    queueautoptr_cleanup_GMainLoop :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GSource_wrapper")
-    autoptr_clear_GSource :: proc(_ptr: ^Source) ---
-
-    @(link_name = "glib_autoptr_cleanup_GSource_wrapper")
-    autoptr_cleanup_GSource :: proc(_ptr: ^^Source) ---
-
-    @(link_name = "glib_autoptr_destroy_GSource_wrapper")
-    autoptr_destroy_GSource :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GSource_wrapper")
-    listautoptr_cleanup_GSource :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GSource_wrapper")
-    slistautoptr_cleanup_GSource :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GSource_wrapper")
-    queueautoptr_cleanup_GSource :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMappedFile_wrapper")
-    autoptr_clear_GMappedFile :: proc(_ptr: ^MappedFile) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMappedFile_wrapper")
-    autoptr_cleanup_GMappedFile :: proc(_ptr: ^^MappedFile) ---
-
-    @(link_name = "glib_autoptr_destroy_GMappedFile_wrapper")
-    autoptr_destroy_GMappedFile :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMappedFile_wrapper")
-    listautoptr_cleanup_GMappedFile :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMappedFile_wrapper")
-    slistautoptr_cleanup_GMappedFile :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMappedFile_wrapper")
-    queueautoptr_cleanup_GMappedFile :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMarkupParseContext_wrapper")
-    autoptr_clear_GMarkupParseContext :: proc(_ptr: ^MarkupParseContext) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMarkupParseContext_wrapper")
-    autoptr_cleanup_GMarkupParseContext :: proc(_ptr: ^^MarkupParseContext) ---
-
-    @(link_name = "glib_autoptr_destroy_GMarkupParseContext_wrapper")
-    autoptr_destroy_GMarkupParseContext :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMarkupParseContext_wrapper")
-    listautoptr_cleanup_GMarkupParseContext :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMarkupParseContext_wrapper")
-    slistautoptr_cleanup_GMarkupParseContext :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMarkupParseContext_wrapper")
-    queueautoptr_cleanup_GMarkupParseContext :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GNode_wrapper")
-    autoptr_clear_GNode :: proc(_ptr: ^Node) ---
-
-    @(link_name = "glib_autoptr_cleanup_GNode_wrapper")
-    autoptr_cleanup_GNode :: proc(_ptr: ^^Node) ---
-
-    @(link_name = "glib_autoptr_destroy_GNode_wrapper")
-    autoptr_destroy_GNode :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GNode_wrapper")
-    listautoptr_cleanup_GNode :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GNode_wrapper")
-    slistautoptr_cleanup_GNode :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GNode_wrapper")
-    queueautoptr_cleanup_GNode :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GOptionContext_wrapper")
-    autoptr_clear_GOptionContext :: proc(_ptr: ^OptionContext) ---
-
-    @(link_name = "glib_autoptr_cleanup_GOptionContext_wrapper")
-    autoptr_cleanup_GOptionContext :: proc(_ptr: ^^OptionContext) ---
-
-    @(link_name = "glib_autoptr_destroy_GOptionContext_wrapper")
-    autoptr_destroy_GOptionContext :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GOptionContext_wrapper")
-    listautoptr_cleanup_GOptionContext :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GOptionContext_wrapper")
-    slistautoptr_cleanup_GOptionContext :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GOptionContext_wrapper")
-    queueautoptr_cleanup_GOptionContext :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GOptionGroup_wrapper")
-    autoptr_clear_GOptionGroup :: proc(_ptr: ^OptionGroup) ---
-
-    @(link_name = "glib_autoptr_cleanup_GOptionGroup_wrapper")
-    autoptr_cleanup_GOptionGroup :: proc(_ptr: ^^OptionGroup) ---
-
-    @(link_name = "glib_autoptr_destroy_GOptionGroup_wrapper")
-    autoptr_destroy_GOptionGroup :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GOptionGroup_wrapper")
-    listautoptr_cleanup_GOptionGroup :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GOptionGroup_wrapper")
-    slistautoptr_cleanup_GOptionGroup :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GOptionGroup_wrapper")
-    queueautoptr_cleanup_GOptionGroup :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GPatternSpec_wrapper")
-    autoptr_clear_GPatternSpec :: proc(_ptr: ^PatternSpec) ---
-
-    @(link_name = "glib_autoptr_cleanup_GPatternSpec_wrapper")
-    autoptr_cleanup_GPatternSpec :: proc(_ptr: ^^PatternSpec) ---
-
-    @(link_name = "glib_autoptr_destroy_GPatternSpec_wrapper")
-    autoptr_destroy_GPatternSpec :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GPatternSpec_wrapper")
-    listautoptr_cleanup_GPatternSpec :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GPatternSpec_wrapper")
-    slistautoptr_cleanup_GPatternSpec :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GPatternSpec_wrapper")
-    queueautoptr_cleanup_GPatternSpec :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GQueue_wrapper")
-    autoptr_clear_GQueue :: proc(_ptr: ^Queue) ---
-
-    @(link_name = "glib_autoptr_cleanup_GQueue_wrapper")
-    autoptr_cleanup_GQueue :: proc(_ptr: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_destroy_GQueue_wrapper")
-    autoptr_destroy_GQueue :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GQueue_wrapper")
-    listautoptr_cleanup_GQueue :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GQueue_wrapper")
-    slistautoptr_cleanup_GQueue :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GQueue_wrapper")
-    queueautoptr_cleanup_GQueue :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GQueue_wrapper")
-    auto_cleanup_GQueue :: proc(_ptr: ^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GRand_wrapper")
-    autoptr_clear_GRand :: proc(_ptr: ^Rand) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRand_wrapper")
-    autoptr_cleanup_GRand :: proc(_ptr: ^^Rand) ---
-
-    @(link_name = "glib_autoptr_destroy_GRand_wrapper")
-    autoptr_destroy_GRand :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRand_wrapper")
-    listautoptr_cleanup_GRand :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRand_wrapper")
-    slistautoptr_cleanup_GRand :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRand_wrapper")
-    queueautoptr_cleanup_GRand :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GRegex_wrapper")
-    autoptr_clear_GRegex :: proc(_ptr: ^Regex) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRegex_wrapper")
-    autoptr_cleanup_GRegex :: proc(_ptr: ^^Regex) ---
-
-    @(link_name = "glib_autoptr_destroy_GRegex_wrapper")
-    autoptr_destroy_GRegex :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRegex_wrapper")
-    listautoptr_cleanup_GRegex :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRegex_wrapper")
-    slistautoptr_cleanup_GRegex :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRegex_wrapper")
-    queueautoptr_cleanup_GRegex :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GMatchInfo_wrapper")
-    autoptr_clear_GMatchInfo :: proc(_ptr: ^MatchInfo) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMatchInfo_wrapper")
-    autoptr_cleanup_GMatchInfo :: proc(_ptr: ^^MatchInfo) ---
-
-    @(link_name = "glib_autoptr_destroy_GMatchInfo_wrapper")
-    autoptr_destroy_GMatchInfo :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMatchInfo_wrapper")
-    listautoptr_cleanup_GMatchInfo :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMatchInfo_wrapper")
-    slistautoptr_cleanup_GMatchInfo :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMatchInfo_wrapper")
-    queueautoptr_cleanup_GMatchInfo :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GScanner_wrapper")
-    autoptr_clear_GScanner :: proc(_ptr: ^Scanner) ---
-
-    @(link_name = "glib_autoptr_cleanup_GScanner_wrapper")
-    autoptr_cleanup_GScanner :: proc(_ptr: ^^Scanner) ---
-
-    @(link_name = "glib_autoptr_destroy_GScanner_wrapper")
-    autoptr_destroy_GScanner :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GScanner_wrapper")
-    listautoptr_cleanup_GScanner :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GScanner_wrapper")
-    slistautoptr_cleanup_GScanner :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GScanner_wrapper")
-    queueautoptr_cleanup_GScanner :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GSequence_wrapper")
-    autoptr_clear_GSequence :: proc(_ptr: ^Sequence) ---
-
-    @(link_name = "glib_autoptr_cleanup_GSequence_wrapper")
-    autoptr_cleanup_GSequence :: proc(_ptr: ^^Sequence) ---
-
-    @(link_name = "glib_autoptr_destroy_GSequence_wrapper")
-    autoptr_destroy_GSequence :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GSequence_wrapper")
-    listautoptr_cleanup_GSequence :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GSequence_wrapper")
-    slistautoptr_cleanup_GSequence :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GSequence_wrapper")
-    queueautoptr_cleanup_GSequence :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GSList_wrapper")
-    autoptr_clear_GSList :: proc(_ptr: ^SList) ---
-
-    @(link_name = "glib_autoptr_cleanup_GSList_wrapper")
-    autoptr_cleanup_GSList :: proc(_ptr: ^^SList) ---
-
-    @(link_name = "glib_autoptr_destroy_GSList_wrapper")
-    autoptr_destroy_GSList :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GSList_wrapper")
-    listautoptr_cleanup_GSList :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GSList_wrapper")
-    slistautoptr_cleanup_GSList :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GSList_wrapper")
-    queueautoptr_cleanup_GSList :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GString_wrapper")
-    autoptr_clear_GString :: proc(_ptr: ^String) ---
-
-    @(link_name = "glib_autoptr_cleanup_GString_wrapper")
-    autoptr_cleanup_GString :: proc(_ptr: ^^String) ---
-
-    @(link_name = "glib_autoptr_destroy_GString_wrapper")
-    autoptr_destroy_GString :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GString_wrapper")
-    listautoptr_cleanup_GString :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GString_wrapper")
-    slistautoptr_cleanup_GString :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GString_wrapper")
-    queueautoptr_cleanup_GString :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GStringChunk_wrapper")
-    autoptr_clear_GStringChunk :: proc(_ptr: ^StringChunk) ---
-
-    @(link_name = "glib_autoptr_cleanup_GStringChunk_wrapper")
-    autoptr_cleanup_GStringChunk :: proc(_ptr: ^^StringChunk) ---
-
-    @(link_name = "glib_autoptr_destroy_GStringChunk_wrapper")
-    autoptr_destroy_GStringChunk :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GStringChunk_wrapper")
-    listautoptr_cleanup_GStringChunk :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GStringChunk_wrapper")
-    slistautoptr_cleanup_GStringChunk :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GStringChunk_wrapper")
-    queueautoptr_cleanup_GStringChunk :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GStrvBuilder_wrapper")
-    autoptr_clear_GStrvBuilder :: proc(_ptr: ^StrvBuilder) ---
-
-    @(link_name = "glib_autoptr_cleanup_GStrvBuilder_wrapper")
-    autoptr_cleanup_GStrvBuilder :: proc(_ptr: ^^StrvBuilder) ---
-
-    @(link_name = "glib_autoptr_destroy_GStrvBuilder_wrapper")
-    autoptr_destroy_GStrvBuilder :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GStrvBuilder_wrapper")
-    listautoptr_cleanup_GStrvBuilder :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GStrvBuilder_wrapper")
-    slistautoptr_cleanup_GStrvBuilder :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GStrvBuilder_wrapper")
-    queueautoptr_cleanup_GStrvBuilder :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GThread_wrapper")
-    autoptr_clear_GThread :: proc(_ptr: ^Thread) ---
-
-    @(link_name = "glib_autoptr_cleanup_GThread_wrapper")
-    autoptr_cleanup_GThread :: proc(_ptr: ^^Thread) ---
-
-    @(link_name = "glib_autoptr_destroy_GThread_wrapper")
-    autoptr_destroy_GThread :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GThread_wrapper")
-    listautoptr_cleanup_GThread :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GThread_wrapper")
-    slistautoptr_cleanup_GThread :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GThread_wrapper")
-    queueautoptr_cleanup_GThread :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GMutex_wrapper")
-    auto_cleanup_GMutex :: proc(_ptr: ^Mutex) ---
-
-    @(link_name = "glib_autoptr_clear_GMutexLocker_wrapper")
-    autoptr_clear_GMutexLocker :: proc(_ptr: ^MutexLocker) ---
-
-    @(link_name = "glib_autoptr_cleanup_GMutexLocker_wrapper")
-    autoptr_cleanup_GMutexLocker :: proc(_ptr: ^^MutexLocker) ---
-
-    @(link_name = "glib_autoptr_destroy_GMutexLocker_wrapper")
-    autoptr_destroy_GMutexLocker :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GMutexLocker_wrapper")
-    listautoptr_cleanup_GMutexLocker :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GMutexLocker_wrapper")
-    slistautoptr_cleanup_GMutexLocker :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GMutexLocker_wrapper")
-    queueautoptr_cleanup_GMutexLocker :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GRecMutexLocker_wrapper")
-    autoptr_clear_GRecMutexLocker :: proc(_ptr: ^RecMutexLocker) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRecMutexLocker_wrapper")
-    autoptr_cleanup_GRecMutexLocker :: proc(_ptr: ^^RecMutexLocker) ---
-
-    @(link_name = "glib_autoptr_destroy_GRecMutexLocker_wrapper")
-    autoptr_destroy_GRecMutexLocker :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRecMutexLocker_wrapper")
-    listautoptr_cleanup_GRecMutexLocker :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRecMutexLocker_wrapper")
-    slistautoptr_cleanup_GRecMutexLocker :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRecMutexLocker_wrapper")
-    queueautoptr_cleanup_GRecMutexLocker :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GRWLockWriterLocker_wrapper")
-    autoptr_clear_GRWLockWriterLocker :: proc(_ptr: ^RWLockWriterLocker) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRWLockWriterLocker_wrapper")
-    autoptr_cleanup_GRWLockWriterLocker :: proc(_ptr: ^^RWLockWriterLocker) ---
-
-    @(link_name = "glib_autoptr_destroy_GRWLockWriterLocker_wrapper")
-    autoptr_destroy_GRWLockWriterLocker :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRWLockWriterLocker_wrapper")
-    listautoptr_cleanup_GRWLockWriterLocker :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRWLockWriterLocker_wrapper")
-    slistautoptr_cleanup_GRWLockWriterLocker :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRWLockWriterLocker_wrapper")
-    queueautoptr_cleanup_GRWLockWriterLocker :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GRWLockReaderLocker_wrapper")
-    autoptr_clear_GRWLockReaderLocker :: proc(_ptr: ^RWLockReaderLocker) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRWLockReaderLocker_wrapper")
-    autoptr_cleanup_GRWLockReaderLocker :: proc(_ptr: ^^RWLockReaderLocker) ---
-
-    @(link_name = "glib_autoptr_destroy_GRWLockReaderLocker_wrapper")
-    autoptr_destroy_GRWLockReaderLocker :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRWLockReaderLocker_wrapper")
-    listautoptr_cleanup_GRWLockReaderLocker :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRWLockReaderLocker_wrapper")
-    slistautoptr_cleanup_GRWLockReaderLocker :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRWLockReaderLocker_wrapper")
-    queueautoptr_cleanup_GRWLockReaderLocker :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GCond_wrapper")
-    auto_cleanup_GCond :: proc(_ptr: ^Cond) ---
-
-    @(link_name = "glib_autoptr_clear_GTimer_wrapper")
-    autoptr_clear_GTimer :: proc(_ptr: ^Timer) ---
-
-    @(link_name = "glib_autoptr_cleanup_GTimer_wrapper")
-    autoptr_cleanup_GTimer :: proc(_ptr: ^^Timer) ---
-
-    @(link_name = "glib_autoptr_destroy_GTimer_wrapper")
-    autoptr_destroy_GTimer :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GTimer_wrapper")
-    listautoptr_cleanup_GTimer :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GTimer_wrapper")
-    slistautoptr_cleanup_GTimer :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GTimer_wrapper")
-    queueautoptr_cleanup_GTimer :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GTimeZone_wrapper")
-    autoptr_clear_GTimeZone :: proc(_ptr: ^TimeZone) ---
-
-    @(link_name = "glib_autoptr_cleanup_GTimeZone_wrapper")
-    autoptr_cleanup_GTimeZone :: proc(_ptr: ^^TimeZone) ---
-
-    @(link_name = "glib_autoptr_destroy_GTimeZone_wrapper")
-    autoptr_destroy_GTimeZone :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GTimeZone_wrapper")
-    listautoptr_cleanup_GTimeZone :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GTimeZone_wrapper")
-    slistautoptr_cleanup_GTimeZone :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GTimeZone_wrapper")
-    queueautoptr_cleanup_GTimeZone :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GTree_wrapper")
-    autoptr_clear_GTree :: proc(_ptr: ^Tree) ---
-
-    @(link_name = "glib_autoptr_cleanup_GTree_wrapper")
-    autoptr_cleanup_GTree :: proc(_ptr: ^^Tree) ---
-
-    @(link_name = "glib_autoptr_destroy_GTree_wrapper")
-    autoptr_destroy_GTree :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GTree_wrapper")
-    listautoptr_cleanup_GTree :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GTree_wrapper")
-    slistautoptr_cleanup_GTree :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GTree_wrapper")
-    queueautoptr_cleanup_GTree :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GVariant_wrapper")
-    autoptr_clear_GVariant :: proc(_ptr: ^Variant) ---
-
-    @(link_name = "glib_autoptr_cleanup_GVariant_wrapper")
-    autoptr_cleanup_GVariant :: proc(_ptr: ^^Variant) ---
-
-    @(link_name = "glib_autoptr_destroy_GVariant_wrapper")
-    autoptr_destroy_GVariant :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GVariant_wrapper")
-    listautoptr_cleanup_GVariant :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GVariant_wrapper")
-    slistautoptr_cleanup_GVariant :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GVariant_wrapper")
-    queueautoptr_cleanup_GVariant :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GVariantBuilder_wrapper")
-    autoptr_clear_GVariantBuilder :: proc(_ptr: ^VariantBuilder) ---
-
-    @(link_name = "glib_autoptr_cleanup_GVariantBuilder_wrapper")
-    autoptr_cleanup_GVariantBuilder :: proc(_ptr: ^^VariantBuilder) ---
-
-    @(link_name = "glib_autoptr_destroy_GVariantBuilder_wrapper")
-    autoptr_destroy_GVariantBuilder :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GVariantBuilder_wrapper")
-    listautoptr_cleanup_GVariantBuilder :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GVariantBuilder_wrapper")
-    slistautoptr_cleanup_GVariantBuilder :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GVariantBuilder_wrapper")
-    queueautoptr_cleanup_GVariantBuilder :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GVariantBuilder_wrapper")
-    auto_cleanup_GVariantBuilder :: proc(_ptr: ^VariantBuilder) ---
-
-    @(link_name = "glib_autoptr_clear_GVariantIter_wrapper")
-    autoptr_clear_GVariantIter :: proc(_ptr: ^VariantIter) ---
-
-    @(link_name = "glib_autoptr_cleanup_GVariantIter_wrapper")
-    autoptr_cleanup_GVariantIter :: proc(_ptr: ^^VariantIter) ---
-
-    @(link_name = "glib_autoptr_destroy_GVariantIter_wrapper")
-    autoptr_destroy_GVariantIter :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GVariantIter_wrapper")
-    listautoptr_cleanup_GVariantIter :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GVariantIter_wrapper")
-    slistautoptr_cleanup_GVariantIter :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GVariantIter_wrapper")
-    queueautoptr_cleanup_GVariantIter :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GVariantDict_wrapper")
-    autoptr_clear_GVariantDict :: proc(_ptr: ^VariantDict) ---
-
-    @(link_name = "glib_autoptr_cleanup_GVariantDict_wrapper")
-    autoptr_cleanup_GVariantDict :: proc(_ptr: ^^VariantDict) ---
-
-    @(link_name = "glib_autoptr_destroy_GVariantDict_wrapper")
-    autoptr_destroy_GVariantDict :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GVariantDict_wrapper")
-    listautoptr_cleanup_GVariantDict :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GVariantDict_wrapper")
-    slistautoptr_cleanup_GVariantDict :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GVariantDict_wrapper")
-    queueautoptr_cleanup_GVariantDict :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GVariantDict_wrapper")
-    auto_cleanup_GVariantDict :: proc(_ptr: ^VariantDict) ---
-
-    @(link_name = "glib_autoptr_clear_GVariantType_wrapper")
-    autoptr_clear_GVariantType :: proc(_ptr: ^VariantType) ---
-
-    @(link_name = "glib_autoptr_cleanup_GVariantType_wrapper")
-    autoptr_cleanup_GVariantType :: proc(_ptr: ^^VariantType) ---
-
-    @(link_name = "glib_autoptr_destroy_GVariantType_wrapper")
-    autoptr_destroy_GVariantType :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GVariantType_wrapper")
-    listautoptr_cleanup_GVariantType :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GVariantType_wrapper")
-    slistautoptr_cleanup_GVariantType :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GVariantType_wrapper")
-    queueautoptr_cleanup_GVariantType :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GStrv_wrapper")
-    auto_cleanup_GStrv :: proc(_ptr: ^Strv) ---
-
-    @(link_name = "glib_autoptr_clear_GRefString_wrapper")
-    autoptr_clear_GRefString :: proc(_ptr: ^RefString) ---
-
-    @(link_name = "glib_autoptr_cleanup_GRefString_wrapper")
-    autoptr_cleanup_GRefString :: proc(_ptr: ^^RefString) ---
-
-    @(link_name = "glib_autoptr_destroy_GRefString_wrapper")
-    autoptr_destroy_GRefString :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GRefString_wrapper")
-    listautoptr_cleanup_GRefString :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GRefString_wrapper")
-    slistautoptr_cleanup_GRefString :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GRefString_wrapper")
-    queueautoptr_cleanup_GRefString :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GUri_wrapper")
-    autoptr_clear_GUri :: proc(_ptr: ^Uri) ---
-
-    @(link_name = "glib_autoptr_cleanup_GUri_wrapper")
-    autoptr_cleanup_GUri :: proc(_ptr: ^^Uri) ---
-
-    @(link_name = "glib_autoptr_destroy_GUri_wrapper")
-    autoptr_destroy_GUri :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GUri_wrapper")
-    listautoptr_cleanup_GUri :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GUri_wrapper")
-    slistautoptr_cleanup_GUri :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GUri_wrapper")
-    queueautoptr_cleanup_GUri :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GPathBuf_wrapper")
-    autoptr_clear_GPathBuf :: proc(_ptr: ^PathBuf) ---
-
-    @(link_name = "glib_autoptr_cleanup_GPathBuf_wrapper")
-    autoptr_cleanup_GPathBuf :: proc(_ptr: ^^PathBuf) ---
-
-    @(link_name = "glib_autoptr_destroy_GPathBuf_wrapper")
-    autoptr_destroy_GPathBuf :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GPathBuf_wrapper")
-    listautoptr_cleanup_GPathBuf :: proc(_l: ^^List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GPathBuf_wrapper")
-    slistautoptr_cleanup_GPathBuf :: proc(_l: ^^SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GPathBuf_wrapper")
-    queueautoptr_cleanup_GPathBuf :: proc(_q: ^^Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GPathBuf_wrapper")
-    auto_cleanup_GPathBuf :: proc(_ptr: ^PathBuf) ---
-
 }
 
 date_weekday :: date_get_weekday
@@ -7359,35 +6219,21 @@ TIME_SPAN_MINTE :: (( (60000000)))
 TIME_SPAN_SECOND :: (( (1000000)))
 TIME_SPAN_MIISECOND :: (( (1000)))
 WIN32_MSG_HANDLE :: 19981206
+NSEC_PER_SEC ::  1000000000
 MAXPATHLEN :: 1024
 
 Pid :: rawptr
 long :: i32
 ulong :: u32
 address_of_function_func_ptr_anon_0 :: #type proc "c" ()
-UserDirectory :: enum i32 {DESKTOP = 0, DOCUMENTS = 1, DOWNLOAD = 2, MUSIC = 3, PICTURES = 4, PUBLIC_SHARE = 5, TEMPLATES = 6, VIDEOS = 7, USER_N_DIRECTORIES = 8 }
-FormatSizeFlags :: enum i32 {FORMAT_SIZE_DEFAULT = 0, FORMAT_SIZE_LONG_FORMAT = 1, FORMAT_SIZE_IEC_UNITS = 2, FORMAT_SIZE_BITS = 4, FORMAT_SIZE_ONLY_VALUE = 8, FORMAT_SIZE_ONLY_UNIT = 16 }
 param0_func_ptr_anon_1 :: #type proc "c" ()
-ThreadError :: enum i32 {AGAIN = 0 }
-ThreadPriority :: enum i32 {LOW = 0, NORMAL = 1, HIGH = 2, URGENT = 3 }
-OnceStatus :: enum i32 {NOTCALLED = 0, PROGRESS = 1, READY = 2 }
-TimeType :: enum i32 {STANDARD = 0, DAYLIGHT = 1, UNIVERSAL = 2 }
-BookmarkFileError :: enum i32 {INVALID_URI = 0, INVALID_VALUE = 1, APP_NOT_REGISTERED = 2, URI_NOT_FOUND = 3, READ = 4, UNKNOWN_ENCODING = 5, WRITE = 6, FILE_NOT_FOUND = 7 }
-ChecksumType :: enum i32 {CHECKSUM_MD5 = 0, CHECKSUM_SHA1 = 1, CHECKSUM_SHA256 = 2, CHECKSUM_SHA512 = 3, CHECKSUM_SHA384 = 4 }
-ConvertError :: enum i32 {NO_CONVERSION = 0, ILLEGAL_SEQUENCE = 1, FAILED = 2, PARTIAL_INPUT = 3, BAD_URI = 4, NOT_ABSOLUTE_PATH = 5, NO_MEMORY = 6, EMBEDDED_NUL = 7 }
-DateDMY :: enum i32 {DATE_DAY = 0, DATE_MONTH = 1, DATE_YEAR = 2 }
-DateWeekday :: enum i32 {DATE_BAD_WEEKDAY = 0, DATE_MONDAY = 1, DATE_TUESDAY = 2, DATE_WEDNESDAY = 3, DATE_THURSDAY = 4, DATE_FRIDAY = 5, DATE_SATURDAY = 6, DATE_SUNDAY = 7 }
-DateMonth :: enum i32 {DATE_BAD_MONTH = 0, DATE_JANUARY = 1, DATE_FEBRUARY = 2, DATE_MARCH = 3, DATE_APRIL = 4, DATE_MAY = 5, DATE_JUNE = 6, DATE_JULY = 7, DATE_AUGUST = 8, DATE_SEPTEMBER = 9, DATE_OCTOBER = 10, DATE_NOVEMBER = 11, DATE_DECEMBER = 12 }
-FileError :: enum i32 {EXIST = 0, ISDIR = 1, ACCES = 2, NAMETOOLONG = 3, NOENT = 4, NOTDIR = 5, NXIO = 6, NODEV = 7, ROFS = 8, TXTBSY = 9, FAULT = 10, LOOP = 11, NOSPC = 12, NOMEM = 13, MFILE = 14, NFILE = 15, BADF = 16, INVAL = 17, PIPE = 18, AGAIN = 19, INTR = 20, IO = 21, PERM = 22, NOSYS = 23, FAILED = 24 }
-FileTest :: enum i32 {IS_REGULAR = 1, IS_SYMLINK = 2, IS_DIR = 4, IS_EXECUTABLE = 8, EXISTS = 16 }
-FileSetContentsFlags :: enum i32 {FILE_SET_CONTENTS_NONE = 0, FILE_SET_CONTENTS_CONSISTENT = 1, FILE_SET_CONTENTS_DURABLE = 2, FILE_SET_CONTENTS_ONLY_EXISTING = 4 }
 malloc_func_ptr_anon_2 :: #type proc "c" (n_bytes: size) -> pointer
 realloc_func_ptr_anon_3 :: #type proc "c" (mem: pointer, n_bytes: size) -> pointer
 free_func_ptr_anon_4 :: #type proc "c" (mem: pointer)
 calloc_func_ptr_anon_5 :: #type proc "c" (n_blocks: size, n_block_bytes: size) -> pointer
 try_malloc_func_ptr_anon_6 :: #type proc "c" (n_bytes: size) -> pointer
 try_realloc_func_ptr_anon_7 :: #type proc "c" (mem: pointer, n_bytes: size) -> pointer
-_GMemVTable :: struct {
+MemVTable :: struct {
     malloc: malloc_func_ptr_anon_2,
     realloc: realloc_func_ptr_anon_3,
     free: free_func_ptr_anon_4,
@@ -7395,41 +6241,28 @@ _GMemVTable :: struct {
     try_malloc: try_malloc_func_ptr_anon_6,
     try_realloc: try_realloc_func_ptr_anon_7,
 }
-TraverseFlags :: enum i32 {TRAVERSE_LEAVES = 1, TRAVERSE_NON_LEAVES = 2, TRAVERSE_ALL = 3, TRAVERSE_MASK = 3, TRAVERSE_LEAFS = 1, TRAVERSE_NON_LEAFS = 2 }
-TraverseType :: enum i32 {IN_ORDER = 0, PRE_ORDER = 1, POST_ORDER = 2, LEVEL_ORDER = 3 }
-HookFlagMask :: enum i32 {HOOK_FLAG_ACTIVE = 1, HOOK_FLAG_IN_CALL = 2, HOOK_FLAG_MASK = 15 }
-_GPollFD :: struct {
+PollFD :: struct {
     fd: int64,
     events: ushort,
     revents: ushort,
 }
-IOCondition :: enum i32 {IO_IN = 1, IO_OUT = 4, IO_PRI = 2, IO_ERR = 8, IO_HUP = 16, IO_NVAL = 32 }
-MainContextFlags :: enum i32 {NONE = 0, OWNERLESS_POLLING = 1 }
 ref_func_ptr_anon_8 :: #type proc "c" (cb_data: pointer)
 unref_func_ptr_anon_9 :: #type proc "c" (cb_data: pointer)
 et_func_ptr_anon_10 :: #type proc "c" (cb_data: pointer, source: ^Source, func: ^SourceFunc, data: ^pointer)
-_GSourceCallbackFuncs :: struct {
+SourceCallbackFuncs :: struct {
     ref: ref_func_ptr_anon_8,
     unref: unref_func_ptr_anon_9,
     get: et_func_ptr_anon_10,
 }
-UnicodeType :: enum i32 {UNICODE_CONTROL = 0, UNICODE_FORMAT = 1, UNICODE_UNASSIGNED = 2, UNICODE_PRIVATE_USE = 3, UNICODE_SURROGATE = 4, UNICODE_LOWERCASE_LETTER = 5, UNICODE_MODIFIER_LETTER = 6, UNICODE_OTHER_LETTER = 7, UNICODE_TITLECASE_LETTER = 8, UNICODE_UPPERCASE_LETTER = 9, UNICODE_SPACING_MARK = 10, UNICODE_ENCLOSING_MARK = 11, UNICODE_NON_SPACING_MARK = 12, UNICODE_DECIMAL_NUMBER = 13, UNICODE_LETTER_NUMBER = 14, UNICODE_OTHER_NUMBER = 15, UNICODE_CONNECT_PUNCTUATION = 16, UNICODE_DASH_PUNCTUATION = 17, UNICODE_CLOSE_PUNCTUATION = 18, UNICODE_FINAL_PUNCTUATION = 19, UNICODE_INITIAL_PUNCTUATION = 20, UNICODE_OTHER_PUNCTUATION = 21, UNICODE_OPEN_PUNCTUATION = 22, UNICODE_CURRENCY_SYMBOL = 23, UNICODE_MODIFIER_SYMBOL = 24, UNICODE_MATH_SYMBOL = 25, UNICODE_OTHER_SYMBOL = 26, UNICODE_LINE_SEPARATOR = 27, UNICODE_PARAGRAPH_SEPARATOR = 28, UNICODE_SPACE_SEPARATOR = 29 }
-UnicodeBreakType :: enum i32 {UNICODE_BREAK_MANDATORY = 0, UNICODE_BREAK_CARRIAGE_RETURN = 1, UNICODE_BREAK_LINE_FEED = 2, UNICODE_BREAK_COMBINING_MARK = 3, UNICODE_BREAK_SURROGATE = 4, UNICODE_BREAK_ZERO_WIDTH_SPACE = 5, UNICODE_BREAK_INSEPARABLE = 6, UNICODE_BREAK_NON_BREAKING_GLUE = 7, UNICODE_BREAK_CONTINGENT = 8, UNICODE_BREAK_SPACE = 9, UNICODE_BREAK_AFTER = 10, UNICODE_BREAK_BEFORE = 11, UNICODE_BREAK_BEFORE_AND_AFTER = 12, UNICODE_BREAK_HYPHEN = 13, UNICODE_BREAK_NON_STARTER = 14, UNICODE_BREAK_OPEN_PUNCTUATION = 15, UNICODE_BREAK_CLOSE_PUNCTUATION = 16, UNICODE_BREAK_QUOTATION = 17, UNICODE_BREAK_EXCLAMATION = 18, UNICODE_BREAK_IDEOGRAPHIC = 19, UNICODE_BREAK_NUMERIC = 20, UNICODE_BREAK_INFIX_SEPARATOR = 21, UNICODE_BREAK_SYMBOL = 22, UNICODE_BREAK_ALPHABETIC = 23, UNICODE_BREAK_PREFIX = 24, UNICODE_BREAK_POSTFIX = 25, UNICODE_BREAK_COMPLEX_CONTEXT = 26, UNICODE_BREAK_AMBIGUOUS = 27, UNICODE_BREAK_UNKNOWN = 28, UNICODE_BREAK_NEXT_LINE = 29, UNICODE_BREAK_WORD_JOINER = 30, UNICODE_BREAK_HANGUL_L_JAMO = 31, UNICODE_BREAK_HANGUL_V_JAMO = 32, UNICODE_BREAK_HANGUL_T_JAMO = 33, UNICODE_BREAK_HANGUL_LV_SYLLABLE = 34, UNICODE_BREAK_HANGUL_LVT_SYLLABLE = 35, UNICODE_BREAK_CLOSE_PARANTHESIS = 36, UNICODE_BREAK_CLOSE_PARENTHESIS = 36, UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER = 37, UNICODE_BREAK_HEBREW_LETTER = 38, UNICODE_BREAK_REGIONAL_INDICATOR = 39, UNICODE_BREAK_EMOJI_BASE = 40, UNICODE_BREAK_EMOJI_MODIFIER = 41, UNICODE_BREAK_ZERO_WIDTH_JOINER = 42, UNICODE_BREAK_AKSARA = 43, UNICODE_BREAK_AKSARA_PRE_BASE = 44, UNICODE_BREAK_AKSARA_START = 45, UNICODE_BREAK_VIRAMA_FINAL = 46, UNICODE_BREAK_VIRAMA = 47 }
-NormalizeMode :: enum i32 {NORMALIZE_DEFAULT = 0, NORMALIZE_NFD = 0, NORMALIZE_DEFAULT_COMPOSE = 1, NORMALIZE_NFC = 1, NORMALIZE_ALL = 2, NORMALIZE_NFKD = 2, NORMALIZE_ALL_COMPOSE = 3, NORMALIZE_NFKC = 3 }
-AsciiType :: enum i32 {ASCII_ALNUM = 1, ASCII_ALPHA = 2, ASCII_CNTRL = 4, ASCII_DIGIT = 8, ASCII_GRAPH = 16, ASCII_LOWER = 32, ASCII_PRINT = 64, ASCII_PUNCT = 128, ASCII_SPACE = 256, ASCII_UPPER = 512, ASCII_XDIGIT = 1024 }
-NumberParserError :: enum i32 {INVALID = 0, OUT_OF_BOUNDS = 1 }
-IOStatus :: enum i32 {ERROR = 0, NORMAL = 1, EOF = 2, AGAIN = 3 }
 io_read_func_ptr_anon_11 :: #type proc "c" (channel: ^IOChannel, buf: ^byte, count: size, bytes_read: ^size, err: ^^Error) -> IOStatus
 io_write_func_ptr_anon_12 :: #type proc "c" (channel: ^IOChannel, buf: ^byte, count: size, bytes_written: ^size, err: ^^Error) -> IOStatus
-SeekType :: enum i32 {SEEK_CUR = 0, SEEK_SET = 1, SEEK_END = 2 }
 io_seek_func_ptr_anon_13 :: #type proc "c" (channel: ^IOChannel, offset_p: int64, type: SeekType, err: ^^Error) -> IOStatus
 io_close_func_ptr_anon_14 :: #type proc "c" (channel: ^IOChannel, err: ^^Error) -> IOStatus
 io_create_watch_func_ptr_anon_15 :: #type proc "c" (channel: ^IOChannel, condition: IOCondition) -> ^Source
 io_free_func_ptr_anon_16 :: #type proc "c" (channel: ^IOChannel)
-IOFlags :: enum i32 {IO_FLAG_NONE = 0, IO_FLAG_APPEND = 1, IO_FLAG_NONBLOCK = 2, IO_FLAG_IS_READABLE = 4, IO_FLAG_IS_WRITABLE = 8, IO_FLAG_IS_WRITEABLE = 8, IO_FLAG_IS_SEEKABLE = 16, IO_FLAG_MASK = 31, IO_FLAG_GET_MASK = 31, IO_FLAG_SET_MASK = 3 }
 io_set_flags_func_ptr_anon_17 :: #type proc "c" (channel: ^IOChannel, flags: IOFlags, err: ^^Error) -> IOStatus
 io_get_flags_func_ptr_anon_18 :: #type proc "c" (channel: ^IOChannel) -> IOFlags
-_GIOFuncs :: struct {
+IOFuncs :: struct {
     io_read: io_read_func_ptr_anon_11,
     io_write: io_write_func_ptr_anon_12,
     io_seek: io_seek_func_ptr_anon_13,
@@ -7439,35 +6272,26 @@ _GIOFuncs :: struct {
     io_set_flags: io_set_flags_func_ptr_anon_17,
     io_get_flags: io_get_flags_func_ptr_anon_18,
 }
-IOError :: enum i32 {NONE = 0, AGAIN = 1, INVAL = 2, UNKNOWN = 3 }
-IOChannelError :: enum i32 {FBIG = 0, INVAL = 1, IO = 2, ISDIR = 3, NOSPC = 4, NXIO = 5, OVERFLOW = 6, PIPE = 7, FAILED = 8 }
-KeyFileError :: enum i32 {UNKNOWN_ENCODING = 0, PARSE = 1, NOT_FOUND = 2, KEY_NOT_FOUND = 3, GROUP_NOT_FOUND = 4, INVALID_VALUE = 5 }
-KeyFileFlags :: enum i32 {KEY_FILE_NONE = 0, KEY_FILE_KEEP_COMMENTS = 1, KEY_FILE_KEEP_TRANSLATIONS = 2 }
-MarkupError :: enum i32 {BAD_UTF8 = 0, EMPTY = 1, PARSE = 2, UNKNOWN_ELEMENT = 3, UNKNOWN_ATTRIBUTE = 4, INVALID_CONTENT = 5, MISSING_ATTRIBUTE = 6 }
-MarkupParseFlags :: enum i32 {MARKUP_DEFAULT_FLAGS = 0, MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1, MARKUP_TREAT_CDATA_AS_TEXT = 2, MARKUP_PREFIX_ERROR_POSITION = 4, MARKUP_IGNORE_QUALIFIED = 8 }
 start_element_func_ptr_anon_19 :: #type proc "c" (context_p: ^MarkupParseContext, element_name: cstring, attribute_names: [^]cstring, attribute_values: [^]cstring, user_data: pointer, error: ^^Error)
 end_element_func_ptr_anon_20 :: #type proc "c" (context_p: ^MarkupParseContext, element_name: cstring, user_data: pointer, error: ^^Error)
 text_func_ptr_anon_21 :: #type proc "c" (context_p: ^MarkupParseContext, text: cstring, text_len: size, user_data: pointer, error: ^^Error)
 passthrough_func_ptr_anon_22 :: #type proc "c" (context_p: ^MarkupParseContext, passthrough_text: cstring, text_len: size, user_data: pointer, error: ^^Error)
 error_func_ptr_anon_23 :: #type proc "c" (context_p: ^MarkupParseContext, error: ^Error, user_data: pointer)
-_GMarkupParser :: struct {
+MarkupParser :: struct {
     start_element: start_element_func_ptr_anon_19,
     end_element: end_element_func_ptr_anon_20,
     text: text_func_ptr_anon_21,
     passthrough: passthrough_func_ptr_anon_22,
     error: error_func_ptr_anon_23,
 }
-MarkupCollectType :: enum i32 {MARKUP_COLLECT_INVALID = 0, MARKUP_COLLECT_STRING = 1, MARKUP_COLLECT_STRDUP = 2, MARKUP_COLLECT_BOOLEAN = 3, MARKUP_COLLECT_TRISTATE = 4, MARKUP_COLLECT_OPTIONAL = 65536 }
-VariantClass :: enum i32 {BOOLEAN = 98, BYTE = 121, INT16 = 110, UINT16 = 113, INT32 = 105, UINT32 = 117, INT64 = 120, UINT64 = 116, HANDLE = 104, DOUBLE = 100, STRING = 115, OBJECT_PATH = 111, SIGNATURE = 103, VARIANT = 118, MAYBE = 109, ARRAY = 97, TUPLE = 40, DICT_ENTRY = 123 }
 s_struct_anon_24 :: struct {
     partial_magic: size,
     type: ^VariantType,
     y: [14]uintptr_,
 }
-_GVariantBuilder :: struct {
+VariantBuilder :: struct {
     u: u_union_anon_25,
 }
-VariantParseError :: enum i32 {FAILED = 0, BASIC_TYPE_EXPECTED = 1, CANNOT_INFER_TYPE = 2, DEFINITE_TYPE_EXPECTED = 3, INPUT_NOT_AT_END = 4, INVALID_CHARACTER = 5, INVALID_FORMAT_STRING = 6, INVALID_OBJECT_PATH = 7, INVALID_SIGNATURE = 8, INVALID_TYPE_STRING = 9, NO_COMMON_TYPE = 10, NUMBER_OUT_OF_RANGE = 11, NUMBER_TOO_BIG = 12, TYPE_ERROR = 13, UNEXPECTED_TOKEN = 14, UNKNOWN_KEYWORD = 15, UNTERMINATED_STRING_CONSTANT = 16, VALUE_EXPECTED = 17, RECURSION = 18 }
 s_struct_anon_26 :: struct {
     asv: ^Variant,
     partial_magic: size,
@@ -7477,26 +6301,9 @@ u_union_anon_27 :: struct #raw_union {
     s: s_struct_anon_26,
     x: [16]uintptr_,
 }
-_GVariantDict :: struct {
+VariantDict :: struct {
     u: u_union_anon_27,
 }
-LogWriterOutput :: enum i32 {LOG_WRITER_HANDLED = 1, LOG_WRITER_UNHANDLED = 0 }
-OptionArg :: enum i32 {NONE = 0, STRING = 1, INT = 2, CALLBACK = 3, FILENAME = 4, STRING_ARRAY = 5, FILENAME_ARRAY = 6, DOUBLE = 7, INT64 = 8 }
-OptionFlags :: enum i32 {OPTION_FLAG_NONE = 0, OPTION_FLAG_HIDDEN = 1, OPTION_FLAG_IN_MAIN = 2, OPTION_FLAG_REVERSE = 4, OPTION_FLAG_NO_ARG = 8, OPTION_FLAG_FILENAME = 16, OPTION_FLAG_OPTIONAL_ARG = 32, OPTION_FLAG_NOALIAS = 64, OPTION_FLAG_DEPRECATED = 128 }
-OptionError :: enum i32 {UNKNOWN_OPTION = 0, BAD_VALUE = 1, FAILED = 2 }
-RegexError :: enum i32 {COMPILE = 0, OPTIMIZE = 1, REPLACE = 2, MATCH = 3, INTERNAL = 4, STRAY_BACKSLASH = 101, MISSING_CONTROL_CHAR = 102, UNRECOGNIZED_ESCAPE = 103, QUANTIFIERS_OUT_OF_ORDER = 104, QUANTIFIER_TOO_BIG = 105, UNTERMINATED_CHARACTER_CLASS = 106, INVALID_ESCAPE_IN_CHARACTER_CLASS = 107, RANGE_OUT_OF_ORDER = 108, NOTHING_TO_REPEAT = 109, UNRECOGNIZED_CHARACTER = 112, POSIX_NAMED_CLASS_OUTSIDE_CLASS = 113, UNMATCHED_PARENTHESIS = 114, INEXISTENT_SUBPATTERN_REFERENCE = 115, UNTERMINATED_COMMENT = 118, EXPRESSION_TOO_LARGE = 120, MEMORY_ERROR = 121, VARIABLE_LENGTH_LOOKBEHIND = 125, MALFORMED_CONDITION = 126, TOO_MANY_CONDITIONAL_BRANCHES = 127, ASSERTION_EXPECTED = 128, UNKNOWN_POSIX_CLASS_NAME = 130, POSIX_COLLATING_ELEMENTS_NOT_SUPPORTED = 131, HEX_CODE_TOO_LARGE = 134, INVALID_CONDITION = 135, SINGLE_BYTE_MATCH_IN_LOOKBEHIND = 136, INFINITE_LOOP = 140, MISSING_SUBPATTERN_NAME_TERMINATOR = 142, DUPLICATE_SUBPATTERN_NAME = 143, MALFORMED_PROPERTY = 146, UNKNOWN_PROPERTY = 147, SUBPATTERN_NAME_TOO_LONG = 148, TOO_MANY_SUBPATTERNS = 149, INVALID_OCTAL_VALUE = 151, TOO_MANY_BRANCHES_IN_DEFINE = 154, DEFINE_REPETION = 155, INCONSISTENT_NEWLINE_OPTIONS = 156, MISSING_BACK_REFERENCE = 157, INVALID_RELATIVE_REFERENCE = 158, BACKTRACKING_CONTROL_VERB_ARGUMENT_FORBIDDEN = 159, UNKNOWN_BACKTRACKING_CONTROL_VERB = 160, NUMBER_TOO_BIG = 161, MISSING_SUBPATTERN_NAME = 162, MISSING_DIGIT = 163, INVALID_DATA_CHARACTER = 164, EXTRA_SUBPATTERN_NAME = 165, BACKTRACKING_CONTROL_VERB_ARGUMENT_REQUIRED = 166, INVALID_CONTROL_CHAR = 168, MISSING_NAME = 169, NOT_SUPPORTED_IN_CLASS = 171, TOO_MANY_FORWARD_REFERENCES = 172, NAME_TOO_LONG = 175, CHARACTER_VALUE_TOO_LARGE = 176 }
-RegexCompileFlags :: enum i32 {REGEX_DEFAULT = 0, REGEX_CASELESS = 1, REGEX_MULTILINE = 2, REGEX_DOTALL = 4, REGEX_EXTENDED = 8, REGEX_ANCHORED = 16, REGEX_DOLLAR_ENDONLY = 32, REGEX_UNGREEDY = 512, REGEX_RAW = 2048, REGEX_NO_AUTO_CAPTURE = 4096, REGEX_OPTIMIZE = 8192, REGEX_FIRSTLINE = 262144, REGEX_DUPNAMES = 524288, REGEX_NEWLINE_CR = 1048576, REGEX_NEWLINE_LF = 2097152, REGEX_NEWLINE_CRLF = 3145728, REGEX_NEWLINE_ANYCRLF = 5242880, REGEX_BSR_ANYCRLF = 8388608, REGEX_JAVASCRIPT_COMPAT = 33554432 }
-RegexMatchFlags :: enum i32 {REGEX_MATCH_DEFAULT = 0, REGEX_MATCH_ANCHORED = 16, REGEX_MATCH_NOTBOL = 128, REGEX_MATCH_NOTEOL = 256, REGEX_MATCH_NOTEMPTY = 1024, REGEX_MATCH_PARTIAL = 32768, REGEX_MATCH_NEWLINE_CR = 1048576, REGEX_MATCH_NEWLINE_LF = 2097152, REGEX_MATCH_NEWLINE_CRLF = 3145728, REGEX_MATCH_NEWLINE_ANY = 4194304, REGEX_MATCH_NEWLINE_ANYCRLF = 5242880, REGEX_MATCH_BSR_ANYCRLF = 8388608, REGEX_MATCH_BSR_ANY = 16777216, REGEX_MATCH_PARTIAL_SOFT = 32768, REGEX_MATCH_PARTIAL_HARD = 134217728, REGEX_MATCH_NOTEMPTY_ATSTART = 268435456 }
-ErrorType :: enum i32 {ERR_UNKNOWN = 0, ERR_UNEXP_EOF = 1, ERR_UNEXP_EOF_IN_STRING = 2, ERR_UNEXP_EOF_IN_COMMENT = 3, ERR_NON_DIGIT_IN_CONST = 4, ERR_DIGIT_RADIX = 5, ERR_FLOAT_RADIX = 6, ERR_FLOAT_MALFORMED = 7 }
-TokenType :: enum i32 {TOKEN_EOF = 0, TOKEN_LEFT_PAREN = 40, TOKEN_RIGHT_PAREN = 41, TOKEN_LEFT_CURLY = 123, TOKEN_RIGHT_CURLY = 125, TOKEN_LEFT_BRACE = 91, TOKEN_RIGHT_BRACE = 93, TOKEN_EQUAL_SIGN = 61, TOKEN_COMMA = 44, TOKEN_NONE = 256, TOKEN_ERROR = 257, TOKEN_CHAR = 258, TOKEN_BINARY = 259, TOKEN_OCTAL = 260, TOKEN_INT = 261, TOKEN_HEX = 262, TOKEN_FLOAT = 263, TOKEN_STRING = 264, TOKEN_SYMBOL = 265, TOKEN_IDENTIFIER = 266, TOKEN_IDENTIFIER_NULL = 267, TOKEN_COMMENT_SINGLE = 268, TOKEN_COMMENT_MULTI = 269, TOKEN_LAST = 270 }
-ShellError :: enum i32 {BAD_QUOTING = 0, EMPTY_STRING = 1, FAILED = 2 }
-SliceConfig :: enum i32 {ALWAYS_MALLOC = 1, BYPASS_MAGAZINES = 2, WORKING_SET_MSECS = 3, COLOR_INCREMENT = 4, CHUNK_SIZES = 5, CONTENTION_COUNTER = 6 }
-SpawnError :: enum i32 {FORK = 0, READ = 1, CHDIR = 2, ACCES = 3, PERM = 4, TOO_BIG = 5, _2BIG = 5, NOEXEC = 6, NAMETOOLONG = 7, NOENT = 8, NOMEM = 9, NOTDIR = 10, LOOP = 11, TXTBUSY = 12, IO = 13, NFILE = 14, MFILE = 15, INVAL = 16, ISDIR = 17, LIBBAD = 18, FAILED = 19 }
-SpawnFlags :: enum i32 {SPAWN_DEFAULT = 0, SPAWN_LEAVE_DESCRIPTORS_OPEN = 1, SPAWN_DO_NOT_REAP_CHILD = 2, SPAWN_SEARCH_PATH = 4, SPAWN_STDOUT_TO_DEV_NULL = 8, SPAWN_STDERR_TO_DEV_NULL = 16, SPAWN_CHILD_INHERITS_STDIN = 32, SPAWN_FILE_AND_ARGV_ZERO = 64, SPAWN_SEARCH_PATH_FROM_ENVP = 128, SPAWN_CLOEXEC_PIPES = 256, SPAWN_CHILD_INHERITS_STDOUT = 512, SPAWN_CHILD_INHERITS_STDERR = 1024, SPAWN_STDIN_FROM_DEV_NULL = 2048 }
-TestTrapFlags :: enum i32 {TEST_TRAP_DEFAULT = 0, TEST_TRAP_SILENCE_STDOUT = 128, TEST_TRAP_SILENCE_STDERR = 256, TEST_TRAP_INHERIT_STDIN = 512 }
-TestSubprocessFlags :: enum i32 {TEST_SUBPROCESS_DEFAULT = 0, TEST_SUBPROCESS_INHERIT_STDIN = 1, TEST_SUBPROCESS_INHERIT_STDOUT = 2, TEST_SUBPROCESS_INHERIT_STDERR = 4 }
-TestResult :: enum i32 {TEST_RUN_SUCCESS = 0, TEST_RUN_SKIPPED = 1, TEST_RUN_FAILURE = 2, TEST_RUN_INCOMPLETE = 3 }
-TestLogType :: enum i32 {TEST_LOG_NONE = 0, TEST_LOG_ERROR = 1, TEST_LOG_START_BINARY = 2, TEST_LOG_LIST_CASE = 3, TEST_LOG_SKIP_CASE = 4, TEST_LOG_START_CASE = 5, TEST_LOG_STOP_CASE = 6, TEST_LOG_MIN_RESULT = 7, TEST_LOG_MAX_RESULT = 8, TEST_LOG_MESSAGE = 9, TEST_LOG_START_SUITE = 10, TEST_LOG_STOP_SUITE = 11 }
 TestLogMsg :: struct {
     log_type: TestLogType,
     n_strings: uint_,
@@ -7504,12 +6311,7 @@ TestLogMsg :: struct {
     n_nums: uint_,
     nums: [^]f64,
 }
-TestFileType :: enum i32 {TEST_DIST = 0, TEST_BUILT = 1 }
-UriFlags :: enum i32 {NONE = 0, PARSE_RELAXED = 1, HAS_PASSWORD = 2, HAS_AUTH_PARAMS = 4, ENCODED = 8, NON_DNS = 16, ENCODED_QUERY = 32, ENCODED_PATH = 64, ENCODED_FRAGMENT = 128, SCHEME_NORMALIZE = 256 }
-UriHideFlags :: enum i32 {URI_HIDE_NONE = 0, URI_HIDE_USERINFO = 1, URI_HIDE_PASSWORD = 2, URI_HIDE_AUTH_PARAMS = 4, URI_HIDE_QUERY = 8, URI_HIDE_FRAGMENT = 16 }
-UriParamsFlags :: enum i32 {URI_PARAMS_NONE = 0, URI_PARAMS_CASE_INSENSITIVE = 1, URI_PARAMS_WWW_FORM = 2, URI_PARAMS_PARSE_RELAXED = 4 }
-UriError :: enum i32 {FAILED = 0, BAD_SCHEME = 1, BAD_USER = 2, BAD_PASSWORD = 3, BAD_AUTH_PARAMS = 4, BAD_HOST = 5, BAD_PORT = 6, BAD_PATH = 7, BAD_QUERY = 8, BAD_FRAGMENT = 9 }
-Win32OSType :: enum i32 {WIN32_OS_ANY = 0, WIN32_OS_WORKSTATION = 1, WIN32_OS_SERVER = 2 }
+Win32OSType :: enum u32 {WIN32_OS_ANY = 0, WIN32_OS_WORKSTATION = 1, WIN32_OS_SERVER = 2 }
 mutex_new_func_ptr_anon_28 :: #type proc "c" () -> ^Mutex
 mutex_lock_func_ptr_anon_29 :: #type proc "c" (mutex: ^Mutex)
 mutex_trylock_func_ptr_anon_30 :: #type proc "c" (mutex: ^Mutex) -> boolean
@@ -7531,7 +6333,7 @@ thread_exit_func_ptr_anon_45 :: #type proc "c" ()
 thread_set_priority_func_ptr_anon_46 :: #type proc "c" (thread: pointer, priority: ThreadPriority)
 thread_self_func_ptr_anon_47 :: #type proc "c" (thread: pointer)
 thread_equal_func_ptr_anon_48 :: #type proc "c" (thread1: pointer, thread2: pointer) -> boolean
-_GThreadFunctions :: struct {
+ThreadFunctions :: struct {
     mutex_new: mutex_new_func_ptr_anon_28,
     mutex_lock: mutex_lock_func_ptr_anon_29,
     mutex_trylock: mutex_trylock_func_ptr_anon_30,
@@ -7561,7 +6363,7 @@ unused_union_anon_49 :: struct #raw_union {
     owner: rawptr,
     dummy: double,
 }
-_GStaticRecMutex :: struct {
+StaticRecMutex :: struct {
     mutex: StaticMutex,
     depth: uint_,
     unused: unused_union_anon_49,
@@ -7632,9 +6434,6 @@ foreign glib_runic {
     @(link_name = "g_win32_check_windows_version")
     win32_check_windows_version :: proc(major: int_, minor: int_, spver: int_, os_type: Win32OSType) -> boolean ---
 
-    @(link_name = "_g_win32_get_system_data_dirs_wrapper")
-    _g_win32_get_system_data_dirs :: proc() -> ^cstring ---
-
 }
 
 }
@@ -7649,12 +6448,10 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
 
 when #config(GLIB_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import glib_runic { "../lib/linux/x86_64/libglib-2.0.a", "../lib/linux/x86_64/libglib-wrapper.a", "system:ffi", "system:pcre2-8" }
+    foreign import glib_runic { "../lib/linux/x86_64/libglib-2.0.a", "system:ffi", "system:pcre2-8" }
 } 
 } else {
-    when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import glib_runic { "system:glib-2.0", "../lib/linux/x86_64/libglib-wrapper.a" }
-} 
+    foreign import glib_runic "system:glib-2.0"
 }
 
 }
@@ -7663,21 +6460,17 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
 
 when #config(GLIB_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import glib_runic { "../lib/linux/aarch64/libglib-2.0.a", "../lib/linux/aarch64/libglib-wrapper.a", "system:ffi", "system:pcre2-8" }
+    foreign import glib_runic { "../lib/linux/aarch64/libglib-2.0.a", "system:ffi", "system:pcre2-8" }
 } 
 } else {
-    when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import glib_runic { "system:glib-2.0", "../lib/linux/aarch64/libglib-wrapper.a" }
-} 
+    foreign import glib_runic "system:glib-2.0"
 }
 
 }
 
 when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
 
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-    foreign import glib_runic { "../lib/windows/x86_64/glib-2.0.lib", "../lib/windows/x86_64/glib-wrapper.lib" }
-} 
+foreign import glib_runic "../lib/windows/x86_64/glib-2.0.lib"
 
 }
 

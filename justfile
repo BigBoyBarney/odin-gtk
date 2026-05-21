@@ -1,26 +1,32 @@
 set windows-shell := ['powershell.exe']
 
-default: setup wrapper
-
+[unix]
 setup: glib-setup gdk-pixbuf-setup cairo-setup pango-setup graphene-setup gtk-setup adwaita-setup
 
+[unix]
 bindings: glib-all gdk-pixbuf cairo pango-all graphene gtk gtk-layer-shell adwaita
+
+[unix]
 glib-all: glib gobject gmodule gio girepository
+
+[unix]
 pango-all: pango pangocairo
 
-wrapper CC='cc':  (glib-wrapper-all CC) (gdk-pixbuf-wrapper CC) (pango-wrapper CC) (graphene-wrapper CC) (gtk-wrapper CC) (adwaita-wrapper CC)
-glib-wrapper-all CC='cc': (glib-wrapper CC) (gobject-wrapper CC) (gio-wrapper CC) (girepository-wrapper CC)
+[unix]
 build: glib-build cairo-build gtk-build
 
-clean: glib-clean cairo-clean gtk-clean adwaita-clean
+[unix]
+clean: glib-clean gdk-pixbuf-clean gtk-clean adwaita-clean
 
 check-all: (check 'glib') (check 'glib/gobject') (check 'glib/gmodule') (check 'glib/gio') (check 'glib/girepository') (check 'gdk-pixbuf') (check 'cairo') (check 'pango') (check 'pango/pangocairo') (check 'graphene') (check 'gtk') (check 'gtk/layer-shell') (check 'adwaita')
 
 RUNIC := 'runic'
-WINDOWS_GVSBUILD_RELEASE := '2025.5.0'
+WINDOWS_GVSBUILD_RELEASE := '2026.4.1'
 
+[unix]
 glib-setup:
     cd shared/glib && meson setup \
+         --reconfigure \
          --default-library static \
          -Dman-pages=disabled \
          -Ddtrace=disabled \
@@ -40,6 +46,7 @@ glib-setup:
         'gio/gioenumtypes.h' \
         'girepository/gi-visibility.h' \
 
+[unix]
 glib-build:
     meson compile -C shared/glib/_build -j{{ num_cpus() }}
     @mkdir -p lib/{{ os() }}/{{ arch() }}
@@ -49,6 +56,7 @@ glib-build:
     ln -srf shared/glib/_build/girepository/libgirepository-2.0.a lib/{{ os() }}/{{ arch() }}/
     ln -srf shared/glib/_build/gobject/libgobject-2.0.a lib/{{ os() }}/{{ arch() }}/
 
+[unix]
 glib-clean:
     rm -rf shared/glib/_build \
            lib/{{ os() }}/{{ arch() }}/libglib-2.0.a \
@@ -57,6 +65,7 @@ glib-clean:
            lib/{{ os() }}/{{ arch() }}/libgirepository-2.0.a \
            lib/{{ os() }}/{{ arch() }}/libgobject-2.0.a \
 
+[unix]
 glib:
     {{ RUNIC }} glib/rune.yml
     sed glib/glib*.odin -i \
@@ -99,17 +108,14 @@ glib:
         -e '/^VARIANT_TYPE_/s/(const GVariantType \*)//g' \
         -e '/^LOG_FATAL_MASK/s/G_LOG/LogLevelFlags.LOG/g' \
         -e '/^LOG_DOMAIN/s/(gchar\*)//g' \
-        -e '/^URI_/s/\\" \\"//g'\
+        -e '/^URI_/s/\\" \\"//g' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
+        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e '/^NSEC_PER_SEC/ {s#`##g; s#(##g; s#)##g; s#0[^0-9]\+#0#}' \
+        -e 's#\(^\s\+[p]*data:\s*\)^#\1[^]#'
 
-    rm glib/glib-wrapper-Linux_arm64.*
-    mv glib/glib-wrapper-Linux_x86_64.h   glib/glib-wrapper-Linux.h
-    mv glib/glib-wrapper-Linux_x86_64.c   glib/glib-wrapper-Linux.c
-    mv glib/glib-wrapper-Windows_x86_64.h glib/glib-wrapper-Windows.h
-    mv glib/glib-wrapper-Windows_x86_64.c glib/glib-wrapper-Windows.c
-    sed glib/glib-wrapper-* -i -e '/^#include/ s/_x86_64//'
-
-    echo '#undef g_steal_pointer' >> glib/glib-wrapper-Linux.h
-    echo '#undef g_steal_pointer' >> glib/glib-wrapper-Windows.h
+    sed 'glib/glib-Linux.odin' -i \
+        -e '0,/glib_runic\s\+"system:glib-2.0"/ s#.*glib_runic\s\+"system:glib-2.0".*##'
 
 WRAPPER_OS := if os() == 'windows' {
   'Windows'
@@ -125,18 +131,6 @@ WRAPPER_ARCH := if arch() == 'aarch64' {
 }
 
 [unix]
-glib-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/glib-wrapper.o -Ishared/glib/ -Ishared/glib/_build -Ishared/glib/_build/glib glib/glib-wrapper-{{ WRAPPER_OS }}.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libglib-wrapper.a lib/{{ os() }}/{{ arch() }}/glib-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/glib-wrapper.o
-
-[windows]
-glib-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/glib-2.0/' '-Ishared/gvsbuild/extract/include/glib-2.0/glib/' '-Ishared/gvsbuild/extract/lib/glib-2.0/include/' -o lib/{{ os() }}/{{ arch() }}/glib-wrapper.obj glib/glib-wrapper-{{ WRAPPER_OS }}.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\glib-wrapper.lib lib\{{ os() }}\{{ arch() }}\glib-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\glib-wrapper.obj
-
 gobject:
     {{ RUNIC }} glib/gobject/rune.yml
     sed glib/gobject/gobject*.odin -i \
@@ -153,26 +147,21 @@ gobject:
         -e '/^TYPE_/s/\]/\] }/g' \
         -e 's/class: \[\^\]/class: ^/g' \
         -e '/^ParamFlags/s/PARAM_//g' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
+        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
 [unix]
-gobject-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/gobject-wrapper.o -Ishared/glib -Ishared/glib/glib -Ishared/glib/_build/glib -Ishared/glib/_build glib/gobject/gobject-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgobject-wrapper.a lib/{{ os() }}/{{ arch() }}/gobject-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/gobject-wrapper.o
-
-[windows]
-gobject-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/glib-2.0/' '-Ishared/gvsbuild/extract/include/glib-2.0/glib/' '-Ishared/gvsbuild/extract/lib/glib-2.0/include/' -o lib/{{ os() }}/{{ arch() }}/gobject-wrapper.obj glib/gobject/gobject-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\gobject-wrapper.lib lib\{{ os() }}\{{ arch() }}\gobject-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\gobject-wrapper.obj
-
 gmodule:
     {{ RUNIC }} glib/gmodule/rune.yml
     sed glib/gmodule/gmodule*.odin -i \
-        -e 's/\^glib.char/cstring/g'\
+        -e 's/\^glib.char/cstring/g' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
+        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 gio:
+    rm -f glib/gio/gio*.odin
+
     {{ RUNIC }} glib/gio/rune.yml
     sed glib/gio/gio*.odin -i \
         -e 's/\^glib.char/cstring/g' \
@@ -183,41 +172,100 @@ gio:
         -e 's/`FALSE`/glib.FALSE/g' \
         -e '/^VOLUME_IDENTIFIER_KIND_HAL_UDI/s/GLIB_DEPRECATED_MACRO//g' \
         -e '/^TLS_CHANNEL_BINDING_ERROR/s/bindinerror/binding_error/g' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
+        -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e 's#\(^\s\+\)application_run\(\s*::\s*proc\)#\1@(private)\n\1g_application_run\2#'
+
+    sed glib/gio/gio-Linux.odin -i \
+        -e '0,/.*gio_runic "system:gio-2\.0"/ s#.*gio_runic "system:gio-2\.0".*##'
+    
+    just -f "{{ justfile() }}" gio-generate-type-casts
+
 [unix]
-gio-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/gio-wrapper.o -Ishared/glib -Ishared/glib/glib -Ishared/glib/_build/glib -Ishared/glib/_build -Ishared/glib/gmodule glib/gio/gio-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgio-wrapper.a lib/{{ os() }}/{{ arch() }}/gio-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/gio-wrapper.o
+gio-generate-type-casts:
+    #! /bin/bash
 
-[windows]
-gio-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/glib-2.0/' '-Ishared/gvsbuild/extract/include/glib-2.0/glib/' '-Ishared/gvsbuild/extract/lib/glib-2.0/include/' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule/' -o lib/{{ os() }}/{{ arch() }}/gio-wrapper.obj glib/gio/gio-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\gio-wrapper.lib lib\{{ os() }}\{{ arch() }}\gio-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\gio-wrapper.obj
+    OUTPUT_FILE="./glib/gio/type_casts.odin"
 
+    cat > "$OUTPUT_FILE" << 'EOF'
+    package gio
+
+    import "base:intrinsics"
+    import glib ".."
+    import gobj "../gobject"
+
+    EOF
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" =~ ^TYPE_([A-Z0-9_]+)[[:space:]]*::[[:space:]]*(.+)_get_type[[:space:]]*$ ]]; then
+            UPPER_NAME="${BASH_REMATCH[1]}"
+            GET_TYPE_NAME="${BASH_REMATCH[2]}"
+            
+            # If an error quark exists I don't want to generate something
+            if grep "${GET_TYPE_NAME}_quark" "./glib/gio/gio.odin" > /dev/null; then
+                continue
+            fi
+            
+            PASCAL_NAME=$(echo "$GET_TYPE_NAME" | sed -r 's/(^|_)([a-z])/\U\2/g')
+            
+            CAST_PROC_NAME="$UPPER_NAME"
+            IS_PROC_NAME="IS_$UPPER_NAME"
+            
+            if printf "$PASCAL_NAME" | grep 'Dbus' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Dbus#DBus#')
+            elif printf "$PASCAL_NAME" | grep '[a-z]Fd[A-Z]' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#(.*)Fd(.*)#\1FD\2#')
+            elif printf "$PASCAL_NAME" | grep 'Io' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Io#IO#')
+            elif printf "$PASCAL_NAME" | grep 'Ip' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Ip#IP#')
+            fi
+
+            cat >> "$OUTPUT_FILE" << EOF
+    ${CAST_PROC_NAME} :: #force_inline proc "contextless" (
+    	ptr: \$Ptr,
+    ) -> ^${PASCAL_NAME} where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_cast(${PASCAL_NAME}, ptr, TYPE_${UPPER_NAME})
+    }
+
+    ${IS_PROC_NAME} :: #force_inline proc "contextless"(
+    	ptr: \$Ptr,
+    ) -> glib.boolean where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_is(ptr, TYPE_${UPPER_NAME})
+    }
+
+    EOF
+        fi
+    done < "./glib/gio/gio.odin"
+    
+    
+    cat >> "$OUTPUT_FILE" << 'EOF'
+    
+    @(private="file")
+    just_do_absolutely_nothing :: #force_inline proc "contextless" () -> gobj.Type { return TYPE_CREDENTIALS() }
+    
+    EOF
+    
+    if command -v 'odinfmt' > /dev/null 2>&1; then
+        odinfmt -w "$OUTPUT_FILE"
+    fi
+
+[unix]
 girepository:
+    rm -f glib/girepository/girepository*.odin
+
     {{ RUNIC }} glib/girepository/rune.yml
     sed glib/girepository/girepository*.odin -i \
         -e '/^\(TYPE_\|[A-Z]\+_ERROR\|\)/ {s/`//g; s/(gi_//g; s/())//g}' \
         -e 's/\(TYPE_TAG_N_TYPES :: \).*/\1int(TypeTag.UNICHAR) + 1/g' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_GI\1$##' \
+        -e 's#^_GI\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+
 [unix]
-girepository-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/girepository-wrapper.o -Ishared/glib -Ishared/glib/glib -Ishared/glib/_build/glib -Ishared/glib/_build -Ishared/glib/gmodule -Ishared/glib/_build/girepository glib/girepository/girepository-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgirepository-wrapper.a lib/{{ os() }}/{{ arch() }}/girepository-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/girepository-wrapper.o
-
-[windows]
-girepository-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/glib-2.0/' '-Ishared/gvsbuild/extract/include/glib-2.0/glib/' '-Ishared/gvsbuild/extract/lib/glib-2.0/include/' -o lib\{{ os() }}\{{ arch() }}\girepository-wrapper.obj glib/girepository/girepository-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\girepository-wrapper.lib lib\{{ os() }}\{{ arch() }}\girepository-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\girepository-wrapper.obj
-
 gdk-pixbuf-setup:
     cd shared/gdk-pixbuf && meson setup \
+        --reconfigure \
         -Dgtk_doc=false \
-        -Ddocs=false \
         -Dintrospection=disabled \
         -Dman=false \
         -Dtests=false \
@@ -226,57 +274,68 @@ gdk-pixbuf-setup:
     ninja -C shared/gdk-pixbuf/_build \
         'gdk-pixbuf/gdk-pixbuf-enum-types.h' \
 
+[unix]
+gdk-pixbuf-clean:
+    rm -rf shared/gdk-pixbuf/_build
+
+[unix]
 gdk-pixbuf:
     {{ RUNIC }} gdk-pixbuf/rune.yml
     sed gdk-pixbuf/gdk-pixbuf.odin -i \
         -e '{s/\^glib.char/cstring/g; s/buf: cstring/buf: ^glib.char/g; s/data: ^cstring/data: ^^glib.char/g; s/buffer: ^cstring/buffer: ^^glib.char/g}' \
         -e '/^TYPE_/ {s/`//g; s/(gdk_//g; s/())//g}' \
         -e '/^ERROR/ {s/`//g; s/gdk_//g; s/()//g}' \
-        -e '0,/^pixbuf_save/ {s/^pixbuf_save.*//}'
+        -e '0,/^pixbuf_save/ {s/^pixbuf_save.*//}' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Gdk\1$##' \
+        -e 's#^_Gdk\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+
 [unix]
-gdk-pixbuf-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/gdk-pixbuf-wrapper.o -Ishared/glib -Ishared/glib/glib -Ishared/glib/_build/glib -Ishared/glib/_build -Ishared/glib/gmodule -Ishared/gdk-pixbuf -Ishared/gdk-pixbuf/_build gdk-pixbuf/gdk-pixbuf-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgdk-pixbuf-wrapper.a lib/{{ os() }}/{{ arch() }}/gdk-pixbuf-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/gdk-pixbuf-wrapper.o
-
-[windows]
-gdk-pixbuf-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0/gdk-pixbuf' -o lib/{{ os() }}/{{ arch() }}/gdk-pixbuf-wrapper.obj gdk-pixbuf/gdk-pixbuf-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\gdk-pixbuf-wrapper.lib lib\{{ os() }}\{{ arch() }}\gdk-pixbuf-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\gdk-pixbuf-wrapper.obj
-
 cairo-setup:
     cd shared/cairo && meson setup \
         --default-library static \
+         --reconfigure \
         -Dxcb=disabled \
         -Dxlib=disabled \
         -Dxlib-xcb=disabled \
         -Dtests=disabled \
         _build
 
+[unix]
 cairo-build:
     meson compile -C shared/cairo/_build -j{{ num_cpus() }}
     @mkdir -p lib/{{ os() }}/{{ arch() }}
     ln -srf shared/cairo/_build/src/libcairo.a lib/{{ os() }}/{{ arch() }}/
 
+[unix]
 cairo-clean:
     rm -rf shared/cairo/_build \
            lib/{{ os() }}/{{ arch() }}/libcairo.a
 
+[unix]
 cairo:
     {{ RUNIC }} cairo/rune.yml
     sed cairo/cairo.odin -i \
         -e '/^[A-Z_1-9]\+ :: / {s/`//g; s/\\//g; s/_CAIRO_//}' \
-        -e 's/^t ::/context_t ::/g' \
+        -e '/^_cairo\s*::\s*/ s#.*##' \
+        -e 's/^t\s*::\s*.*$/context_t :: struct #packed {}/g' \
         -e '/\^text/! s/\^t/\^context_t/g' \
+        -e '/^path_data_t\s*::\s*/ s#.*##' \
+        -e '/^_cairo_path_data_t\s*::\s*/ s#_t##' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)_t\s*::\s*_cairo_\1$##' \
+        -e 's#^_cairo_\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1_t :: \2#' \
 
+[unix]
 pango-setup:
-    cd shared/pango && meson setup _build
+    cd shared/pango && meson setup \
+         --reconfigure \
+         _build
     ninja -C shared/pango/_build \
       'pango/pango-enum-types.h' \
 
+[unix]
 pango:
+    rm -f pango/pango*.odin
+
     {{ RUNIC }} pango/rune.yml
     sed pango/pango.odin -i \
         -e '{s/\^glib\.char/cstring/g; s/\[\^\]glib.char/cstring/g}' \
@@ -286,26 +345,21 @@ pango:
         -e '/^ATTR_/ {s/`//g; s/(guint)//g; s/UINT_MAX/glib.MAXUINT/g}' \
         -e '/^ANALYSIS_/ {s/`//g}' \
         -e '/^\(RENDER_TYPE\|ENGINE_TYPE\)/ {s/`//g; s/\\//g}' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Pango\1$##' \
+        -e 's#^_Pango\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+
 [unix]
-pango-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/pango-wrapper.o -Ishared/pango -Ishared/pango/_build -Ishared/glib -Ishared/glib/glib -Ishared/glib/_build -Ishared/glib/_build/glib -I/usr/include/harfbuzz pango/pango-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libpango-wrapper.a lib/{{ os() }}/{{ arch() }}/pango-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/pango-wrapper.o
-
-[windows]
-pango-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/pango-1.0' '-Ishared/gvsbuild/extract/include/pango-1.0/pango' '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/harfbuzz' -o lib/{{ os() }}/{{ arch() }}/pango-wrapper.obj pango/pango-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\pango-wrapper.lib lib\{{ os() }}\{{ arch() }}\pango-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\pango-wrapper.obj
-
 pangocairo:
     {{ RUNIC }} pango/pangocairo/rune.yml
     sed pango/pangocairo/pangocairo.odin -i \
         -e '/^TYPE_/ {s/`//g; s/(//g; s/)//g; s/pango_cairo_//g}' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_PangoCairo\1$##' \
+        -e 's#^_PangoCairo\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 graphene-setup:
     cd shared/graphene && meson setup \
+       --reconfigure \
        -Dsse2=false \
        -Darm_neon=false \
        -Dgcc_vector=false \
@@ -314,26 +368,19 @@ graphene-setup:
        -Dinstalled_tests=false \
        _build
 
+[unix]
 graphene:
     {{ RUNIC }} graphene/rune.yml
     sed graphene/graphene*.odin -i \
         -e '/^SIMD_S/ {s/`//g; s/\\//g}' \
         -e '/^PI/ {s/`//g; s/f//g}' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_graphene_\1$##' \
+        -e 's#^_graphene_\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
+
 [unix]
-graphene-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/graphene-wrapper.o -Ishared/graphene/_build/include graphene/graphene-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgraphene-wrapper.a lib/{{ os() }}/{{ arch() }}/graphene-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/graphene-wrapper.o
-
-[windows]
-graphene-wrapper CC='clang':
-    clang '-msse4.1' -c -O2 '-Ishared/gvsbuild/extract/lib/graphene-1.0/include/' '-Ishared/gvsbuild/extract/include/graphene-1.0/' -o lib/{{ os() }}/{{ arch() }}/graphene-wrapper.obj graphene/graphene-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\graphene-wrapper.lib lib\{{ os() }}\{{ arch() }}\graphene-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\graphene-wrapper.obj
-
 gtk-setup:
   cd shared/gtk && meson setup \
+     --reconfigure \
      -Ddefault_library=static \
      -Dvulkan=enabled \
      -Dintrospection=disabled \
@@ -352,41 +399,128 @@ gtk-setup:
       'gsk/gskenumtypes.h' \
       'gtk/gtktypebuiltins.h' \
 
+  rm -rf shared/gtk/subprojects/.wraplock
+
+[unix]
 gtk-build:
     meson compile -C shared/gtk/_build -j{{ num_cpus() }}
 
     @mkdir -p lib/{{ os() }}/{{ arch() }}
     ln -sfr shared/gtk/_build/gtk/libgtk.a lib/{{ os() }}/{{ arch() }}/libgtk.a
+
+[unix]
 gtk-clean:
     rm -rf shared/gtk/_build
 
+[unix]
 gtk:
     {{ RUNIC }} gtk/rune.yml
     sed gtk/gtk.odin -i \
         -e 's/cairo.t/cairo.context_t/g' \
-        -e 's/^Snapshot :: Snapshot//g' \
-        -e 's/^SnapshotClass :: _GtkSnapshotClass//g' \
         -e '0,/Snapshot_queueautoptr/{s/Snapshot_.*//g}' \
         -e '/^\(TYPE_\|[A-Z_]\+ERROR\|ACCESSIBLE_LIST\)/ {s/`(//; s/())`//; s/ gtk_/ /}' \
-        -e '/^\(BINARY_AGE\)\|\(INTERFACE_AGE\)/ {s/`//g}'
+        -e '/^\(BINARY_AGE\)\|\(INTERFACE_AGE\)/ {s/`//g}' \
+        -e '/^_GdkSnapshotClass/ s#.*##' \
+        -e '/^SnapshotClass\s*::\s*_GdkSnapshotClass$/ s#.*##' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Gtk\1$##' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Gdk\1$##' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Gsk\1$##' \
+        -e 's#^_Gtk\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e 's#^_Gdk\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
+        -e 's#^_Gsk\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
+    
+    just -f "{{ justfile() }}" gtk-generate-type-casts
+
 [unix]
-gtk-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o -Ishared/gtk -Ishared/glib -Ishared/glib/glib -Ishared/glib/gmodule -Ishared/glib/_build -Ishared/glib/_build/glib -Ishared/gtk/_build -Ishared/cairo/src -Ishared/cairo/_build/src -Ishared/pango -Ishared/pango/_build -Ishared/gdk-pixbuf -Ishared/gdk-pixbuf/_build -Ishared/graphene/include -Ishared/graphene/_build/include -I/usr/include/harfbuzz gtk/gtk-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libgtk-wrapper.a lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/gtk-wrapper.o
+gtk-generate-type-casts:
+    #! /bin/bash
 
-[windows]
-gtk-wrapper CC='clang':
-    clang -c -O2 '-DGTK_COMPILATION' '-Ishared/gvsbuild/extract/include/gtk-4.0' '-Ishared/gvsbuild/extract/lib/gtk-4.0/include' '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule' '-Ishared/gvsbuild/extract/include/cairo' '-Ishared/gvsbuild/extract/include/pango-1.0' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0' '-Ishared/gvsbuild/extract/include/graphene-1.0' '-Ishared/gvsbuild/extract/lib/graphene-1.0/include' '-Ishared/gvsbuild/extract/include/harfbuzz' -o lib/{{ os() }}/{{ arch() }}/gtk-wrapper.obj gtk/gtk-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\gtk-wrapper.lib lib\{{ os() }}\{{ arch() }}\gtk-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\gtk-wrapper.obj
+    OUTPUT_FILE="./gtk/type_casts.odin"
 
+    cat > "$OUTPUT_FILE" << 'EOF'
+    package gtk
+
+    import "base:intrinsics"
+    import glib "../glib"
+    import gobj "../glib/gobject"
+
+    EOF
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" =~ ^TYPE_([A-Z0-9_]+)[[:space:]]*::[[:space:]]*(gdk_)*(gsk_)*(.+)_get_type[[:space:]]*$ ]]; then
+            UPPER_NAME="${BASH_REMATCH[1]}"
+            GDK_PREFIX="${BASH_REMATCH[2]}"
+            GSK_PREFIX="${BASH_REMATCH[3]}"
+            GET_TYPE_NAME="${BASH_REMATCH[4]}"
+            
+            # If an error quark exists I don't want to generate something
+            if grep "${GDK_PREFIX}${GSK_PREFIX}${GET_TYPE_NAME}_quark" "./gtk/gtk.odin" > /dev/null; then
+                continue
+            fi
+            
+            PASCAL_NAME=$(echo "$GET_TYPE_NAME" | sed -r 's/(^|_)([a-z])/\U\2/g')
+            
+            CAST_PROC_NAME="$UPPER_NAME"
+            IS_PROC_NAME="IS_$UPPER_NAME"
+
+            if [[ "$UPPER_NAME" == "RGBA" ]]; then
+                CAST_PROC_NAME="RGBA_CAST"
+                PASCAL_NAME="RGBA"
+            elif [[ "$UPPER_NAME" == "GL_API" ]]; then
+                PASCAL_NAME="GLAPI"
+            elif [[ "$UPPER_NAME" == "CCLOSURE_EXPRESSION" ]]; then
+                PASCAL_NAME="CClosureExpression"
+            elif [[ "$UPPER_NAME" == "BUILDER_CSCOPE" ]]; then
+                PASCAL_NAME="BuilderCScope"
+            elif [[ "$UPPER_NAME" == "AT_CONTEXT" ]]; then
+                PASCAL_NAME="ATContext"
+            elif [[ "$UPPER_NAME" == "PARAM_SPEC_EXPRESSION" ]]; then
+                PASCAL_NAME="ParamSpecExpression"
+            elif echo "$PASCAL_NAME" | grep '^Gl[A-Z]' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Gl(.*)#GL\1#')
+            elif echo "$PASCAL_NAME" | grep '^Im[A-Z]' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Im(.*)#IM\1#')
+            elif echo "$PASCAL_NAME" | grep '^Dnd[A-Z]' > /dev/null; then
+                PASCAL_NAME=$(printf "$PASCAL_NAME" | sed -r 's#Dnd(.*)#DND\1#')
+            fi
+
+            cat >> "$OUTPUT_FILE" << EOF
+    ${CAST_PROC_NAME} :: #force_inline proc "contextless" (
+    	ptr: \$Ptr,
+    ) -> ^${PASCAL_NAME} where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_cast(${PASCAL_NAME}, ptr, TYPE_${UPPER_NAME})
+    }
+
+    ${IS_PROC_NAME} :: #force_inline proc "contextless"(
+    	ptr: \$Ptr,
+    ) -> glib.boolean where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_is(ptr, TYPE_${UPPER_NAME})
+    }
+
+    EOF
+        fi
+    done < "./gtk/gtk.odin"
+    
+    
+    cat >> "$OUTPUT_FILE" << 'EOF'
+    
+    @(private="file")
+    just_do_absolutely_nothing :: #force_inline proc "contextless" () -> gobj.Type { return TYPE_BUTTON_EVENT() }
+    
+    EOF
+    
+    if command -v 'odinfmt' > /dev/null 2>&1; then
+        odinfmt -w "$OUTPUT_FILE"
+    fi
+
+[unix]
 gtk-layer-shell:
     {{ RUNIC }} gtk/layer-shell/rune.yml
 
+[unix]
 adwaita-setup:
     cd shared/adwaita && meson setup \
+          --reconfigure \
           -Dprofiling=false \
           -Dintrospection=disabled \
           -Dvapi=false \
@@ -394,46 +528,91 @@ adwaita-setup:
           -Dtests=false \
           -Dexamples=false \
           _build
+
     ninja -C shared/adwaita/_build \
              src/adw-version.h \
              src/adw-enums.h
 
+    rm -rf shared/adwaita/subprojects/.wraplock shared/adwaita/subprojects/libsass.wrap
+
+[unix]
 adwaita:
     {{ RUNIC }} adwaita/rune.yml
     sed adwaita/adwaita.odin -i \
         -e 's/focus: \[\^\]/focus: ^/' \
         -e '/^TYPE/ {s/`(//; s/())`//; s/ adw_/ /}' \
         -e '/^DURATION_INFINITE/ {s/`//g; s/([a-zA-Z0-9_]\+)//g}' \
+        -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Adw\1$##' \
+        -e 's#^_Adw\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
+
+    just -f "{{ justfile() }}" adwaita-generate-type-casts
 
 [unix]
-adwaita-wrapper CC='cc':
-    @mkdir -p lib/{{ os() }}/{{ arch() }}
-    {{ CC }} -c -o lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o -Ishared/gtk -Ishared/glib -Ishared/glib/glib -Ishared/glib/gmodule -Ishared/glib/_build -Ishared/glib/_build/glib -Ishared/gtk/_build -Ishared/cairo/src -Ishared/cairo/_build/src -Ishared/pango -Ishared/pango/_build -Ishared/gdk-pixbuf -Ishared/gdk-pixbuf/_build -Ishared/graphene/include -Ishared/graphene/_build/include -Ishared/adwaita/_build/src -I/usr/include/harfbuzz adwaita/adwaita-wrapper.c
-    ar rs lib/{{ os() }}/{{ arch() }}/libadwaita-wrapper.a lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o
-    @rm lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.o
+adwaita-generate-type-casts:
+    #! /bin/bash
 
-[windows]
-adwaita-wrapper CC='clang':
-    clang -c -O2 '-Ishared/gvsbuild/extract/include/gtk-4.0' '-Ishared/gvsbuild/extract/include/glib-2.0' '-Ishared/gvsbuild/extract/include/glib-2.0/glib' '-Ishared/gvsbuild/extract/include/glib-2.0/gmodule' '-Ishared/gvsbuild/extract/lib/glib-2.0/include' '-Ishared/gvsbuild/extract/include/cairo' '-Ishared/gvsbuild/extract/include/pango-1.0' '-Ishared/gvsbuild/extract/include/gdk-pixbuf-2.0' '-Ishared/gvsbuild/extract/include/graphene-1.0' '-Ishared/gvsbuild/extract/lib/graphene-1.0/include' '-Ishared/gvsbuild/extract/include/libadwaita-1' '-Ishared/gvsbuild/extract/include/harfbuzz' -o lib/{{ os() }}/{{ arch() }}/adwaita-wrapper.obj adwaita/adwaita-wrapper.c
-    lib /out:lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.lib lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.obj
-    @Remove-Item -Path lib\{{ os() }}\{{ arch() }}\adwaita-wrapper.obj
+    OUTPUT_FILE="./adwaita/type_casts.odin"
 
+    cat > "$OUTPUT_FILE" << 'EOF'
+    package adwaita
+
+    import "base:intrinsics"
+    import glib "../glib"
+    import gobj "../glib/gobject"
+
+    EOF
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" =~ ^TYPE_([A-Z0-9_]+)[[:space:]]*::[[:space:]]*(.+)_get_type[[:space:]]*$ ]]; then
+            UPPER_NAME="${BASH_REMATCH[1]}"
+            GET_TYPE_NAME="${BASH_REMATCH[2]}"
+
+            PASCAL_NAME=$(echo "$GET_TYPE_NAME" | sed -r 's/(^|_)([a-z])/\U\2/g')
+
+            CAST_PROC_NAME="$UPPER_NAME"
+            IS_PROC_NAME="IS_$UPPER_NAME"
+
+            cat >> "$OUTPUT_FILE" << EOF
+    ${CAST_PROC_NAME} :: #force_inline proc "contextless" (
+    	ptr: \$Ptr,
+    ) -> ^${PASCAL_NAME} where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_cast(${PASCAL_NAME}, ptr, TYPE_${UPPER_NAME})
+    }
+
+    ${IS_PROC_NAME} :: #force_inline proc "contextless"(
+    	ptr: \$Ptr,
+    ) -> glib.boolean where intrinsics.type_is_pointer(Ptr) {
+    	return gobj.type_is(ptr, TYPE_${UPPER_NAME})
+    }
+
+    EOF
+        fi
+    done < "./adwaita/adwaita.odin"
+
+
+    cat >> "$OUTPUT_FILE" << 'EOF'
+    
+    @(private="file")
+    just_do_absolutely_nothing :: #force_inline proc "contextless" () -> gobj.Type { return TYPE_BREAKPOINT() }
+    
+    EOF
+
+    if command -v 'odinfmt' > /dev/null 2>&1; then
+        odinfmt -w "$OUTPUT_FILE"
+    fi
+
+[unix]
 adwaita-clean:
     rm -rf \
        shared/adwaita/_build
 
-TMP_DIR := if os() == 'windows' {
-    'C:\temp'
-} else {
-    '/tmp'
-}
 EXE_END := if os() == 'windows' {
     '.exe'
 } else {
     ''
 }
-example NAME='hello-glib' KIND='shared': (make-directory TMP_DIR)
-    odin build {{ 'examples' / NAME }} -debug -error-pos-style:unix -vet -out:{{ TMP_DIR / NAME + EXE_END }} -define:GLIB_STATIC={{ if KIND == 'static' { 'true' } else { 'false' } }}
+example NAME='hello-glib' KIND='shared': (make-directory 'build')
+    odin build {{ 'examples' / NAME }} -debug -error-pos-style:unix -vet -out:{{ 'build' / NAME + EXE_END }} -define:GLIB_STATIC={{ if KIND == 'static' { 'true' } else { 'false' } }}
 
 check PACKAGE TARGET='':
     odin check {{ PACKAGE }} -error-pos-style:unix -vet -no-entry-point {{ if TARGET == '' { '' } else { '-target:' + TARGET } }}
@@ -450,19 +629,19 @@ download-webkitgtk VERSION='2.46.4':
     rmdir shared/webkitgtk/webkitgtk-{{ VERSION }}/
 
 [unix]
-download-and-extract-gvsbuild GVSBUILD_RELEASE:
+download-and-extract-gvsbuild GVSBUILD_RELEASE=WINDOWS_GVSBUILD_RELEASE:
     #! /bin/sh
     set -ex
 
     VERSION_FILE="shared/gvsbuild/extract/VERSION_{{ GVSBUILD_RELEASE }}"
     ZIP_FILE="shared/gvsbuild/{{ GVSBUILD_RELEASE }}.zip"
 
-    if [[ ! -f $VERSION_FILE ]]
+    if [ ! -f $VERSION_FILE ]
     then
         rm -rf shared/gvsbuild/extract
         mkdir -p shared/gvsbuild/extract
 
-        if [[ ! -f $ZIP_FILE ]]
+        if [ ! -f $ZIP_FILE ]
         then
             curl -SL https://github.com/wingtk/gvsbuild/releases/download/{{ GVSBUILD_RELEASE }}/GTK4_Gvsbuild_{{ GVSBUILD_RELEASE }}_x64.zip --output $ZIP_FILE
         fi
@@ -472,7 +651,7 @@ download-and-extract-gvsbuild GVSBUILD_RELEASE:
     fi
 
 [windows]
-download-and-extract-gvsbuild GVSBUILD_RELEASE:
+download-and-extract-gvsbuild GVSBUILD_RELEASE=WINDOWS_GVSBUILD_RELEASE:
     #! pwsh.exe
     Set-PSDebug -Trace 1
     $ErrorActionPreference = "Stop"
@@ -552,7 +731,6 @@ install-windows-runtime BIN_DIR GVSBUILD_RELEASE=WINDOWS_GVSBUILD_RELEASE: (down
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}" -Force | Out-Null
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}/share" -Force | Out-Null
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}/etc" -Force | Out-Null
-    New-Item -ItemType Directory -Path "C:\temp" -Force | Out-Null
 
     # Copy DLL files, excluding ones containing "mm"
     Get-ChildItem -Path "shared/gvsbuild/extract/bin" -Filter "*.dll" -File |

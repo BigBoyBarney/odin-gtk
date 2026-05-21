@@ -3,13 +3,6 @@ platforms:
   - Linux x86_64
   - Linux arm64
   - Windows x86_64
-wrapper:
-  language: c
-  in_headers: ../shared/adwaita/src/adwaita.h
-  out_header: adwaita-wrapper.h
-  out_source: adwaita-wrapper.c
-  load_all_includes: true
-  multi_platform: false
 from:
   language: c
   shared.linux: 'libadwaita-1.so'
@@ -17,9 +10,7 @@ from:
   static.linux.arm64: '../lib/linux/aarch64/libadwaita.a'
   static.linux.x86_64: '../lib/linux/x86_64/libadwaita.a'
   headers: ../shared/adwaita/src/adwaita.h
-  headers.windows.x86_64:
-    - ../shared/gvsbuild/extract/include/libadwaita-1/adwaita.h
-    - adwaita-wrapper.h
+  headers.windows.x86_64: ../shared/gvsbuild/extract/include/libadwaita-1/adwaita.h
   includedirs:
     - ../stdinc/
     - ../shared/gtk/
@@ -146,12 +137,17 @@ from:
     - '../shared/gvsbuild/extract/include/gtk-4.0/gsk/gl/*'
     - '../shared/gvsbuild/extract/include/gtk-4.0/gsk/gpu/*'
   ignore:
+    types:
+      - '*autoptr*'
     constants:
       - 'GDK_*'
       - '_*'
       - '*VERSION*'
       - '*DEPRECATED*'
       - '*AVAILABLE*'
+    functions:
+      - '*autoptr*'
+      - '*auto_cleanup*'
 to:
   language: odin
   package: adwaita
@@ -189,9 +185,6 @@ to:
       - 'TOOLBAR_'
       - 'VIEW_SWITCHER_POLICY_'
     enum_type_name: true
-  trim_suffix:
-    functions:
-      - '_wrapper'
   extern:
     sources:
       '../shared/glib/glib/*': '../glib'
@@ -273,15 +266,9 @@ to:
     trim_prefix: true
   add_libs.shared.linux.arm64:
     - libglib-2.0.so
-    - ../lib/linux/aarch64/libadwaita-wrapper.a
   add_libs.shared.linux.x86_64:
     - libglib-2.0.so
-    - ../lib/linux/x86_64/libadwaita-wrapper.a
   add_libs.static.linux.arm64:
     - ../lib/linux/aarch64/libglib-2.0.a
-    - ../lib/linux/aarch64/libadwaita-wrapper.a
   add_libs.static.linux.x86_64:
     - ../lib/linux/x86_64/libglib-2.0.a
-    - ../lib/linux/x86_64/libadwaita-wrapper.a
-  add_libs.windows.x86_64:
-    - ../lib/windows/x86_64/adwaita-wrapper.lib

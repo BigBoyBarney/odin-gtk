@@ -6,46 +6,29 @@ import gio "../../glib/gio"
 import gobj "../../glib/gobject"
 import gtk "../../gtk"
 import "core:os"
-import "core:strings"
 
 activate_cb :: proc "c" (app: ^gtk.Application) {
-    window := gobj.type_cast(
-        gtk.Window,
-        gtk.application_window_new(app),
-        gtk.TYPE_WINDOW(),
-    )
+    window := gtk.WINDOW(gtk.application_window_new(app))
 
     label := gtk.label_new("Hello, enjoy this spinner :-)")
     spinner := adw.spinner_new()
     about_btn := gtk.button_new_with_label("About")
 
-    box := gobj.type_cast(
-        gtk.CenterBox,
-        gtk.center_box_new(),
-        gtk.TYPE_CENTER_BOX(),
-    )
-    gtk.orientable_set_orientation(
-        gobj.type_cast(gtk.Orientable, box, gtk.TYPE_ORIENTABLE()),
-        .VERTICAL,
-    )
+    box := gtk.CENTER_BOX(gtk.center_box_new())
+    gtk.orientable_set_orientation(gtk.ORIENTABLE(box), .VERTICAL)
     gtk.center_box_set_start_widget(box, label)
     gtk.center_box_set_center_widget(box, spinner)
     gtk.center_box_set_end_widget(box, about_btn)
 
-    gobj.signal_connect(
-        about_btn,
-        "clicked",
-        cast(gobj.Callback)on_about,
-        window,
-    )
+    gobj.signal_connect(about_btn, "clicked", on_about, window)
 
     gtk.widget_set_halign(spinner, .FILL)
     gtk.widget_set_valign(spinner, .FILL)
-    gtk.widget_set_valign(cast(^gtk.Widget)box, .FILL)
+    gtk.widget_set_valign(gtk.WIDGET(box), .FILL)
 
     gtk.window_set_title(window, "Hello Libadwaita")
     gtk.window_set_default_size(window, 200, 200)
-    gtk.window_set_child(window, cast(^gtk.Widget)box)
+    gtk.window_set_child(window, gtk.WIDGET(box))
     gtk.window_present(window)
 }
 
@@ -54,7 +37,7 @@ on_about :: proc "c" (self: ^gtk.Button, user_data: glib.pointer) {
 
     designers := [?]cstring{"Mr. Designer", "Ms. Designress", nil}
 
-    window := cast(^gtk.Widget)user_data
+    window := gtk.WIDGET(user_data)
 
     dlg := adw.about_dialog_new()
 
@@ -83,23 +66,10 @@ main :: proc() {
 
     app := adw.application_new("runic.hello-adwaita", .NONE)
 
-    gobj.signal_connect(app, "activate", cast(gobj.Callback)activate_cb, nil)
+    gobj.signal_connect(app, "activate", activate_cb)
 
-    argv := make([dynamic]cstring, len(os.args))
-    argc := i32(len(os.args))
-    defer delete(argv)
-    for arg, idx in os.args {
-        argv[idx] = strings.clone_to_cstring(arg)
-    }
-    defer for arg in argv do delete(arg)
-
-    status := gio.application_run(
-        gobj.type_cast(gio.Application, app, gio.TYPE_APPLICATION()),
-        argc,
-        raw_data(argv),
-    )
+    status := gio.application_run(app)
     if status != 0 {
         os.exit(int(status))
     }
 }
-

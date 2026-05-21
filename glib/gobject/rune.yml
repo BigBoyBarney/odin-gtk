@@ -3,13 +3,6 @@ platforms:
   - Linux x86_64
   - Linux arm64
   - Windows x86_64
-wrapper:
-  language: c
-  in_headers: ../../shared/glib/glib/glib-object.h
-  out_header: gobject-wrapper.h
-  out_source: gobject-wrapper.c
-  load_all_includes: true
-  multi_platform: false
 from:
   language: c
   shared.linux: 'libgobject-2.0.so'
@@ -45,6 +38,8 @@ from:
     - "../../shared/gvsbuild/extract/include/glib-2.0/glib/deprecated/*"
     - "../../shared/gvsbuild/extract/lib/glib-2.0/include/*"
   ignore:
+    types:
+      - '*autoptr*'
     constants:
       - 'G_STATIC_*'
       - '_GOBJECT_*'
@@ -58,11 +53,16 @@ from:
       - '_g_type_*'
     functions:
       - 'g_object_set'
+      - '*autoptr*'
+      - '*auto_cleanup*'
   overwrite:
     types:
       # !!!!This is 64-Bit only!!!!!
       _GClosure: '#SInt8 #Attr Arr 32 #AttrEnd'
       _GParamSpecString: '#SInt8 #Attr Arr 104 #AttrEnd'
+      GClassInitFunc.param.0.type: 'GTypeClass #Attr Ptr 1 #AttrEnd'
+      GInitiallyUnowned: 'GObject'
+      GInitiallyUnownedClass: 'GObjectClass'
   aliases:
     g_static_mutex_get_mutex_impl: g_static_mutex_get_mutex
 to:
@@ -99,17 +99,9 @@ to:
       "../../shared/gvsbuild/extract/lib/glib-2.0/include/*": "glib .."
     trim_prefix: true
   add_libs.static.linux.arm64:
-    - '../../lib/linux/aarch64/libgobject-wrapper.a'
     - libffi.so
     - libpcre2-8.so
-  add_libs.shared.linux.arm64:
-    - '../../lib/linux/aarch64/libgobject-wrapper.a'
-  add_libs.windows.x86_64:
-    - '../../lib/windows/x86_64/gobject-wrapper.lib'
 #   add_libs.static.linux.x86_64:
-#     - '../../lib/linux/x86_64/libgobject-wrapper.a'
 #     - libffi.so
 #     - libpcre2-8.so
-#   add_libs.shared.linux.x86_64:
-#     - '../../lib/linux/x86_64/libgobject-wrapper.a'
 #   static_switch: 'GLIB_STATIC'

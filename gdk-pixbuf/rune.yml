@@ -3,13 +3,6 @@ platforms:
   - Linux x86_64
   - Linux arm64
   - Windows x86_64
-wrapper:
-  language: c
-  in_headers: ../shared/gdk-pixbuf/gdk-pixbuf/gdk-pixbuf.h
-  out_header: gdk-pixbuf-wrapper.h
-  out_source: gdk-pixbuf-wrapper.c
-  load_all_includes: true
-  multi_platform: false
 from:
   language: c
   shared.linux: 'libgdk_pixbuf-2.0.so'
@@ -17,9 +10,7 @@ from:
   static.linux.arm64: '../lib/linux/aarch64/libgdk_pixbuf-2.0.a'
   static.linux.x86_64: '../lib/linux/x86_64/libgdk_pixbuf-2.0.a'
   headers: ../shared/gdk-pixbuf/gdk-pixbuf/gdk-pixbuf.h
-  headers.windows.x86_64:
-    - ../shared/gvsbuild/extract/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixbuf.h
-    - gdk-pixbuf-wrapper.h
+  headers.windows.x86_64: ../shared/gvsbuild/extract/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixbuf.h
   includedirs:
     - ../stdinc/
     - ../shared/glib/
@@ -61,6 +52,8 @@ from:
     - '../shared/gvsbuild/extract/lib/glib-2.0/include/*'
     - '../shared/gvsbuild/extract/include/glib-2.0/glib/deprecated/*'
   ignore: &ignore_any
+    types:
+      - '*autoptr*'
     constants:
       - 'GDK_PIXBUF_MAJOR'
       - 'GDK_PIXBUF_MINOR'
@@ -70,10 +63,9 @@ from:
       - 'GDK_PIXBUF_DEPRECATED*'
       - 'GDK_PIXBUF_AVAILABLE*'
       - '_GDK*'
-  ignore.windows.x86_64:
-    variables:
-      - 'gdk_pixbuf_*version'
-    <<: *ignore_any
+    functions:
+      - '*autoptr*'
+      - '*auto_cleanup*'
   aliases:
     'gdk_pixbuf_save_utf8': 'gdk_pixbuf_save'
 to:
@@ -98,9 +90,6 @@ to:
       - glib_
     variables:
       - gdk_
-  trim_suffix:
-    functions:
-      - _wrapper
   extern:
     sources:
       '../shared/glib/glib/*': "../glib"
@@ -116,7 +105,4 @@ to:
       '../shared/gvsbuild/extract/include/glib-2.0/glib/deprecated/*': "../glib"
       '../shared/gvsbuild/extract/include/glib-2.0/gio/*': "../glib/gio"
     trim_prefix: true
-  add_libs.linux.arm64: ../lib/linux/aarch64/libgdk-pixbuf-wrapper.a
-  add_libs.linux.x86_64: ../lib/linux/x86_64/libgdk-pixbuf-wrapper.a
-  add_libs.windows.x86_64: ../lib/windows/x86_64/gdk-pixbuf-wrapper.lib
 

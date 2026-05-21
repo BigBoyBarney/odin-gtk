@@ -3,13 +3,6 @@ platforms:
   - Linux x86_64
   - Linux arm64
   - Windows x86_64
-wrapper:
-  language: c
-  in_headers: ../shared/pango/pango/pango.h
-  out_header: pango-wrapper.h
-  out_source: pango-wrapper.c
-  load_all_includes: true
-  multi_platform: false
 from:
   language: c
   shared.linux: 'libpango-1.0.so'
@@ -17,9 +10,7 @@ from:
   static.linux.arm64: '../lib/linux/aarch64/libpango-1.0.a'
   static.linux.x86_64: '../lib/linux/x86_64/libpango-1.0.a'
   headers: ../shared/pango/pango/pango.h
-  headers.windows.x86_64:
-    - ../shared/gvsbuild/extract/include/pango-1.0/pango/pango.h
-    - pango-wrapper.h
+  headers.windows.x86_64: ../shared/gvsbuild/extract/include/pango-1.0/pango/pango.h
   includedirs:
     - ../stdinc/
     - ../shared/pango/
@@ -50,12 +41,17 @@ from:
     - '../shared/gvsbuild/extract/lib/glib-2.0/include/*'
     - '../shared/gvsbuild/extract/include/glib-2.0/gobject/*'
   ignore: &ignore_any
+    types:
+      - '*autoptr*'
     constants:
       - '*_INIT'
       - '_PANGO*'
       - 'PANGO_VERSION*'
       - 'PANGO_DEPRECATED*'
       - 'PANGO_AVAILABLE*'
+    functions:
+      - '*autoptr*'
+      - '*auto_cleanup*'
   overwrite:
     # !! This only works on 64-Bit !!
     types:
@@ -63,13 +59,6 @@ from:
       _PangoAttrSize: '#SInt8 #Attr Arr 24 #AttrEnd'
       _PangoGlyphVisAttr: '#SInt8 #Attr Arr 4 #AttrEnd'
       _PangoLayoutLine: '#SInt8 #Attr Arr 32 #AttrEnd'
-  # The windows headers are based on a newer version of pango
-  ignore.windows.x86_64:
-    functions:
-      - 'pango_font_description_set_features_static'
-      - 'pango_font_description_set_features'
-      - 'pango_font_description_get_features'
-    <<: *ignore_any
 
 to:
   language: odin
@@ -92,9 +81,6 @@ to:
       - 'LAYOUT_SERIALIZE_'
       - 'LAYOUT_DESERIALIZE_'
     enum_type_name: true
-  trim_suffix:
-    functions:
-      - '_wrapper'
   extern:
     sources:
       '../stdinc/stdio.h': 'core:c/libc'
@@ -108,6 +94,4 @@ to:
       '../shared/gvsbuild/extract/lib/glib-2.0/include/*': '../glib'
       '../shared/gvsbuild/extract/include/glib-2.0/gobject/*': 'gobj ../glib/gobject'
     trim_prefix: true
-  add_libs.linux.arm64: ../lib/linux/aarch64/libpango-wrapper.a
-  add_libs.linux.x86_64: ../lib/linux/x86_64/libpango-wrapper.a
-  add_libs.windows.x86_64: ../lib/windows/x86_64/pango-wrapper.lib
+

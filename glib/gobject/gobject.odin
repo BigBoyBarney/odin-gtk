@@ -122,31 +122,31 @@ array_union_anon_0 :: struct #raw_union {
     v_double: glib.double,
     v_pointer: glib.pointer,
 }
-_GValue :: struct {
+Value :: struct {
     g_type: Type,
     data: [2]array_union_anon_0,
 }
-Value :: _GValue
-_GTypeCValue :: struct #packed {}
-TypeCValue :: _GTypeCValue
-_GTypePlugin :: struct #packed {}
-TypePlugin :: _GTypePlugin
-_GTypeClass :: struct {
+
+TypeCValue :: struct #packed {}
+
+TypePlugin :: struct #packed {}
+
+TypeClass :: struct {
     g_type: Type,
 }
-TypeClass :: _GTypeClass
-_GTypeInterface :: struct {
+
+TypeInterface :: struct {
     g_type: Type,
     g_instance_type: Type,
 }
-TypeInterface :: _GTypeInterface
-_GTypeInstance :: struct {
+
+TypeInstance :: struct {
     g_class: ^TypeClass,
 }
-TypeInstance :: _GTypeInstance
+
 BaseInitFunc :: #type proc "c" (g_class: glib.pointer)
 BaseFinalizeFunc :: #type proc "c" (g_class: glib.pointer)
-ClassInitFunc :: #type proc "c" (g_class: glib.pointer, class_data: glib.pointer)
+ClassInitFunc :: #type proc "c" (g_class: ^TypeClass, class_data: glib.pointer)
 ClassFinalizeFunc :: #type proc "c" (g_class: glib.pointer, class_data: glib.pointer)
 InstanceInitFunc :: #type proc "c" (instance: ^TypeInstance, g_class: glib.pointer)
 TypeValueInitFunc :: #type proc "c" (value: ^Value)
@@ -155,7 +155,7 @@ TypeValueCopyFunc :: #type proc "c" (src_value: ^Value, dest_value: ^Value)
 TypeValuePeekPointerFunc :: #type proc "c" (value: ^Value) -> glib.pointer
 TypeValueCollectFunc :: #type proc "c" (value: ^Value, n_collect_values: glib.uint_, collect_values: [^]TypeCValue, collect_flags: glib.uint_) -> cstring
 TypeValueLCopyFunc :: #type proc "c" (value: ^Value, n_collect_values: glib.uint_, collect_values: [^]TypeCValue, collect_flags: glib.uint_) -> cstring
-_GTypeValueTable :: struct {
+TypeValueTable :: struct {
     value_init: TypeValueInitFunc,
     value_free: TypeValueFreeFunc,
     value_copy: TypeValueCopyFunc,
@@ -165,8 +165,8 @@ _GTypeValueTable :: struct {
     lcopy_format: cstring,
     lcopy_value: TypeValueLCopyFunc,
 }
-TypeValueTable :: _GTypeValueTable
-_GTypeInfo :: struct {
+
+TypeInfo :: struct {
     class_size: glib.uint16,
     base_init: BaseInitFunc,
     base_finalize: BaseFinalizeFunc,
@@ -178,31 +178,34 @@ _GTypeInfo :: struct {
     instance_init: InstanceInitFunc,
     value_table: ^TypeValueTable,
 }
-TypeInfo :: _GTypeInfo
-_GTypeFundamentalInfo :: struct {
+
+TypeFundamentalFlags :: enum u32 {CLASSED = 1, INSTANTIATABLE = 2, DERIVABLE = 4, DEEP_DERIVABLE = 8 }
+TypeFundamentalInfo :: struct {
     type_flags: TypeFundamentalFlags,
 }
-TypeFundamentalInfo :: _GTypeFundamentalInfo
+
 InterfaceInitFunc :: #type proc "c" (g_iface: glib.pointer, iface_data: glib.pointer)
 InterfaceFinalizeFunc :: #type proc "c" (g_iface: glib.pointer, iface_data: glib.pointer)
-_GInterfaceInfo :: struct {
+InterfaceInfo :: struct {
     interface_init: InterfaceInitFunc,
     interface_finalize: InterfaceFinalizeFunc,
     interface_data: glib.pointer,
 }
-InterfaceInfo :: _GInterfaceInfo
-_GTypeQuery :: struct {
+
+TypeQuery :: struct {
     type: Type,
     type_name: cstring,
     class_size: glib.uint_,
     instance_size: glib.uint_,
 }
-TypeQuery :: _GTypeQuery
+
+TypeDebugFlags :: enum u32 {NONE = 0, OBJECTS = 1, SIGNALS = 2, INSTANCE_COUNT = 4, MASK = 7 }
 TypeClassCacheFunc :: #type proc "c" (cache_data: glib.pointer, g_class: ^TypeClass) -> glib.boolean
 TypeInterfaceCheckFunc :: #type proc "c" (check_data: glib.pointer, g_iface: glib.pointer)
+TypeFlags :: enum u32 {NONE = 0, ABSTRACT = 16, VALUE_ABSTRACT = 32, FINAL = 64, DEPRECATED = 128 }
 ValueTransform :: #type proc "c" (src_value: ^Value, dest_value: ^Value)
 ParamFlags :: enum i32 {READABLE = 1, WRITABLE = 2, READWRITE = 3, CONSTRUCT = 4, CONSTRUCT_ONLY = 8, LAX_VALIDATION = 16, STATIC_NAME = 32, PRIVATE = 32, STATIC_NICK = 64, STATIC_BLURB = 128, EXPLICIT_NOTIFY = 1073741824, DEPRECATED = -2147483648 }
-_GParamSpec :: struct {
+ParamSpec :: struct {
     g_type_instance: TypeInstance,
     name: cstring,
     flags: ParamFlags,
@@ -214,13 +217,13 @@ _GParamSpec :: struct {
     ref_count: glib.uint_,
     param_id: glib.uint_,
 }
-ParamSpec :: _GParamSpec
+
 finalize_func_ptr_anon_1 :: #type proc "c" (pspec: ^ParamSpec)
 value_set_default_func_ptr_anon_2 :: #type proc "c" (pspec: ^ParamSpec, value: ^Value)
 value_validate_func_ptr_anon_3 :: #type proc "c" (pspec: ^ParamSpec, value: ^Value) -> glib.boolean
 values_cmp_func_ptr_anon_4 :: #type proc "c" (pspec: ^ParamSpec, value1: ^Value, value2: ^Value) -> glib.int_
 value_is_valid_func_ptr_anon_5 :: #type proc "c" (pspec: ^ParamSpec, value: ^Value) -> glib.boolean
-_GParamSpecClass :: struct {
+ParamSpecClass :: struct {
     g_type_class: TypeClass,
     value_type: Type,
     finalize: finalize_func_ptr_anon_1,
@@ -230,20 +233,20 @@ _GParamSpecClass :: struct {
     value_is_valid: value_is_valid_func_ptr_anon_5,
     dummy: [3]glib.pointer,
 }
-ParamSpecClass :: _GParamSpecClass
-_GParameter :: struct {
+
+Parameter :: struct {
     name: cstring,
     value: Value,
 }
-Parameter :: _GParameter
-_GParamSpecPool :: struct #packed {}
-ParamSpecPool :: _GParamSpecPool
+
+ParamSpecPool :: struct #packed {}
+
 instance_init_func_ptr_anon_6 :: #type proc "c" (pspec: ^ParamSpec)
 finalize_func_ptr_anon_7 :: #type proc "c" (pspec: ^ParamSpec)
 value_set_default_func_ptr_anon_8 :: #type proc "c" (pspec: ^ParamSpec, value: ^Value)
 value_validate_func_ptr_anon_9 :: #type proc "c" (pspec: ^ParamSpec, value: ^Value) -> glib.boolean
 values_cmp_func_ptr_anon_10 :: #type proc "c" (pspec: ^ParamSpec, value1: ^Value, value2: ^Value) -> glib.int_
-_GParamSpecTypeInfo :: struct {
+ParamSpecTypeInfo :: struct {
     instance_size: glib.uint16,
     n_preallocs: glib.uint16,
     instance_init: instance_init_func_ptr_anon_6,
@@ -253,24 +256,25 @@ _GParamSpecTypeInfo :: struct {
     value_validate: value_validate_func_ptr_anon_9,
     values_cmp: values_cmp_func_ptr_anon_10,
 }
-ParamSpecTypeInfo :: _GParamSpecTypeInfo
-_GClosure :: [32]i8
-Closure :: _GClosure
+
+Closure :: [32]i8
+
 ClosureNotify :: #type proc "c" (data: glib.pointer, closure: ^Closure)
-_GClosureNotifyData :: struct {
+ClosureNotifyData :: struct {
     data: glib.pointer,
     notify: ClosureNotify,
 }
-ClosureNotifyData :: _GClosureNotifyData
+
 Callback :: #type proc "c" ()
 ClosureMarshal :: #type proc "c" (closure: ^Closure, return_value: ^Value, n_param_values: glib.uint_, param_values: [^]Value, invocation_hint: glib.pointer, marshal_data: glib.pointer)
 VaClosureMarshal :: #type proc "c" (closure: ^Closure, return_value: ^Value, instance: glib.pointer, args: libc.va_list, marshal_data: glib.pointer, n_params: i32, param_types: [^]Type)
-_GCClosure :: struct {
+CClosure :: struct {
     closure: Closure,
     callback: glib.pointer,
 }
-CClosure :: _GCClosure
-_GSignalQuery :: struct {
+
+SignalFlags :: enum u32 {RUN_FIRST = 1, RUN_LAST = 2, RUN_CLEANUP = 4, NO_RECURSE = 8, DETAILED = 16, ACTION = 32, NO_HOOKS = 64, MUST_COLLECT = 128, DEPRECATED = 256, ACCUMULATOR_FIRST_RUN = 131072 }
+SignalQuery :: struct {
     signal_id: glib.uint_,
     signal_name: cstring,
     itype: Type,
@@ -279,30 +283,32 @@ _GSignalQuery :: struct {
     n_params: glib.uint_,
     param_types: [^]Type,
 }
-SignalQuery :: _GSignalQuery
-_GSignalInvocationHint :: struct {
+
+SignalInvocationHint :: struct {
     signal_id: glib.uint_,
     detail: glib.Quark,
     run_type: SignalFlags,
 }
-SignalInvocationHint :: _GSignalInvocationHint
+
 SignalCMarshaller :: ClosureMarshal
 SignalCVaMarshaller :: VaClosureMarshal
 SignalEmissionHook :: #type proc "c" (ihint: ^SignalInvocationHint, n_param_values: glib.uint_, param_values: [^]Value, data: glib.pointer) -> glib.boolean
 SignalAccumulator :: #type proc "c" (ihint: ^SignalInvocationHint, return_accu: ^Value, handler_return: ^Value, data: glib.pointer) -> glib.boolean
+ConnectFlags :: enum u32 {DEFAULT = 0, AFTER = 1, SWAPPED = 2 }
+SignalMatchType :: enum u32 {MATCH_ID = 1, MATCH_DETAIL = 2, MATCH_CLOSURE = 4, MATCH_FUNC = 8, MATCH_DATA = 16, MATCH_UNBLOCKED = 32 }
 BoxedCopyFunc :: #type proc "c" (boxed: glib.pointer) -> glib.pointer
 BoxedFreeFunc :: #type proc "c" (boxed: glib.pointer)
-_GObject :: struct {
+Object :: struct {
     g_type_instance: TypeInstance,
     ref_count: glib.uint_,
     qdata: ^glib.Data,
 }
-Object :: _GObject
-_GObjectConstructParam :: struct {
+
+ObjectConstructParam :: struct {
     pspec: ^ParamSpec,
     value: ^Value,
 }
-ObjectConstructParam :: _GObjectConstructParam
+
 constructor_func_ptr_anon_11 :: #type proc "c" (type: Type, n_construct_properties: glib.uint_, construct_properties: [^]ObjectConstructParam) -> ^Object
 set_property_func_ptr_anon_12 :: #type proc "c" (object: ^Object, property_id: glib.uint_, value: ^Value, pspec: ^ParamSpec)
 et_property_func_ptr_anon_13 :: #type proc "c" (object: ^Object, property_id: glib.uint_, value: ^Value, pspec: ^ParamSpec)
@@ -311,7 +317,7 @@ finalize_func_ptr_anon_15 :: #type proc "c" (object: ^Object)
 dispatch_properties_changed_func_ptr_anon_16 :: #type proc "c" (object: ^Object, n_pspecs: glib.uint_, pspecs: [^]^ParamSpec)
 notify_func_ptr_anon_17 :: #type proc "c" (object: ^Object, pspec: ^ParamSpec)
 constructed_func_ptr_anon_18 :: #type proc "c" (object: ^Object)
-_GObjectClass :: struct {
+ObjectClass :: struct {
     g_type_class: TypeClass,
     construct_properties: [^]glib.SList,
     constructor: constructor_func_ptr_anon_11,
@@ -328,9 +334,9 @@ _GObjectClass :: struct {
     n_pspecs: glib.size,
     pdummy: [3]glib.pointer,
 }
-ObjectClass :: _GObjectClass
-InitiallyUnowned :: _GObject
-InitiallyUnownedClass :: _GObjectClass
+
+InitiallyUnowned :: Object
+InitiallyUnownedClass :: ObjectClass
 ObjectGetPropertyFunc :: #type proc "c" (object: ^Object, property_id: glib.uint_, value: ^Value, pspec: ^ParamSpec)
 ObjectSetPropertyFunc :: #type proc "c" (object: ^Object, property_id: glib.uint_, value: ^Value, pspec: ^ParamSpec)
 ObjectFinalizeFunc :: #type proc "c" (object: ^Object)
@@ -342,190 +348,191 @@ priv_union_anon_19 :: struct #raw_union {
 WeakRef :: struct {
     priv: priv_union_anon_19,
 }
-_GBinding :: struct #packed {}
-Binding :: _GBinding
+Binding :: struct #packed {}
+
 BindingTransformFunc :: #type proc "c" (binding: ^Binding, from_value: ^Value, to_value: ^Value, user_data: glib.pointer) -> glib.boolean
-_GBindingGroup :: struct #packed {}
-BindingGroup :: _GBindingGroup
-_GEnumValue :: struct {
+BindingFlags :: enum u32 {DEFAULT = 0, BIDIRECTIONAL = 1, SYNC_CREATE = 2, INVERT_BOOLEAN = 4 }
+BindingGroup :: struct #packed {}
+
+EnumValue :: struct {
     value: glib.int_,
     value_name: cstring,
     value_nick: cstring,
 }
-EnumValue :: _GEnumValue
-_GEnumClass :: struct {
+
+EnumClass :: struct {
     g_type_class: TypeClass,
     minimum: glib.int_,
     maximum: glib.int_,
     n_values: glib.uint_,
     values: [^]EnumValue,
 }
-EnumClass :: _GEnumClass
-_GFlagsValue :: struct {
+
+FlagsValue :: struct {
     value: glib.uint_,
     value_name: cstring,
     value_nick: cstring,
 }
-FlagsValue :: _GFlagsValue
-_GFlagsClass :: struct {
+
+FlagsClass :: struct {
     g_type_class: TypeClass,
     mask: glib.uint_,
     n_values: glib.uint_,
     values: [^]FlagsValue,
 }
-FlagsClass :: _GFlagsClass
-_GParamSpecChar :: struct {
+
+ParamSpecChar :: struct {
     parent_instance: ParamSpec,
     minimum: glib.int8,
     maximum: glib.int8,
     default_value: glib.int8,
 }
-ParamSpecChar :: _GParamSpecChar
-_GParamSpecUChar :: struct {
+
+ParamSpecUChar :: struct {
     parent_instance: ParamSpec,
     minimum: glib.uint8,
     maximum: glib.uint8,
     default_value: glib.uint8,
 }
-ParamSpecUChar :: _GParamSpecUChar
-_GParamSpecBoolean :: struct {
+
+ParamSpecBoolean :: struct {
     parent_instance: ParamSpec,
     default_value: glib.boolean,
 }
-ParamSpecBoolean :: _GParamSpecBoolean
-_GParamSpecInt :: struct {
+
+ParamSpecInt :: struct {
     parent_instance: ParamSpec,
     minimum: glib.int_,
     maximum: glib.int_,
     default_value: glib.int_,
 }
-ParamSpecInt :: _GParamSpecInt
-_GParamSpecUInt :: struct {
+
+ParamSpecUInt :: struct {
     parent_instance: ParamSpec,
     minimum: glib.uint_,
     maximum: glib.uint_,
     default_value: glib.uint_,
 }
-ParamSpecUInt :: _GParamSpecUInt
-_GParamSpecLong :: struct {
+
+ParamSpecLong :: struct {
     parent_instance: ParamSpec,
     minimum: glib.long,
     maximum: glib.long,
     default_value: glib.long,
 }
-ParamSpecLong :: _GParamSpecLong
-_GParamSpecULong :: struct {
+
+ParamSpecULong :: struct {
     parent_instance: ParamSpec,
     minimum: glib.ulong,
     maximum: glib.ulong,
     default_value: glib.ulong,
 }
-ParamSpecULong :: _GParamSpecULong
-_GParamSpecInt64 :: struct {
+
+ParamSpecInt64 :: struct {
     parent_instance: ParamSpec,
     minimum: glib.int64,
     maximum: glib.int64,
     default_value: glib.int64,
 }
-ParamSpecInt64 :: _GParamSpecInt64
-_GParamSpecUInt64 :: struct {
+
+ParamSpecUInt64 :: struct {
     parent_instance: ParamSpec,
     minimum: glib.uint64,
     maximum: glib.uint64,
     default_value: glib.uint64,
 }
-ParamSpecUInt64 :: _GParamSpecUInt64
-_GParamSpecUnichar :: struct {
+
+ParamSpecUnichar :: struct {
     parent_instance: ParamSpec,
     default_value: glib.unichar,
 }
-ParamSpecUnichar :: _GParamSpecUnichar
-_GParamSpecEnum :: struct {
+
+ParamSpecEnum :: struct {
     parent_instance: ParamSpec,
     enum_class: ^EnumClass,
     default_value: glib.int_,
 }
-ParamSpecEnum :: _GParamSpecEnum
-_GParamSpecFlags :: struct {
+
+ParamSpecFlags :: struct {
     parent_instance: ParamSpec,
     flags_class: ^FlagsClass,
     default_value: glib.uint_,
 }
-ParamSpecFlags :: _GParamSpecFlags
-_GParamSpecFloat :: struct {
+
+ParamSpecFloat :: struct {
     parent_instance: ParamSpec,
     minimum: glib.float,
     maximum: glib.float,
     default_value: glib.float,
     epsilon: glib.float,
 }
-ParamSpecFloat :: _GParamSpecFloat
-_GParamSpecDouble :: struct {
+
+ParamSpecDouble :: struct {
     parent_instance: ParamSpec,
     minimum: glib.double,
     maximum: glib.double,
     default_value: glib.double,
     epsilon: glib.double,
 }
-ParamSpecDouble :: _GParamSpecDouble
-_GParamSpecString :: [104]i8
-ParamSpecString :: _GParamSpecString
-_GParamSpecParam :: struct {
+
+ParamSpecString :: [104]i8
+
+ParamSpecParam :: struct {
     parent_instance: ParamSpec,
 }
-ParamSpecParam :: _GParamSpecParam
-_GParamSpecBoxed :: struct {
+
+ParamSpecBoxed :: struct {
     parent_instance: ParamSpec,
 }
-ParamSpecBoxed :: _GParamSpecBoxed
-_GParamSpecPointer :: struct {
+
+ParamSpecPointer :: struct {
     parent_instance: ParamSpec,
 }
-ParamSpecPointer :: _GParamSpecPointer
-_GParamSpecValueArray :: struct {
+
+ParamSpecValueArray :: struct {
     parent_instance: ParamSpec,
     element_spec: ^ParamSpec,
     fixed_n_elements: glib.uint_,
 }
-ParamSpecValueArray :: _GParamSpecValueArray
-_GParamSpecObject :: struct {
+
+ParamSpecObject :: struct {
     parent_instance: ParamSpec,
 }
-ParamSpecObject :: _GParamSpecObject
-_GParamSpecOverride :: struct {
+
+ParamSpecOverride :: struct {
     parent_instance: ParamSpec,
     overridden: ^ParamSpec,
 }
-ParamSpecOverride :: _GParamSpecOverride
-_GParamSpecGType :: struct {
+
+ParamSpecGType :: struct {
     parent_instance: ParamSpec,
     is_a_type: Type,
 }
-ParamSpecGType :: _GParamSpecGType
-_GParamSpecVariant :: struct {
+
+ParamSpecVariant :: struct {
     parent_instance: ParamSpec,
     type: ^glib.VariantType,
     default_value: ^glib.Variant,
     padding: [4]glib.pointer,
 }
-ParamSpecVariant :: _GParamSpecVariant
-_GSignalGroup :: struct #packed {}
-SignalGroup :: _GSignalGroup
-_GTypeModule :: struct {
+
+SignalGroup :: struct #packed {}
+
+TypeModule :: struct {
     parent_instance: Object,
     use_count: glib.uint_,
     type_infos: [^]glib.SList,
     interface_infos: [^]glib.SList,
     name: cstring,
 }
-TypeModule :: _GTypeModule
+
 load_func_ptr_anon_20 :: #type proc "c" (module: ^TypeModule) -> glib.boolean
 unload_func_ptr_anon_21 :: #type proc "c" (module: ^TypeModule)
 reserved1_func_ptr_anon_22 :: #type proc "c" ()
 reserved2_func_ptr_anon_23 :: #type proc "c" ()
 reserved3_func_ptr_anon_24 :: #type proc "c" ()
 reserved4_func_ptr_anon_25 :: #type proc "c" ()
-_GTypeModuleClass :: struct {
+TypeModuleClass :: struct {
     parent_class: ObjectClass,
     load: load_func_ptr_anon_20,
     unload: unload_func_ptr_anon_21,
@@ -534,58 +541,26 @@ _GTypeModuleClass :: struct {
     reserved3: reserved3_func_ptr_anon_24,
     reserved4: reserved4_func_ptr_anon_25,
 }
-TypeModuleClass :: _GTypeModuleClass
-TypeModule_autoptr :: ^TypeModule
-TypeModule_listautoptr :: ^glib.List
-TypeModule_slistautoptr :: ^glib.SList
-TypeModule_queueautoptr :: ^glib.Queue
+
 TypePluginUse :: #type proc "c" (plugin: ^TypePlugin)
 TypePluginUnuse :: #type proc "c" (plugin: ^TypePlugin)
 TypePluginCompleteTypeInfo :: #type proc "c" (plugin: ^TypePlugin, g_type: Type, info: ^TypeInfo, value_table: ^TypeValueTable)
 TypePluginCompleteInterfaceInfo :: #type proc "c" (plugin: ^TypePlugin, instance_type: Type, interface_type: Type, info: ^InterfaceInfo)
-_GTypePluginClass :: struct {
+TypePluginClass :: struct {
     base_iface: TypeInterface,
     use_plugin: TypePluginUse,
     unuse_plugin: TypePluginUnuse,
     complete_type_info: TypePluginCompleteTypeInfo,
     complete_interface_info: TypePluginCompleteInterfaceInfo,
 }
-TypePluginClass :: _GTypePluginClass
-_GValueArray :: struct {
+
+ValueArray :: struct {
     n_values: glib.uint_,
     values: [^]Value,
     n_prealloced: glib.uint_,
 }
-ValueArray :: _GValueArray
+
 chararray :: cstring
-Closure_autoptr :: ^Closure
-Closure_listautoptr :: ^glib.List
-Closure_slistautoptr :: ^glib.SList
-Closure_queueautoptr :: ^glib.Queue
-EnumClass_autoptr :: ^EnumClass
-EnumClass_listautoptr :: ^glib.List
-EnumClass_slistautoptr :: ^glib.SList
-EnumClass_queueautoptr :: ^glib.Queue
-FlagsClass_autoptr :: ^FlagsClass
-FlagsClass_listautoptr :: ^glib.List
-FlagsClass_slistautoptr :: ^glib.SList
-FlagsClass_queueautoptr :: ^glib.Queue
-Object_autoptr :: ^Object
-Object_listautoptr :: ^glib.List
-Object_slistautoptr :: ^glib.SList
-Object_queueautoptr :: ^glib.Queue
-InitiallyUnowned_autoptr :: ^InitiallyUnowned
-InitiallyUnowned_listautoptr :: ^glib.List
-InitiallyUnowned_slistautoptr :: ^glib.SList
-InitiallyUnowned_queueautoptr :: ^glib.Queue
-ParamSpec_autoptr :: ^ParamSpec
-ParamSpec_listautoptr :: ^glib.List
-ParamSpec_slistautoptr :: ^glib.SList
-ParamSpec_queueautoptr :: ^glib.Queue
-TypeClass_autoptr :: ^TypeClass
-TypeClass_listautoptr :: ^glib.List
-TypeClass_slistautoptr :: ^glib.SList
-TypeClass_queueautoptr :: ^glib.Queue
 _g_type_once_init_type :: Type
 
 @(default_calling_convention = "c")
@@ -2043,188 +2018,6 @@ when (ODIN_OS == .Linux) {
 
 pid_t :: i32
 uid_t :: i32
-TypeFundamentalFlags :: enum u32 {CLASSED = 1, INSTANTIATABLE = 2, DERIVABLE = 4, DEEP_DERIVABLE = 8 }
-TypeDebugFlags :: enum u32 {NONE = 0, OBJECTS = 1, SIGNALS = 2, INSTANCE_COUNT = 4, MASK = 7 }
-TypeFlags :: enum u32 {NONE = 0, ABSTRACT = 16, VALUE_ABSTRACT = 32, FINAL = 64, DEPRECATED = 128 }
-SignalFlags :: enum u32 {RUN_FIRST = 1, RUN_LAST = 2, RUN_CLEANUP = 4, NO_RECURSE = 8, DETAILED = 16, ACTION = 32, NO_HOOKS = 64, MUST_COLLECT = 128, DEPRECATED = 256, ACCUMULATOR_FIRST_RUN = 131072 }
-ConnectFlags :: enum u32 {DEFAULT = 0, AFTER = 1, SWAPPED = 2 }
-SignalMatchType :: enum u32 {MATCH_ID = 1, MATCH_DETAIL = 2, MATCH_CLOSURE = 4, MATCH_FUNC = 8, MATCH_DATA = 16, MATCH_UNBLOCKED = 32 }
-BindingFlags :: enum u32 {DEFAULT = 0, BIDIRECTIONAL = 1, SYNC_CREATE = 2, INVERT_BOOLEAN = 4 }
-
-@(default_calling_convention = "c")
-foreign gobject_runic {
-    @(link_name = "g_set_object_wrapper")
-    set_object :: proc(object_ptr: ^^Object, new_object: ^Object) -> glib.boolean ---
-
-    @(link_name = "g_assert_finalize_object_wrapper")
-    assert_finalize_object :: proc(object: ^Object) ---
-
-    @(link_name = "g_clear_weak_pointer_wrapper")
-    clear_weak_pointer :: proc(weak_pointer_location: ^glib.pointer) ---
-
-    @(link_name = "g_set_weak_pointer_wrapper")
-    set_weak_pointer :: proc(weak_pointer_location: ^glib.pointer, new_object: ^Object) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_GTypeModule_wrapper")
-    glib_autoptr_clear_GTypeModule :: proc(_ptr: ^TypeModule) ---
-
-    @(link_name = "glib_autoptr_cleanup_GTypeModule_wrapper")
-    glib_autoptr_cleanup_GTypeModule :: proc(_ptr: ^^TypeModule) ---
-
-    @(link_name = "glib_autoptr_destroy_GTypeModule_wrapper")
-    glib_autoptr_destroy_GTypeModule :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GTypeModule_wrapper")
-    glib_listautoptr_cleanup_GTypeModule :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GTypeModule_wrapper")
-    glib_slistautoptr_cleanup_GTypeModule :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GTypeModule_wrapper")
-    glib_queueautoptr_cleanup_GTypeModule :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GClosure_wrapper")
-    glib_autoptr_clear_GClosure :: proc(_ptr: ^Closure) ---
-
-    @(link_name = "glib_autoptr_cleanup_GClosure_wrapper")
-    glib_autoptr_cleanup_GClosure :: proc(_ptr: ^^Closure) ---
-
-    @(link_name = "glib_autoptr_destroy_GClosure_wrapper")
-    glib_autoptr_destroy_GClosure :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GClosure_wrapper")
-    glib_listautoptr_cleanup_GClosure :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GClosure_wrapper")
-    glib_slistautoptr_cleanup_GClosure :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GClosure_wrapper")
-    glib_queueautoptr_cleanup_GClosure :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GEnumClass_wrapper")
-    glib_autoptr_clear_GEnumClass :: proc(_ptr: ^EnumClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_GEnumClass_wrapper")
-    glib_autoptr_cleanup_GEnumClass :: proc(_ptr: ^^EnumClass) ---
-
-    @(link_name = "glib_autoptr_destroy_GEnumClass_wrapper")
-    glib_autoptr_destroy_GEnumClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GEnumClass_wrapper")
-    glib_listautoptr_cleanup_GEnumClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GEnumClass_wrapper")
-    glib_slistautoptr_cleanup_GEnumClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GEnumClass_wrapper")
-    glib_queueautoptr_cleanup_GEnumClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GFlagsClass_wrapper")
-    glib_autoptr_clear_GFlagsClass :: proc(_ptr: ^FlagsClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_GFlagsClass_wrapper")
-    glib_autoptr_cleanup_GFlagsClass :: proc(_ptr: ^^FlagsClass) ---
-
-    @(link_name = "glib_autoptr_destroy_GFlagsClass_wrapper")
-    glib_autoptr_destroy_GFlagsClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GFlagsClass_wrapper")
-    glib_listautoptr_cleanup_GFlagsClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GFlagsClass_wrapper")
-    glib_slistautoptr_cleanup_GFlagsClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GFlagsClass_wrapper")
-    glib_queueautoptr_cleanup_GFlagsClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GObject_wrapper")
-    glib_autoptr_clear_GObject :: proc(_ptr: ^Object) ---
-
-    @(link_name = "glib_autoptr_cleanup_GObject_wrapper")
-    glib_autoptr_cleanup_GObject :: proc(_ptr: ^^Object) ---
-
-    @(link_name = "glib_autoptr_destroy_GObject_wrapper")
-    glib_autoptr_destroy_GObject :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GObject_wrapper")
-    glib_listautoptr_cleanup_GObject :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GObject_wrapper")
-    glib_slistautoptr_cleanup_GObject :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GObject_wrapper")
-    glib_queueautoptr_cleanup_GObject :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GInitiallyUnowned_wrapper")
-    glib_autoptr_clear_GInitiallyUnowned :: proc(_ptr: ^InitiallyUnowned) ---
-
-    @(link_name = "glib_autoptr_cleanup_GInitiallyUnowned_wrapper")
-    glib_autoptr_cleanup_GInitiallyUnowned :: proc(_ptr: ^^InitiallyUnowned) ---
-
-    @(link_name = "glib_autoptr_destroy_GInitiallyUnowned_wrapper")
-    glib_autoptr_destroy_GInitiallyUnowned :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GInitiallyUnowned_wrapper")
-    glib_listautoptr_cleanup_GInitiallyUnowned :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GInitiallyUnowned_wrapper")
-    glib_slistautoptr_cleanup_GInitiallyUnowned :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GInitiallyUnowned_wrapper")
-    glib_queueautoptr_cleanup_GInitiallyUnowned :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GParamSpec_wrapper")
-    glib_autoptr_clear_GParamSpec :: proc(_ptr: ^ParamSpec) ---
-
-    @(link_name = "glib_autoptr_cleanup_GParamSpec_wrapper")
-    glib_autoptr_cleanup_GParamSpec :: proc(_ptr: ^^ParamSpec) ---
-
-    @(link_name = "glib_autoptr_destroy_GParamSpec_wrapper")
-    glib_autoptr_destroy_GParamSpec :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GParamSpec_wrapper")
-    glib_listautoptr_cleanup_GParamSpec :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GParamSpec_wrapper")
-    glib_slistautoptr_cleanup_GParamSpec :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GParamSpec_wrapper")
-    glib_queueautoptr_cleanup_GParamSpec :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_GTypeClass_wrapper")
-    glib_autoptr_clear_GTypeClass :: proc(_ptr: ^TypeClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_GTypeClass_wrapper")
-    glib_autoptr_cleanup_GTypeClass :: proc(_ptr: ^^TypeClass) ---
-
-    @(link_name = "glib_autoptr_destroy_GTypeClass_wrapper")
-    glib_autoptr_destroy_GTypeClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_GTypeClass_wrapper")
-    glib_listautoptr_cleanup_GTypeClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_GTypeClass_wrapper")
-    glib_slistautoptr_cleanup_GTypeClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_GTypeClass_wrapper")
-    glib_queueautoptr_cleanup_GTypeClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_auto_cleanup_GValue_wrapper")
-    glib_auto_cleanup_GValue :: proc(_ptr: ^Value) ---
-
-}
-
-}
-
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-
-TypeFundamentalFlags :: enum i32 {CLASSED = 1, INSTANTIATABLE = 2, DERIVABLE = 4, DEEP_DERIVABLE = 8 }
-TypeDebugFlags :: enum i32 {NONE = 0, OBJECTS = 1, SIGNALS = 2, INSTANCE_COUNT = 4, MASK = 7 }
-TypeFlags :: enum i32 {NONE = 0, ABSTRACT = 16, VALUE_ABSTRACT = 32, FINAL = 64, DEPRECATED = 128 }
-SignalFlags :: enum i32 {RUN_FIRST = 1, RUN_LAST = 2, RUN_CLEANUP = 4, NO_RECURSE = 8, DETAILED = 16, ACTION = 32, NO_HOOKS = 64, MUST_COLLECT = 128, DEPRECATED = 256, ACCUMULATOR_FIRST_RUN = 131072 }
-ConnectFlags :: enum i32 {DEFAULT = 0, AFTER = 1, SWAPPED = 2 }
-SignalMatchType :: enum i32 {MATCH_ID = 1, MATCH_DETAIL = 2, MATCH_CLOSURE = 4, MATCH_FUNC = 8, MATCH_DATA = 16, MATCH_UNBLOCKED = 32 }
-BindingFlags :: enum i32 {DEFAULT = 0, BIDIRECTIONAL = 1, SYNC_CREATE = 2, INVERT_BOOLEAN = 4 }
 
 }
 
@@ -2242,21 +2035,17 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
 
 when #config(GOBJECT_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import gobject_runic { "../../lib/linux/aarch64/libgobject-2.0.a", "../../lib/linux/aarch64/libgobject-wrapper.a", "system:ffi", "system:pcre2-8" }
+    foreign import gobject_runic { "../../lib/linux/aarch64/libgobject-2.0.a", "system:ffi", "system:pcre2-8" }
 } 
 } else {
-    when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import gobject_runic { "system:gobject-2.0", "../../lib/linux/aarch64/libgobject-wrapper.a" }
-} 
+    foreign import gobject_runic "system:gobject-2.0"
 }
 
 }
 
 when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
 
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-    foreign import gobject_runic { "../../lib/windows/x86_64/gobject-2.0.lib", "../../lib/windows/x86_64/gobject-wrapper.lib" }
-} 
+foreign import gobject_runic "../../lib/windows/x86_64/gobject-2.0.lib"
 
 }
 

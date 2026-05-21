@@ -24,11 +24,6 @@ test_log :: proc(t: ^ts.T) {
         nil,
     )
 
-    gio.application_run(
-        gobj.type_cast(gio.Application, app, gio.TYPE_APPLICATION()),
-        0,
-        nil,
-    )
+    gio.application_run(app, nil)
     gobj.object_unref(app)
 }
-

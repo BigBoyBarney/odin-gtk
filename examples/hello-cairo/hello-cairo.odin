@@ -23,7 +23,7 @@ main :: proc() {
     cairo.fill(cr)
 
     // Write the output to a PNG file
-    cairo.surface_write_to_png(surface, "/tmp/output.png")
+    cairo.surface_write_to_png(surface, "build/output.png")
 
-    glib.print("Succesfully rendered to \"tmp/output.png\"\n")
+    glib.print("Succesfully rendered to \"build/output.png\"\n")
 }

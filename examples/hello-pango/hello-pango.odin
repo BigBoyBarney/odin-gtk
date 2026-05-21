@@ -41,11 +41,8 @@ main :: proc() {
     pancai.show_layout(cr, layout) // NOW DRAW!
 
     // SAVE DRAWING! NAME IT "pango_output.png"! YOU CHECK LATER!
-    when ODIN_OS == .Windows {
-        OUTPUT_PATH :: "C:\\temp\\pango_output.png"
-    } else {
-        OUTPUT_PATH :: "/tmp/pango_output.png"
-    }
+    OUTPUT_PATH :: "build/pango_output.png"
+
     cairo.surface_write_to_png(surface, OUTPUT_PATH)
 
     fmt.printf("Successfully rendered \"%s\" to \"%s\"\n", TEXT, OUTPUT_PATH)

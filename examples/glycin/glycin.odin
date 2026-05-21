@@ -16,16 +16,16 @@ main :: proc() {
 	app := adw.application_new("some.example", .NONE)
     defer gobj.object_unref(app)
 
-    gobj.signal_connect(app, "activate", cast(gobj.Callback)show_window, nil)
-    gobj.signal_connect(app, "startup",  cast(gobj.Callback)startup,     nil)
+    gobj.signal_connect(app, "activate", show_window, nil)
+    gobj.signal_connect(app, "startup",  startup,     nil)
 
-    gio.application_run(cast(^gio.Application)app, 0, nil)
+    gio.application_run(app)
 }
 
 startup :: proc "c" (app: ^adw.Application) {
 	// Add the window, as per usual.
 	_app_window := adw.application_window_new(cast(^gtk.Application)app)
-    app_window   = cast(^adw.ApplicationWindow)_app_window
+    app_window    = cast(^adw.ApplicationWindow)_app_window
     gtk.application_add_window(cast(^gtk.Application)app, cast(^gtk.Window)_app_window)
 
     // Load the file with glycin.

@@ -6,7 +6,6 @@ import gobj "../../glib/gobject"
 import gtk "../../gtk"
 import gtk_layer "../../gtk/layer-shell"
 import "core:os"
-import "core:strings"
 
 main :: proc() {
     context = glib.create_context()
@@ -17,20 +16,9 @@ main :: proc() {
     )
     defer gobj.object_unref(app)
 
-    gobj.signal_connect(app, "activate", cast(gobj.Callback)activate, nil)
+    gobj.signal_connect(app, "activate", activate)
 
-    argv := make([]cstring, len(os.args))
-    for &arg, idx in argv {
-        arg = strings.clone_to_cstring(os.args[idx])
-    }
-    defer delete(argv)
-    defer for arg in argv do delete(arg)
-
-    status := gio.application_run(
-        cast(^gio.Application)app,
-        i32(len(argv)),
-        raw_data(argv),
-    )
+    status := gio.application_run(app)
 
     if status != 0 {
         os.exit(int(status))
@@ -38,11 +26,7 @@ main :: proc() {
 }
 
 activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
-    window := gobj.type_cast(
-        gtk.Window,
-        gtk.application_window_new(app),
-        gtk.window_get_type(),
-    )
+    window := gtk.WINDOW(gtk.application_window_new(app))
 
     css := gtk.css_provider_new()
     gtk.css_provider_load_from_string(
@@ -52,7 +36,7 @@ activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
     display := gtk.gdk_display_get_default()
     gtk.style_context_add_provider_for_display(
         display,
-        gobj.type_cast(gtk.StyleProvider, css, gtk.style_provider_get_type()),
+        gtk.STYLE_PROVIDER(css),
         600,
     )
 
@@ -65,7 +49,7 @@ activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
 
     label := gtk.label_new("")
     gtk.label_set_markup(
-        gobj.type_cast(gtk.Label, label, gtk.label_get_type()),
+        gtk.LABEL(label),
         `<span font_desc="100.0" color="white">
 GTK Layer
 Shell example!
@@ -73,18 +57,9 @@ Shell example!
     )
 
     button := gtk.button_new_with_label("Quit")
-    gobj.signal_connect(
-        button,
-        "clicked",
-        cast(gobj.Callback)button_clicked,
-        window,
-    )
+    gobj.signal_connect(button, "clicked", button_clicked, window)
 
-    box := gobj.type_cast(
-        gtk.Box,
-        gtk.box_new(.VERTICAL, 10),
-        gtk.box_get_type(),
-    )
+    box := gtk.BOX(gtk.box_new(.VERTICAL, 10))
     gtk.box_append(box, label)
     gtk.box_append(box, button)
 
@@ -93,11 +68,6 @@ Shell example!
 }
 
 button_clicked :: proc "c" (button: ^gtk.Button, user_data: glib.pointer) {
-    window := gobj.type_cast(
-        gtk.Window,
-        cast(^gtk.Widget)user_data,
-        gtk.window_get_type(),
-    )
+    window := gtk.WINDOW(user_data)
     gtk.window_close(window)
 }
-

@@ -8,7 +8,6 @@ import "core:strings"
 
 main :: proc() {
     when ODIN_OS != .Windows {
-        // The windows binary does not export "gdk_pixbuf_version"
         glib.print("GdkPixbuf version: %s\n", gdk.pixbuf_version)
     }
 

@@ -25,6 +25,7 @@ TYPE_INLINE_VIEW_SWITCHER_DISPLAY_MODE :: inline_view_switcher_display_mode_get_
 TYPE_LEAFLET_TRANSITION_TYPE :: leaflet_transition_type_get_type
 TYPE_LENGTH_UNIT :: length_unit_get_type
 TYPE_NAVIGATION_DIRECTION :: navigation_direction_get_type
+TYPE_SIDEBAR_MODE :: sidebar_mode_get_type
 TYPE_SQUEEZER_TRANSITION_TYPE :: squeezer_transition_type_get_type
 TYPE_COLOR_SCHEME :: color_scheme_get_type
 TYPE_TAB_VIEW_SHORTCUTS :: tab_view_shortcuts_get_type
@@ -42,6 +43,7 @@ TYPE_PREFERENCES_ROW :: preferences_row_get_type
 TYPE_ACTION_ROW :: action_row_get_type
 TYPE_ALERT_DIALOG :: alert_dialog_get_type
 TYPE_ANIMATION_TARGET :: animation_target_get_type
+TYPE_NONE_ANIMATION_TARGET :: none_animation_target_get_type
 TYPE_CALLBACK_ANIMATION_TARGET :: callback_animation_target_get_type
 TYPE_PROPERTY_ANIMATION_TARGET :: property_animation_target_get_type
 DURATION_INFINITE :: ( 0xffffffff)
@@ -90,6 +92,13 @@ TYPE_PREFERENCES_PAGE :: preferences_page_get_type
 TYPE_TOAST :: toast_get_type
 TYPE_PREFERENCES_DIALOG :: preferences_dialog_get_type
 TYPE_PREFERENCES_WINDOW :: preferences_window_get_type
+TYPE_SHORTCUT_LABEL :: shortcut_label_get_type
+TYPE_SHORTCUTS_ITEM :: shortcuts_item_get_type
+TYPE_SHORTCUTS_SECTION :: shortcuts_section_get_type
+TYPE_SHORTCUTS_DIALOG :: shortcuts_dialog_get_type
+TYPE_SIDEBAR_ITEM :: sidebar_item_get_type 
+TYPE_SIDEBAR_SECTION :: sidebar_section_get_type 
+TYPE_SIDEBAR :: sidebar_get_type 
 TYPE_SPIN_ROW :: spin_row_get_type 
 TYPE_SPINNER :: spinner_get_type 
 TYPE_SPINNER_PAINTABLE :: spinner_paintable_get_type 
@@ -113,676 +122,330 @@ TYPE_TOGGLE_GROUP :: toggle_group_get_type
 TYPE_TOOLBAR_VIEW :: toolbar_view_get_type
 TYPE_VIEW_SWITCHER :: view_switcher_get_type
 TYPE_VIEW_SWITCHER_BAR :: view_switcher_bar_get_type
+TYPE_VIEW_SWITCHER_SIDEBAR :: view_switcher_sidebar_get_type
 TYPE_VIEW_SWITCHER_TITLE :: view_switcher_title_get_type
 TYPE_WINDOW_TITLE :: window_title_get_type
 TYPE_WRAP_LAYOUT :: wrap_layout_get_type
 TYPE_WRAP_BOX :: wrap_box_get_type
 
-_AdwBreakpointCondition :: struct #packed {}
-BreakpointCondition :: _AdwBreakpointCondition
-BreakpointCondition_autoptr :: ^BreakpointCondition
-BreakpointCondition_listautoptr :: ^glib.List
-BreakpointCondition_slistautoptr :: ^glib.SList
-BreakpointCondition_queueautoptr :: ^glib.Queue
-_AdwBreakpoint :: struct #packed {}
-Breakpoint :: _AdwBreakpoint
+LengthUnit :: enum u32 {PX = 0, PT = 1, SP = 2 }
+BreakpointConditionLengthType :: enum u32 {MIN_WIDTH = 0, MAX_WIDTH = 1, MIN_HEIGHT = 2, MAX_HEIGHT = 3 }
+BreakpointConditionRatioType :: enum u32 {MIN_ASPECT_RATIO = 0, MAX_ASPECT_RATIO = 1 }
+BreakpointCondition :: struct #packed {}
+
+Breakpoint :: struct #packed {}
+
 BreakpointClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-Breakpoint_autoptr :: ^Breakpoint
-Breakpoint_listautoptr :: ^glib.List
-Breakpoint_slistautoptr :: ^glib.SList
-Breakpoint_queueautoptr :: ^glib.Queue
-BreakpointClass_autoptr :: ^BreakpointClass
-BreakpointClass_listautoptr :: ^glib.List
-BreakpointClass_slistautoptr :: ^glib.SList
-BreakpointClass_queueautoptr :: ^glib.Queue
-_AdwDialog :: struct {
+DialogPresentationMode :: enum u32 {AUTO = 0, FLOATING = 1, BOTTOM_SHEET = 2 }
+Dialog :: struct {
     parent_instance: gtk.Widget,
 }
-Dialog :: _AdwDialog
+
 close_attempt_func_ptr_anon_0 :: #type proc "c" (dialog: ^Dialog)
 closed_func_ptr_anon_1 :: #type proc "c" (dialog: ^Dialog)
-_AdwDialogClass :: struct {
+DialogClass :: struct {
     parent_class: gtk.WidgetClass,
     close_attempt: close_attempt_func_ptr_anon_0,
     closed: closed_func_ptr_anon_1,
     padding: [4]glib.pointer,
 }
-DialogClass :: _AdwDialogClass
-Dialog_autoptr :: ^Dialog
-Dialog_listautoptr :: ^glib.List
-Dialog_slistautoptr :: ^glib.SList
-Dialog_queueautoptr :: ^glib.Queue
-DialogClass_autoptr :: ^DialogClass
-DialogClass_listautoptr :: ^glib.List
-DialogClass_slistautoptr :: ^glib.SList
-DialogClass_queueautoptr :: ^glib.Queue
-_AdwAboutDialog :: struct #packed {}
-AboutDialog :: _AdwAboutDialog
+
+AboutDialog :: struct #packed {}
+
 AboutDialogClass :: struct {
     parent_class: DialogClass,
 }
-AboutDialog_autoptr :: ^AboutDialog
-AboutDialog_listautoptr :: ^glib.List
-AboutDialog_slistautoptr :: ^glib.SList
-AboutDialog_queueautoptr :: ^glib.Queue
-AboutDialogClass_autoptr :: ^AboutDialogClass
-AboutDialogClass_listautoptr :: ^glib.List
-AboutDialogClass_slistautoptr :: ^glib.SList
-AboutDialogClass_queueautoptr :: ^glib.Queue
-_AdwWindow :: struct {
+Window :: struct {
     parent_instance: gtk.Window,
 }
-Window :: _AdwWindow
-_AdwWindowClass :: struct {
+
+WindowClass :: struct {
     parent_class: gtk.WindowClass,
     padding: [4]glib.pointer,
 }
-WindowClass :: _AdwWindowClass
-Window_autoptr :: ^Window
-Window_listautoptr :: ^glib.List
-Window_slistautoptr :: ^glib.SList
-Window_queueautoptr :: ^glib.Queue
-WindowClass_autoptr :: ^WindowClass
-WindowClass_listautoptr :: ^glib.List
-WindowClass_slistautoptr :: ^glib.SList
-WindowClass_queueautoptr :: ^glib.Queue
-_AdwAboutWindow :: struct #packed {}
-AboutWindow :: _AdwAboutWindow
+
+AboutWindow :: struct #packed {}
+
 AboutWindowClass :: struct {
     parent_class: WindowClass,
 }
-AboutWindow_autoptr :: ^AboutWindow
-AboutWindow_listautoptr :: ^glib.List
-AboutWindow_slistautoptr :: ^glib.SList
-AboutWindow_queueautoptr :: ^glib.Queue
-AboutWindowClass_autoptr :: ^AboutWindowClass
-AboutWindowClass_listautoptr :: ^glib.List
-AboutWindowClass_slistautoptr :: ^glib.SList
-AboutWindowClass_queueautoptr :: ^glib.Queue
-_AdwPreferencesRow :: struct {
+AccentColor :: enum u32 {BLUE = 0, TEAL = 1, GREEN = 2, YELLOW = 3, ORANGE = 4, RED = 5, PINK = 6, PURPLE = 7, SLATE = 8 }
+PreferencesRow :: struct {
     parent_instance: gtk.ListBoxRow,
 }
-PreferencesRow :: _AdwPreferencesRow
-_AdwPreferencesRowClass :: struct {
+
+PreferencesRowClass :: struct {
     parent_class: gtk.ListBoxRowClass,
     padding: [4]glib.pointer,
 }
-PreferencesRowClass :: _AdwPreferencesRowClass
-PreferencesRow_autoptr :: ^PreferencesRow
-PreferencesRow_listautoptr :: ^glib.List
-PreferencesRow_slistautoptr :: ^glib.SList
-PreferencesRow_queueautoptr :: ^glib.Queue
-PreferencesRowClass_autoptr :: ^PreferencesRowClass
-PreferencesRowClass_listautoptr :: ^glib.List
-PreferencesRowClass_slistautoptr :: ^glib.SList
-PreferencesRowClass_queueautoptr :: ^glib.Queue
-_AdwActionRow :: struct {
+
+ActionRow :: struct {
     parent_instance: PreferencesRow,
 }
-ActionRow :: _AdwActionRow
+
 activate_func_ptr_anon_2 :: #type proc "c" (self: ^ActionRow)
-_AdwActionRowClass :: struct {
+ActionRowClass :: struct {
     parent_class: PreferencesRowClass,
     activate: activate_func_ptr_anon_2,
     padding: [4]glib.pointer,
 }
-ActionRowClass :: _AdwActionRowClass
-ActionRow_autoptr :: ^ActionRow
-ActionRow_listautoptr :: ^glib.List
-ActionRow_slistautoptr :: ^glib.SList
-ActionRow_queueautoptr :: ^glib.Queue
-ActionRowClass_autoptr :: ^ActionRowClass
-ActionRowClass_listautoptr :: ^glib.List
-ActionRowClass_slistautoptr :: ^glib.SList
-ActionRowClass_queueautoptr :: ^glib.Queue
-_AdwAlertDialog :: struct {
+
+ResponseAppearance :: enum u32 {DEFAULT = 0, SUGGESTED = 1, DESTRUCTIVE = 2 }
+AlertDialog :: struct {
     parent_instance: Dialog,
 }
-AlertDialog :: _AdwAlertDialog
+
 response_func_ptr_anon_3 :: #type proc "c" (self: ^AlertDialog, response: cstring)
-_AdwAlertDialogClass :: struct {
+AlertDialogClass :: struct {
     parent_class: DialogClass,
     response: response_func_ptr_anon_3,
     padding: [4]glib.pointer,
 }
-AlertDialogClass :: _AdwAlertDialogClass
-AlertDialog_autoptr :: ^AlertDialog
-AlertDialog_listautoptr :: ^glib.List
-AlertDialog_slistautoptr :: ^glib.SList
-AlertDialog_queueautoptr :: ^glib.Queue
-AlertDialogClass_autoptr :: ^AlertDialogClass
-AlertDialogClass_listautoptr :: ^glib.List
-AlertDialogClass_slistautoptr :: ^glib.SList
-AlertDialogClass_queueautoptr :: ^glib.Queue
-_AdwAnimationTarget :: struct #packed {}
-AnimationTarget :: _AdwAnimationTarget
-_AdwAnimationTargetClass :: struct #packed {}
-AnimationTargetClass :: _AdwAnimationTargetClass
-AnimationTarget_autoptr :: ^AnimationTarget
-AnimationTarget_listautoptr :: ^glib.List
-AnimationTarget_slistautoptr :: ^glib.SList
-AnimationTarget_queueautoptr :: ^glib.Queue
-AnimationTargetClass_autoptr :: ^AnimationTargetClass
-AnimationTargetClass_listautoptr :: ^glib.List
-AnimationTargetClass_slistautoptr :: ^glib.SList
-AnimationTargetClass_queueautoptr :: ^glib.Queue
+
+AnimationTarget :: struct #packed {}
+
+AnimationTargetClass :: struct #packed {}
+
+NoneAnimationTarget :: struct #packed {}
+
+NoneAnimationTargetClass :: struct #packed {}
+
 AnimationTargetFunc :: #type proc "c" (value: f64, user_data: glib.pointer)
-_AdwCallbackAnimationTarget :: struct #packed {}
-CallbackAnimationTarget :: _AdwCallbackAnimationTarget
-_AdwCallbackAnimationTargetClass :: struct #packed {}
-CallbackAnimationTargetClass :: _AdwCallbackAnimationTargetClass
-CallbackAnimationTarget_autoptr :: ^CallbackAnimationTarget
-CallbackAnimationTarget_listautoptr :: ^glib.List
-CallbackAnimationTarget_slistautoptr :: ^glib.SList
-CallbackAnimationTarget_queueautoptr :: ^glib.Queue
-CallbackAnimationTargetClass_autoptr :: ^CallbackAnimationTargetClass
-CallbackAnimationTargetClass_listautoptr :: ^glib.List
-CallbackAnimationTargetClass_slistautoptr :: ^glib.SList
-CallbackAnimationTargetClass_queueautoptr :: ^glib.Queue
-_AdwPropertyAnimationTarget :: struct #packed {}
-PropertyAnimationTarget :: _AdwPropertyAnimationTarget
-_AdwPropertyAnimationTargetClass :: struct #packed {}
-PropertyAnimationTargetClass :: _AdwPropertyAnimationTargetClass
-PropertyAnimationTarget_autoptr :: ^PropertyAnimationTarget
-PropertyAnimationTarget_listautoptr :: ^glib.List
-PropertyAnimationTarget_slistautoptr :: ^glib.SList
-PropertyAnimationTarget_queueautoptr :: ^glib.Queue
-PropertyAnimationTargetClass_autoptr :: ^PropertyAnimationTargetClass
-PropertyAnimationTargetClass_listautoptr :: ^glib.List
-PropertyAnimationTargetClass_slistautoptr :: ^glib.SList
-PropertyAnimationTargetClass_queueautoptr :: ^glib.Queue
-_AdwAnimation :: struct {
+CallbackAnimationTarget :: struct #packed {}
+
+CallbackAnimationTargetClass :: struct #packed {}
+
+PropertyAnimationTarget :: struct #packed {}
+
+PropertyAnimationTargetClass :: struct #packed {}
+
+Animation :: struct {
     parent_instance: gobj.Object,
 }
-Animation :: _AdwAnimation
-_AdwAnimationClass :: struct #packed {}
-AnimationClass :: _AdwAnimationClass
-Animation_autoptr :: ^Animation
-Animation_listautoptr :: ^glib.List
-Animation_slistautoptr :: ^glib.SList
-Animation_queueautoptr :: ^glib.Queue
-AnimationClass_autoptr :: ^AnimationClass
-AnimationClass_listautoptr :: ^glib.List
-AnimationClass_slistautoptr :: ^glib.SList
-AnimationClass_queueautoptr :: ^glib.Queue
-_AdwStyleManager :: struct #packed {}
-StyleManager :: _AdwStyleManager
+
+AnimationClass :: struct #packed {}
+
+AnimationState :: enum u32 {IDLE = 0, PAUSED = 1, PLAYING = 2, FINISHED = 3 }
+ColorScheme :: enum u32 {DEFAULT = 0, FORCE_LIGHT = 1, PREFER_LIGHT = 2, PREFER_DARK = 3, FORCE_DARK = 4 }
+StyleManager :: struct #packed {}
+
 StyleManagerClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-StyleManager_autoptr :: ^StyleManager
-StyleManager_listautoptr :: ^glib.List
-StyleManager_slistautoptr :: ^glib.SList
-StyleManager_queueautoptr :: ^glib.Queue
-StyleManagerClass_autoptr :: ^StyleManagerClass
-StyleManagerClass_listautoptr :: ^glib.List
-StyleManagerClass_slistautoptr :: ^glib.SList
-StyleManagerClass_queueautoptr :: ^glib.Queue
-_AdwApplication :: struct {
+Application :: struct {
     parent_instance: gtk.Application,
 }
-Application :: _AdwApplication
-_AdwApplicationClass :: struct {
+
+ApplicationClass :: struct {
     parent_class: gtk.ApplicationClass,
     padding: [4]glib.pointer,
 }
-ApplicationClass :: _AdwApplicationClass
-Application_autoptr :: ^Application
-Application_listautoptr :: ^glib.List
-Application_slistautoptr :: ^glib.SList
-Application_queueautoptr :: ^glib.Queue
-ApplicationClass_autoptr :: ^ApplicationClass
-ApplicationClass_listautoptr :: ^glib.List
-ApplicationClass_slistautoptr :: ^glib.SList
-ApplicationClass_queueautoptr :: ^glib.Queue
-_AdwApplicationWindow :: struct {
+
+ApplicationWindow :: struct {
     parent_instance: gtk.ApplicationWindow,
 }
-ApplicationWindow :: _AdwApplicationWindow
-_AdwApplicationWindowClass :: struct {
+
+ApplicationWindowClass :: struct {
     parent_class: gtk.ApplicationWindowClass,
     padding: [4]glib.pointer,
 }
-ApplicationWindowClass :: _AdwApplicationWindowClass
-ApplicationWindow_autoptr :: ^ApplicationWindow
-ApplicationWindow_listautoptr :: ^glib.List
-ApplicationWindow_slistautoptr :: ^glib.SList
-ApplicationWindow_queueautoptr :: ^glib.Queue
-ApplicationWindowClass_autoptr :: ^ApplicationWindowClass
-ApplicationWindowClass_listautoptr :: ^glib.List
-ApplicationWindowClass_slistautoptr :: ^glib.SList
-ApplicationWindowClass_queueautoptr :: ^glib.Queue
-_AdwAvatar :: struct #packed {}
-Avatar :: _AdwAvatar
+
+Avatar :: struct #packed {}
+
 AvatarClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Avatar_autoptr :: ^Avatar
-Avatar_listautoptr :: ^glib.List
-Avatar_slistautoptr :: ^glib.SList
-Avatar_queueautoptr :: ^glib.Queue
-AvatarClass_autoptr :: ^AvatarClass
-AvatarClass_listautoptr :: ^glib.List
-AvatarClass_slistautoptr :: ^glib.SList
-AvatarClass_queueautoptr :: ^glib.Queue
-_AdwBanner :: struct #packed {}
-Banner :: _AdwBanner
+BannerButtonStyle :: enum u32 {BANNER_BUTTON_DEFAULT = 0, BANNER_BUTTON_SUGGESTED = 1 }
+Banner :: struct #packed {}
+
 BannerClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Banner_autoptr :: ^Banner
-Banner_listautoptr :: ^glib.List
-Banner_slistautoptr :: ^glib.SList
-Banner_queueautoptr :: ^glib.Queue
-BannerClass_autoptr :: ^BannerClass
-BannerClass_listautoptr :: ^glib.List
-BannerClass_slistautoptr :: ^glib.SList
-BannerClass_queueautoptr :: ^glib.Queue
-_AdwBin :: struct {
+Bin :: struct {
     parent_instance: gtk.Widget,
 }
-Bin :: _AdwBin
-_AdwBinClass :: struct {
+
+BinClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-BinClass :: _AdwBinClass
-Bin_autoptr :: ^Bin
-Bin_listautoptr :: ^glib.List
-Bin_slistautoptr :: ^glib.SList
-Bin_queueautoptr :: ^glib.Queue
-BinClass_autoptr :: ^BinClass
-BinClass_listautoptr :: ^glib.List
-BinClass_slistautoptr :: ^glib.SList
-BinClass_queueautoptr :: ^glib.Queue
-_AdwBottomSheet :: struct #packed {}
-BottomSheet :: _AdwBottomSheet
+
+BottomSheet :: struct #packed {}
+
 BottomSheetClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-BottomSheet_autoptr :: ^BottomSheet
-BottomSheet_listautoptr :: ^glib.List
-BottomSheet_slistautoptr :: ^glib.SList
-BottomSheet_queueautoptr :: ^glib.Queue
-BottomSheetClass_autoptr :: ^BottomSheetClass
-BottomSheetClass_listautoptr :: ^glib.List
-BottomSheetClass_slistautoptr :: ^glib.SList
-BottomSheetClass_queueautoptr :: ^glib.Queue
-_AdwBreakpointBin :: struct {
+BreakpointBin :: struct {
     parent_instance: gtk.Widget,
 }
-BreakpointBin :: _AdwBreakpointBin
-_AdwBreakpointBinClass :: struct {
+
+BreakpointBinClass :: struct {
     parent_class: gtk.WidgetClass,
     padding: [4]glib.pointer,
 }
-BreakpointBinClass :: _AdwBreakpointBinClass
-BreakpointBin_autoptr :: ^BreakpointBin
-BreakpointBin_listautoptr :: ^glib.List
-BreakpointBin_slistautoptr :: ^glib.SList
-BreakpointBin_queueautoptr :: ^glib.Queue
-BreakpointBinClass_autoptr :: ^BreakpointBinClass
-BreakpointBinClass_listautoptr :: ^glib.List
-BreakpointBinClass_slistautoptr :: ^glib.SList
-BreakpointBinClass_queueautoptr :: ^glib.Queue
-_AdwButtonContent :: struct #packed {}
-ButtonContent :: _AdwButtonContent
+
+ButtonContent :: struct #packed {}
+
 ButtonContentClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ButtonContent_autoptr :: ^ButtonContent
-ButtonContent_listautoptr :: ^glib.List
-ButtonContent_slistautoptr :: ^glib.SList
-ButtonContent_queueautoptr :: ^glib.Queue
-ButtonContentClass_autoptr :: ^ButtonContentClass
-ButtonContentClass_listautoptr :: ^glib.List
-ButtonContentClass_slistautoptr :: ^glib.SList
-ButtonContentClass_queueautoptr :: ^glib.Queue
-_AdwButtonRow :: struct #packed {}
-ButtonRow :: _AdwButtonRow
+ButtonRow :: struct #packed {}
+
 ButtonRowClass :: struct {
     parent_class: PreferencesRowClass,
 }
-ButtonRow_autoptr :: ^ButtonRow
-ButtonRow_listautoptr :: ^glib.List
-ButtonRow_slistautoptr :: ^glib.SList
-ButtonRow_queueautoptr :: ^glib.Queue
-ButtonRowClass_autoptr :: ^ButtonRowClass
-ButtonRowClass_listautoptr :: ^glib.List
-ButtonRowClass_slistautoptr :: ^glib.SList
-ButtonRowClass_queueautoptr :: ^glib.Queue
-_AdwSpringParams :: struct #packed {}
-SpringParams :: _AdwSpringParams
-SpringParams_autoptr :: ^SpringParams
-SpringParams_listautoptr :: ^glib.List
-SpringParams_slistautoptr :: ^glib.SList
-SpringParams_queueautoptr :: ^glib.Queue
-_AdwCarousel :: struct #packed {}
-Carousel :: _AdwCarousel
+SpringParams :: struct #packed {}
+
+Carousel :: struct #packed {}
+
 CarouselClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Carousel_autoptr :: ^Carousel
-Carousel_listautoptr :: ^glib.List
-Carousel_slistautoptr :: ^glib.SList
-Carousel_queueautoptr :: ^glib.Queue
-CarouselClass_autoptr :: ^CarouselClass
-CarouselClass_listautoptr :: ^glib.List
-CarouselClass_slistautoptr :: ^glib.SList
-CarouselClass_queueautoptr :: ^glib.Queue
-_AdwCarouselIndicatorDots :: struct #packed {}
-CarouselIndicatorDots :: _AdwCarouselIndicatorDots
+CarouselIndicatorDots :: struct #packed {}
+
 CarouselIndicatorDotsClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-CarouselIndicatorDots_autoptr :: ^CarouselIndicatorDots
-CarouselIndicatorDots_listautoptr :: ^glib.List
-CarouselIndicatorDots_slistautoptr :: ^glib.SList
-CarouselIndicatorDots_queueautoptr :: ^glib.Queue
-CarouselIndicatorDotsClass_autoptr :: ^CarouselIndicatorDotsClass
-CarouselIndicatorDotsClass_listautoptr :: ^glib.List
-CarouselIndicatorDotsClass_slistautoptr :: ^glib.SList
-CarouselIndicatorDotsClass_queueautoptr :: ^glib.Queue
-_AdwCarouselIndicatorLines :: struct #packed {}
-CarouselIndicatorLines :: _AdwCarouselIndicatorLines
+CarouselIndicatorLines :: struct #packed {}
+
 CarouselIndicatorLinesClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-CarouselIndicatorLines_autoptr :: ^CarouselIndicatorLines
-CarouselIndicatorLines_listautoptr :: ^glib.List
-CarouselIndicatorLines_slistautoptr :: ^glib.SList
-CarouselIndicatorLines_queueautoptr :: ^glib.Queue
-CarouselIndicatorLinesClass_autoptr :: ^CarouselIndicatorLinesClass
-CarouselIndicatorLinesClass_listautoptr :: ^glib.List
-CarouselIndicatorLinesClass_slistautoptr :: ^glib.SList
-CarouselIndicatorLinesClass_queueautoptr :: ^glib.Queue
-_AdwClamp :: struct #packed {}
-Clamp :: _AdwClamp
+Clamp :: struct #packed {}
+
 ClampClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Clamp_autoptr :: ^Clamp
-Clamp_listautoptr :: ^glib.List
-Clamp_slistautoptr :: ^glib.SList
-Clamp_queueautoptr :: ^glib.Queue
-ClampClass_autoptr :: ^ClampClass
-ClampClass_listautoptr :: ^glib.List
-ClampClass_slistautoptr :: ^glib.SList
-ClampClass_queueautoptr :: ^glib.Queue
-_AdwClampLayout :: struct #packed {}
-ClampLayout :: _AdwClampLayout
+ClampLayout :: struct #packed {}
+
 ClampLayoutClass :: struct {
     parent_class: gtk.LayoutManagerClass,
 }
-ClampLayout_autoptr :: ^ClampLayout
-ClampLayout_listautoptr :: ^glib.List
-ClampLayout_slistautoptr :: ^glib.SList
-ClampLayout_queueautoptr :: ^glib.Queue
-ClampLayoutClass_autoptr :: ^ClampLayoutClass
-ClampLayoutClass_listautoptr :: ^glib.List
-ClampLayoutClass_slistautoptr :: ^glib.SList
-ClampLayoutClass_queueautoptr :: ^glib.Queue
-_AdwClampScrollable :: struct #packed {}
-ClampScrollable :: _AdwClampScrollable
+ClampScrollable :: struct #packed {}
+
 ClampScrollableClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ClampScrollable_autoptr :: ^ClampScrollable
-ClampScrollable_listautoptr :: ^glib.List
-ClampScrollable_slistautoptr :: ^glib.SList
-ClampScrollable_queueautoptr :: ^glib.Queue
-ClampScrollableClass_autoptr :: ^ClampScrollableClass
-ClampScrollableClass_listautoptr :: ^glib.List
-ClampScrollableClass_slistautoptr :: ^glib.SList
-ClampScrollableClass_queueautoptr :: ^glib.Queue
-_AdwComboRow :: struct {
+ComboRow :: struct {
     parent_instance: ActionRow,
 }
-ComboRow :: _AdwComboRow
-_AdwComboRowClass :: struct {
+
+ComboRowClass :: struct {
     parent_class: ActionRowClass,
     padding: [4]glib.pointer,
 }
-ComboRowClass :: _AdwComboRowClass
-ComboRow_autoptr :: ^ComboRow
-ComboRow_listautoptr :: ^glib.List
-ComboRow_slistautoptr :: ^glib.SList
-ComboRow_queueautoptr :: ^glib.Queue
-ComboRowClass_autoptr :: ^ComboRowClass
-ComboRowClass_listautoptr :: ^glib.List
-ComboRowClass_slistautoptr :: ^glib.SList
-ComboRowClass_queueautoptr :: ^glib.Queue
-_AdwEntryRow :: struct {
+
+Easing :: enum u32 {LINEAR = 0, EASE_IN_QUAD = 1, EASE_OUT_QUAD = 2, EASE_IN_OUT_QUAD = 3, EASE_IN_CUBIC = 4, EASE_OUT_CUBIC = 5, EASE_IN_OUT_CUBIC = 6, EASE_IN_QUART = 7, EASE_OUT_QUART = 8, EASE_IN_OUT_QUART = 9, EASE_IN_QUINT = 10, EASE_OUT_QUINT = 11, EASE_IN_OUT_QUINT = 12, EASE_IN_SINE = 13, EASE_OUT_SINE = 14, EASE_IN_OUT_SINE = 15, EASE_IN_EXPO = 16, EASE_OUT_EXPO = 17, EASE_IN_OUT_EXPO = 18, EASE_IN_CIRC = 19, EASE_OUT_CIRC = 20, EASE_IN_OUT_CIRC = 21, EASE_IN_ELASTIC = 22, EASE_OUT_ELASTIC = 23, EASE_IN_OUT_ELASTIC = 24, EASE_IN_BACK = 25, EASE_OUT_BACK = 26, EASE_IN_OUT_BACK = 27, EASE_IN_BOUNCE = 28, EASE_OUT_BOUNCE = 29, EASE_IN_OUT_BOUNCE = 30, EASE = 31, EASE_IN = 32, EASE_OUT = 33, EASE_IN_OUT = 34 }
+EntryRow :: struct {
     parent_instance: PreferencesRow,
 }
-EntryRow :: _AdwEntryRow
-_AdwEntryRowClass :: struct {
+
+EntryRowClass :: struct {
     parent_class: PreferencesRowClass,
 }
-EntryRowClass :: _AdwEntryRowClass
-EntryRow_autoptr :: ^EntryRow
-EntryRow_listautoptr :: ^glib.List
-EntryRow_slistautoptr :: ^glib.SList
-EntryRow_queueautoptr :: ^glib.Queue
-EntryRowClass_autoptr :: ^EntryRowClass
-EntryRowClass_listautoptr :: ^glib.List
-EntryRowClass_slistautoptr :: ^glib.SList
-EntryRowClass_queueautoptr :: ^glib.Queue
-_AdwEnumListItem :: struct #packed {}
-EnumListItem :: _AdwEnumListItem
+
+EnumListItem :: struct #packed {}
+
 EnumListItemClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-EnumListItem_autoptr :: ^EnumListItem
-EnumListItem_listautoptr :: ^glib.List
-EnumListItem_slistautoptr :: ^glib.SList
-EnumListItem_queueautoptr :: ^glib.Queue
-EnumListItemClass_autoptr :: ^EnumListItemClass
-EnumListItemClass_listautoptr :: ^glib.List
-EnumListItemClass_slistautoptr :: ^glib.SList
-EnumListItemClass_queueautoptr :: ^glib.Queue
-_AdwEnumListModel :: struct #packed {}
-EnumListModel :: _AdwEnumListModel
+EnumListModel :: struct #packed {}
+
 EnumListModelClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-EnumListModel_autoptr :: ^EnumListModel
-EnumListModel_listautoptr :: ^glib.List
-EnumListModel_slistautoptr :: ^glib.SList
-EnumListModel_queueautoptr :: ^glib.Queue
-EnumListModelClass_autoptr :: ^EnumListModelClass
-EnumListModelClass_listautoptr :: ^glib.List
-EnumListModelClass_slistautoptr :: ^glib.SList
-EnumListModelClass_queueautoptr :: ^glib.Queue
-_AdwExpanderRow :: struct {
+ExpanderRow :: struct {
     parent_instance: PreferencesRow,
 }
-ExpanderRow :: _AdwExpanderRow
-_AdwExpanderRowClass :: struct {
+
+ExpanderRowClass :: struct {
     parent_class: PreferencesRowClass,
     padding: [4]glib.pointer,
 }
-ExpanderRowClass :: _AdwExpanderRowClass
-ExpanderRow_autoptr :: ^ExpanderRow
-ExpanderRow_listautoptr :: ^glib.List
-ExpanderRow_slistautoptr :: ^glib.SList
-ExpanderRow_queueautoptr :: ^glib.Queue
-ExpanderRowClass_autoptr :: ^ExpanderRowClass
-ExpanderRowClass_listautoptr :: ^glib.List
-ExpanderRowClass_slistautoptr :: ^glib.SList
-ExpanderRowClass_queueautoptr :: ^glib.Queue
-_AdwFlap :: struct #packed {}
-Flap :: _AdwFlap
+
+FoldThresholdPolicy :: enum u32 {MINIMUM = 0, NATURAL = 1 }
+Flap :: struct #packed {}
+
 FlapClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Flap_autoptr :: ^Flap
-Flap_listautoptr :: ^glib.List
-Flap_slistautoptr :: ^glib.SList
-Flap_queueautoptr :: ^glib.Queue
-FlapClass_autoptr :: ^FlapClass
-FlapClass_listautoptr :: ^glib.List
-FlapClass_slistautoptr :: ^glib.SList
-FlapClass_queueautoptr :: ^glib.Queue
-_AdwHeaderBar :: struct #packed {}
-HeaderBar :: _AdwHeaderBar
+FlapFoldPolicy :: enum u32 {NEVER = 0, ALWAYS = 1, AUTO = 2 }
+FlapTransitionType :: enum u32 {OVER = 0, UNDER = 1, SLIDE = 2 }
+HeaderBar :: struct #packed {}
+
 HeaderBarClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-HeaderBar_autoptr :: ^HeaderBar
-HeaderBar_listautoptr :: ^glib.List
-HeaderBar_slistautoptr :: ^glib.SList
-HeaderBar_queueautoptr :: ^glib.Queue
-HeaderBarClass_autoptr :: ^HeaderBarClass
-HeaderBarClass_listautoptr :: ^glib.List
-HeaderBarClass_slistautoptr :: ^glib.SList
-HeaderBarClass_queueautoptr :: ^glib.Queue
-_AdwViewStackPage :: struct #packed {}
-ViewStackPage :: _AdwViewStackPage
+CenteringPolicy :: enum u32 {LOOSE = 0, STRICT = 1 }
+ViewStackPage :: struct #packed {}
+
 ViewStackPageClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-ViewStackPage_autoptr :: ^ViewStackPage
-ViewStackPage_listautoptr :: ^glib.List
-ViewStackPage_slistautoptr :: ^glib.SList
-ViewStackPage_queueautoptr :: ^glib.Queue
-ViewStackPageClass_autoptr :: ^ViewStackPageClass
-ViewStackPageClass_listautoptr :: ^glib.List
-ViewStackPageClass_slistautoptr :: ^glib.SList
-ViewStackPageClass_queueautoptr :: ^glib.Queue
-_AdwViewStack :: struct #packed {}
-ViewStack :: _AdwViewStack
+ViewStack :: struct #packed {}
+
 ViewStackClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ViewStack_autoptr :: ^ViewStack
-ViewStack_listautoptr :: ^glib.List
-ViewStack_slistautoptr :: ^glib.SList
-ViewStack_queueautoptr :: ^glib.Queue
-ViewStackClass_autoptr :: ^ViewStackClass
-ViewStackClass_listautoptr :: ^glib.List
-ViewStackClass_slistautoptr :: ^glib.SList
-ViewStackClass_queueautoptr :: ^glib.Queue
-_AdwViewStackPages :: struct #packed {}
-ViewStackPages :: _AdwViewStackPages
+ViewStackPages :: struct #packed {}
+
 ViewStackPagesClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-ViewStackPages_autoptr :: ^ViewStackPages
-ViewStackPages_listautoptr :: ^glib.List
-ViewStackPages_slistautoptr :: ^glib.SList
-ViewStackPages_queueautoptr :: ^glib.Queue
-ViewStackPagesClass_autoptr :: ^ViewStackPagesClass
-ViewStackPagesClass_listautoptr :: ^glib.List
-ViewStackPagesClass_slistautoptr :: ^glib.SList
-ViewStackPagesClass_queueautoptr :: ^glib.Queue
-_AdwInlineViewSwitcher :: struct #packed {}
-InlineViewSwitcher :: _AdwInlineViewSwitcher
+InlineViewSwitcherDisplayMode :: enum u32 {INLINE_VIEW_SWITCHER_LABELS = 0, INLINE_VIEW_SWITCHER_ICONS = 1, INLINE_VIEW_SWITCHER_BOTH = 2 }
+InlineViewSwitcher :: struct #packed {}
+
 InlineViewSwitcherClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-InlineViewSwitcher_autoptr :: ^InlineViewSwitcher
-InlineViewSwitcher_listautoptr :: ^glib.List
-InlineViewSwitcher_slistautoptr :: ^glib.SList
-InlineViewSwitcher_queueautoptr :: ^glib.Queue
-InlineViewSwitcherClass_autoptr :: ^InlineViewSwitcherClass
-InlineViewSwitcherClass_listautoptr :: ^glib.List
-InlineViewSwitcherClass_slistautoptr :: ^glib.SList
-InlineViewSwitcherClass_queueautoptr :: ^glib.Queue
-_AdwLayout :: struct #packed {}
-Layout :: _AdwLayout
+Layout :: struct #packed {}
+
 LayoutClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-Layout_autoptr :: ^Layout
-Layout_listautoptr :: ^glib.List
-Layout_slistautoptr :: ^glib.SList
-Layout_queueautoptr :: ^glib.Queue
-LayoutClass_autoptr :: ^LayoutClass
-LayoutClass_listautoptr :: ^glib.List
-LayoutClass_slistautoptr :: ^glib.SList
-LayoutClass_queueautoptr :: ^glib.Queue
-_AdwLayoutSlot :: struct #packed {}
-LayoutSlot :: _AdwLayoutSlot
+LayoutSlot :: struct #packed {}
+
 LayoutSlotClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-LayoutSlot_autoptr :: ^LayoutSlot
-LayoutSlot_listautoptr :: ^glib.List
-LayoutSlot_slistautoptr :: ^glib.SList
-LayoutSlot_queueautoptr :: ^glib.Queue
-LayoutSlotClass_autoptr :: ^LayoutSlotClass
-LayoutSlotClass_listautoptr :: ^glib.List
-LayoutSlotClass_slistautoptr :: ^glib.SList
-LayoutSlotClass_queueautoptr :: ^glib.Queue
-_AdwLeafletPage :: struct #packed {}
-LeafletPage :: _AdwLeafletPage
+NavigationDirection :: enum u32 {BACK = 0, FORWARD = 1 }
+LeafletPage :: struct #packed {}
+
 LeafletPageClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-LeafletPage_autoptr :: ^LeafletPage
-LeafletPage_listautoptr :: ^glib.List
-LeafletPage_slistautoptr :: ^glib.SList
-LeafletPage_queueautoptr :: ^glib.Queue
-LeafletPageClass_autoptr :: ^LeafletPageClass
-LeafletPageClass_listautoptr :: ^glib.List
-LeafletPageClass_slistautoptr :: ^glib.SList
-LeafletPageClass_queueautoptr :: ^glib.Queue
-_AdwLeaflet :: struct #packed {}
-Leaflet :: _AdwLeaflet
+Leaflet :: struct #packed {}
+
 LeafletClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Leaflet_autoptr :: ^Leaflet
-Leaflet_listautoptr :: ^glib.List
-Leaflet_slistautoptr :: ^glib.SList
-Leaflet_queueautoptr :: ^glib.Queue
-LeafletClass_autoptr :: ^LeafletClass
-LeafletClass_listautoptr :: ^glib.List
-LeafletClass_slistautoptr :: ^glib.SList
-LeafletClass_queueautoptr :: ^glib.Queue
-_AdwMessageDialog :: struct {
+LeafletTransitionType :: enum u32 {OVER = 0, UNDER = 1, SLIDE = 2 }
+MessageDialog :: struct {
     parent_instance: gtk.Window,
 }
-MessageDialog :: _AdwMessageDialog
+
 response_func_ptr_anon_4 :: #type proc "c" (self: ^MessageDialog, response: cstring)
-_AdwMessageDialogClass :: struct {
+MessageDialogClass :: struct {
     parent_class: gtk.WindowClass,
     response: response_func_ptr_anon_4,
     padding: [4]glib.pointer,
 }
-MessageDialogClass :: _AdwMessageDialogClass
-MessageDialog_autoptr :: ^MessageDialog
-MessageDialog_listautoptr :: ^glib.List
-MessageDialog_slistautoptr :: ^glib.SList
-MessageDialog_queueautoptr :: ^glib.Queue
-MessageDialogClass_autoptr :: ^MessageDialogClass
-MessageDialogClass_listautoptr :: ^glib.List
-MessageDialogClass_slistautoptr :: ^glib.SList
-MessageDialogClass_queueautoptr :: ^glib.Queue
-_AdwMultiLayoutView :: struct #packed {}
-MultiLayoutView :: _AdwMultiLayoutView
+
+MultiLayoutView :: struct #packed {}
+
 MultiLayoutViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-MultiLayoutView_autoptr :: ^MultiLayoutView
-MultiLayoutView_listautoptr :: ^glib.List
-MultiLayoutView_slistautoptr :: ^glib.SList
-MultiLayoutView_queueautoptr :: ^glib.Queue
-MultiLayoutViewClass_autoptr :: ^MultiLayoutViewClass
-MultiLayoutViewClass_listautoptr :: ^glib.List
-MultiLayoutViewClass_slistautoptr :: ^glib.SList
-MultiLayoutViewClass_queueautoptr :: ^glib.Queue
-_AdwNavigationPage :: struct {
+NavigationPage :: struct {
     parent_instance: gtk.Widget,
 }
-NavigationPage :: _AdwNavigationPage
+
 showing_func_ptr_anon_5 :: #type proc "c" (self: ^NavigationPage)
 shown_func_ptr_anon_6 :: #type proc "c" (self: ^NavigationPage)
 hiding_func_ptr_anon_7 :: #type proc "c" (self: ^NavigationPage)
 hidden_func_ptr_anon_8 :: #type proc "c" (self: ^NavigationPage)
-_AdwNavigationPageClass :: struct {
+NavigationPageClass :: struct {
     parent_class: gtk.WidgetClass,
     showing: showing_func_ptr_anon_5,
     shown: shown_func_ptr_anon_6,
@@ -790,259 +453,158 @@ _AdwNavigationPageClass :: struct {
     hidden: hidden_func_ptr_anon_8,
     padding: [8]glib.pointer,
 }
-NavigationPageClass :: _AdwNavigationPageClass
-NavigationPage_autoptr :: ^NavigationPage
-NavigationPage_listautoptr :: ^glib.List
-NavigationPage_slistautoptr :: ^glib.SList
-NavigationPage_queueautoptr :: ^glib.Queue
-NavigationPageClass_autoptr :: ^NavigationPageClass
-NavigationPageClass_listautoptr :: ^glib.List
-NavigationPageClass_slistautoptr :: ^glib.SList
-NavigationPageClass_queueautoptr :: ^glib.Queue
-_AdwNavigationView :: struct #packed {}
-NavigationView :: _AdwNavigationView
+
+NavigationView :: struct #packed {}
+
 NavigationViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-NavigationView_autoptr :: ^NavigationView
-NavigationView_listautoptr :: ^glib.List
-NavigationView_slistautoptr :: ^glib.SList
-NavigationView_queueautoptr :: ^glib.Queue
-NavigationViewClass_autoptr :: ^NavigationViewClass
-NavigationViewClass_listautoptr :: ^glib.List
-NavigationViewClass_slistautoptr :: ^glib.SList
-NavigationViewClass_queueautoptr :: ^glib.Queue
-_AdwNavigationSplitView :: struct #packed {}
-NavigationSplitView :: _AdwNavigationSplitView
+NavigationSplitView :: struct #packed {}
+
 NavigationSplitViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-NavigationSplitView_autoptr :: ^NavigationSplitView
-NavigationSplitView_listautoptr :: ^glib.List
-NavigationSplitView_slistautoptr :: ^glib.SList
-NavigationSplitView_queueautoptr :: ^glib.Queue
-NavigationSplitViewClass_autoptr :: ^NavigationSplitViewClass
-NavigationSplitViewClass_listautoptr :: ^glib.List
-NavigationSplitViewClass_slistautoptr :: ^glib.SList
-NavigationSplitViewClass_queueautoptr :: ^glib.Queue
-_AdwOverlaySplitView :: struct #packed {}
-OverlaySplitView :: _AdwOverlaySplitView
+OverlaySplitView :: struct #packed {}
+
 OverlaySplitViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-OverlaySplitView_autoptr :: ^OverlaySplitView
-OverlaySplitView_listautoptr :: ^glib.List
-OverlaySplitView_slistautoptr :: ^glib.SList
-OverlaySplitView_queueautoptr :: ^glib.Queue
-OverlaySplitViewClass_autoptr :: ^OverlaySplitViewClass
-OverlaySplitViewClass_listautoptr :: ^glib.List
-OverlaySplitViewClass_slistautoptr :: ^glib.SList
-OverlaySplitViewClass_queueautoptr :: ^glib.Queue
-_AdwPasswordEntryRow :: struct #packed {}
-PasswordEntryRow :: _AdwPasswordEntryRow
+PasswordEntryRow :: struct #packed {}
+
 PasswordEntryRowClass :: struct {
     parent_class: EntryRowClass,
 }
-PasswordEntryRow_autoptr :: ^PasswordEntryRow
-PasswordEntryRow_listautoptr :: ^glib.List
-PasswordEntryRow_slistautoptr :: ^glib.SList
-PasswordEntryRow_queueautoptr :: ^glib.Queue
-PasswordEntryRowClass_autoptr :: ^PasswordEntryRowClass
-PasswordEntryRowClass_listautoptr :: ^glib.List
-PasswordEntryRowClass_slistautoptr :: ^glib.SList
-PasswordEntryRowClass_queueautoptr :: ^glib.Queue
-_AdwPreferencesGroup :: struct {
+PreferencesGroup :: struct {
     parent_instance: gtk.Widget,
 }
-PreferencesGroup :: _AdwPreferencesGroup
-_AdwPreferencesGroupClass :: struct {
+
+PreferencesGroupClass :: struct {
     parent_class: gtk.WidgetClass,
     padding: [4]glib.pointer,
 }
-PreferencesGroupClass :: _AdwPreferencesGroupClass
-PreferencesGroup_autoptr :: ^PreferencesGroup
-PreferencesGroup_listautoptr :: ^glib.List
-PreferencesGroup_slistautoptr :: ^glib.SList
-PreferencesGroup_queueautoptr :: ^glib.Queue
-PreferencesGroupClass_autoptr :: ^PreferencesGroupClass
-PreferencesGroupClass_listautoptr :: ^glib.List
-PreferencesGroupClass_slistautoptr :: ^glib.SList
-PreferencesGroupClass_queueautoptr :: ^glib.Queue
-_AdwPreferencesPage :: struct {
+
+PreferencesPage :: struct {
     parent_instance: gtk.Widget,
 }
-PreferencesPage :: _AdwPreferencesPage
-_AdwPreferencesPageClass :: struct {
+
+PreferencesPageClass :: struct {
     parent_class: gtk.WidgetClass,
     padding: [4]glib.pointer,
 }
-PreferencesPageClass :: _AdwPreferencesPageClass
-PreferencesPage_autoptr :: ^PreferencesPage
-PreferencesPage_listautoptr :: ^glib.List
-PreferencesPage_slistautoptr :: ^glib.SList
-PreferencesPage_queueautoptr :: ^glib.Queue
-PreferencesPageClass_autoptr :: ^PreferencesPageClass
-PreferencesPageClass_listautoptr :: ^glib.List
-PreferencesPageClass_slistautoptr :: ^glib.SList
-PreferencesPageClass_queueautoptr :: ^glib.Queue
-_AdwToast :: struct #packed {}
-Toast :: _AdwToast
+
+ToastPriority :: enum u32 {NORMAL = 0, HIGH = 1 }
+Toast :: struct #packed {}
+
 ToastClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-Toast_autoptr :: ^Toast
-Toast_listautoptr :: ^glib.List
-Toast_slistautoptr :: ^glib.SList
-Toast_queueautoptr :: ^glib.Queue
-ToastClass_autoptr :: ^ToastClass
-ToastClass_listautoptr :: ^glib.List
-ToastClass_slistautoptr :: ^glib.SList
-ToastClass_queueautoptr :: ^glib.Queue
-_AdwPreferencesDialog :: struct {
+PreferencesDialog :: struct {
     parent_instance: Dialog,
 }
-PreferencesDialog :: _AdwPreferencesDialog
-_AdwPreferencesDialogClass :: struct {
+
+PreferencesDialogClass :: struct {
     parent_class: DialogClass,
     padding: [4]glib.pointer,
 }
-PreferencesDialogClass :: _AdwPreferencesDialogClass
-PreferencesDialog_autoptr :: ^PreferencesDialog
-PreferencesDialog_listautoptr :: ^glib.List
-PreferencesDialog_slistautoptr :: ^glib.SList
-PreferencesDialog_queueautoptr :: ^glib.Queue
-PreferencesDialogClass_autoptr :: ^PreferencesDialogClass
-PreferencesDialogClass_listautoptr :: ^glib.List
-PreferencesDialogClass_slistautoptr :: ^glib.SList
-PreferencesDialogClass_queueautoptr :: ^glib.Queue
-_AdwPreferencesWindow :: struct {
+
+PreferencesWindow :: struct {
     parent_instance: Window,
 }
-PreferencesWindow :: _AdwPreferencesWindow
-_AdwPreferencesWindowClass :: struct {
+
+PreferencesWindowClass :: struct {
     parent_class: WindowClass,
     padding: [4]glib.pointer,
 }
-PreferencesWindowClass :: _AdwPreferencesWindowClass
-PreferencesWindow_autoptr :: ^PreferencesWindow
-PreferencesWindow_listautoptr :: ^glib.List
-PreferencesWindow_slistautoptr :: ^glib.SList
-PreferencesWindow_queueautoptr :: ^glib.Queue
-PreferencesWindowClass_autoptr :: ^PreferencesWindowClass
-PreferencesWindowClass_listautoptr :: ^glib.List
-PreferencesWindowClass_slistautoptr :: ^glib.SList
-PreferencesWindowClass_queueautoptr :: ^glib.Queue
-_AdwSpinRow :: struct #packed {}
-SpinRow :: _AdwSpinRow
+
+ShortcutLabel :: struct #packed {}
+
+ShortcutLabelClass :: struct {
+    parent_class: gtk.WidgetClass,
+}
+ShortcutsItem :: struct #packed {}
+
+ShortcutsItemClass :: struct {
+    parent_class: gobj.ObjectClass,
+}
+ShortcutsSection :: struct #packed {}
+
+ShortcutsSectionClass :: struct {
+    parent_class: gobj.ObjectClass,
+}
+ShortcutsDialog :: struct #packed {}
+
+ShortcutsDialogClass :: struct {
+    parent_class: DialogClass,
+}
+SidebarSection :: struct #packed {}
+
+SidebarItem :: struct {
+    parent_instance: gobj.Object,
+}
+
+SidebarItemClass :: struct {
+    parent_class: gobj.ObjectClass,
+    padding: [4]glib.pointer,
+}
+
+Sidebar :: struct #packed {}
+
+SidebarSectionCreateItemFunc :: #type proc "c" (item: glib.pointer, user_data: glib.pointer) -> ^SidebarItem
+SidebarSectionClass :: struct {
+    parent_class: gobj.ObjectClass,
+}
+SidebarMode :: enum u32 {SIDEBAR = 0, PAGE = 1 }
+SidebarClass :: struct {
+    parent_class: gtk.WidgetClass,
+}
+SpinRow :: struct #packed {}
+
 SpinRowClass :: struct {
     parent_class: ActionRowClass,
 }
-SpinRow_autoptr :: ^SpinRow
-SpinRow_listautoptr :: ^glib.List
-SpinRow_slistautoptr :: ^glib.SList
-SpinRow_queueautoptr :: ^glib.Queue
-SpinRowClass_autoptr :: ^SpinRowClass
-SpinRowClass_listautoptr :: ^glib.List
-SpinRowClass_slistautoptr :: ^glib.SList
-SpinRowClass_queueautoptr :: ^glib.Queue
-_AdwSpinner :: struct #packed {}
-Spinner :: _AdwSpinner
+Spinner :: struct #packed {}
+
 SpinnerClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Spinner_autoptr :: ^Spinner
-Spinner_listautoptr :: ^glib.List
-Spinner_slistautoptr :: ^glib.SList
-Spinner_queueautoptr :: ^glib.Queue
-SpinnerClass_autoptr :: ^SpinnerClass
-SpinnerClass_listautoptr :: ^glib.List
-SpinnerClass_slistautoptr :: ^glib.SList
-SpinnerClass_queueautoptr :: ^glib.Queue
-_AdwSpinnerPaintable :: struct #packed {}
-SpinnerPaintable :: _AdwSpinnerPaintable
+SpinnerPaintable :: struct #packed {}
+
 SpinnerPaintableClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-SpinnerPaintable_autoptr :: ^SpinnerPaintable
-SpinnerPaintable_listautoptr :: ^glib.List
-SpinnerPaintable_slistautoptr :: ^glib.SList
-SpinnerPaintable_queueautoptr :: ^glib.Queue
-SpinnerPaintableClass_autoptr :: ^SpinnerPaintableClass
-SpinnerPaintableClass_listautoptr :: ^glib.List
-SpinnerPaintableClass_slistautoptr :: ^glib.SList
-SpinnerPaintableClass_queueautoptr :: ^glib.Queue
-_AdwSplitButton :: struct #packed {}
-SplitButton :: _AdwSplitButton
+SplitButton :: struct #packed {}
+
 SplitButtonClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-SplitButton_autoptr :: ^SplitButton
-SplitButton_listautoptr :: ^glib.List
-SplitButton_slistautoptr :: ^glib.SList
-SplitButton_queueautoptr :: ^glib.Queue
-SplitButtonClass_autoptr :: ^SplitButtonClass
-SplitButtonClass_listautoptr :: ^glib.List
-SplitButtonClass_slistautoptr :: ^glib.SList
-SplitButtonClass_queueautoptr :: ^glib.Queue
-_AdwSpringAnimation :: struct #packed {}
-SpringAnimation :: _AdwSpringAnimation
-_AdwSpringAnimationClass :: struct #packed {}
-SpringAnimationClass :: _AdwSpringAnimationClass
-SpringAnimation_autoptr :: ^SpringAnimation
-SpringAnimation_listautoptr :: ^glib.List
-SpringAnimation_slistautoptr :: ^glib.SList
-SpringAnimation_queueautoptr :: ^glib.Queue
-SpringAnimationClass_autoptr :: ^SpringAnimationClass
-SpringAnimationClass_listautoptr :: ^glib.List
-SpringAnimationClass_slistautoptr :: ^glib.SList
-SpringAnimationClass_queueautoptr :: ^glib.Queue
-_AdwSqueezerPage :: struct #packed {}
-SqueezerPage :: _AdwSqueezerPage
+SpringAnimation :: struct #packed {}
+
+SpringAnimationClass :: struct #packed {}
+
+SqueezerPage :: struct #packed {}
+
 SqueezerPageClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-SqueezerPage_autoptr :: ^SqueezerPage
-SqueezerPage_listautoptr :: ^glib.List
-SqueezerPage_slistautoptr :: ^glib.SList
-SqueezerPage_queueautoptr :: ^glib.Queue
-SqueezerPageClass_autoptr :: ^SqueezerPageClass
-SqueezerPageClass_listautoptr :: ^glib.List
-SqueezerPageClass_slistautoptr :: ^glib.SList
-SqueezerPageClass_queueautoptr :: ^glib.Queue
-_AdwSqueezer :: struct #packed {}
-Squeezer :: _AdwSqueezer
+Squeezer :: struct #packed {}
+
 SqueezerClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-Squeezer_autoptr :: ^Squeezer
-Squeezer_listautoptr :: ^glib.List
-Squeezer_slistautoptr :: ^glib.SList
-Squeezer_queueautoptr :: ^glib.Queue
-SqueezerClass_autoptr :: ^SqueezerClass
-SqueezerClass_listautoptr :: ^glib.List
-SqueezerClass_slistautoptr :: ^glib.SList
-SqueezerClass_queueautoptr :: ^glib.Queue
-_AdwStatusPage :: struct #packed {}
-StatusPage :: _AdwStatusPage
+SqueezerTransitionType :: enum u32 {NONE = 0, CROSSFADE = 1 }
+StatusPage :: struct #packed {}
+
 StatusPageClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-StatusPage_autoptr :: ^StatusPage
-StatusPage_listautoptr :: ^glib.List
-StatusPage_slistautoptr :: ^glib.SList
-StatusPage_queueautoptr :: ^glib.Queue
-StatusPageClass_autoptr :: ^StatusPageClass
-StatusPageClass_listautoptr :: ^glib.List
-StatusPageClass_slistautoptr :: ^glib.SList
-StatusPageClass_queueautoptr :: ^glib.Queue
-_AdwSwipeable :: struct #packed {}
-Swipeable :: _AdwSwipeable
+Swipeable :: struct #packed {}
+
 et_distance_func_ptr_anon_9 :: #type proc "c" (self: ^Swipeable) -> f64
 et_snap_points_func_ptr_anon_10 :: #type proc "c" (self: ^Swipeable, n_snap_points: [^]i32) -> ^f64
 et_progress_func_ptr_anon_11 :: #type proc "c" (self: ^Swipeable) -> f64
 et_cancel_progress_func_ptr_anon_12 :: #type proc "c" (self: ^Swipeable) -> f64
 et_swipe_area_func_ptr_anon_13 :: #type proc "c" (self: ^Swipeable, navigation_direction: NavigationDirection, is_drag: glib.boolean, rect: ^gtk.Rectangle)
-_AdwSwipeableInterface :: struct {
+SwipeableInterface :: struct {
     parent: gobj.TypeInterface,
     get_distance: et_distance_func_ptr_anon_9,
     get_snap_points: et_snap_points_func_ptr_anon_10,
@@ -1051,244 +613,107 @@ _AdwSwipeableInterface :: struct {
     get_swipe_area: et_swipe_area_func_ptr_anon_13,
     padding: [4]glib.pointer,
 }
-SwipeableInterface :: _AdwSwipeableInterface
-Swipeable_autoptr :: ^Swipeable
-Swipeable_listautoptr :: ^glib.List
-Swipeable_slistautoptr :: ^glib.SList
-Swipeable_queueautoptr :: ^glib.Queue
-_AdwSwipeTracker :: struct #packed {}
-SwipeTracker :: _AdwSwipeTracker
+
+SwipeTracker :: struct #packed {}
+
 SwipeTrackerClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-SwipeTracker_autoptr :: ^SwipeTracker
-SwipeTracker_listautoptr :: ^glib.List
-SwipeTracker_slistautoptr :: ^glib.SList
-SwipeTracker_queueautoptr :: ^glib.Queue
-SwipeTrackerClass_autoptr :: ^SwipeTrackerClass
-SwipeTrackerClass_listautoptr :: ^glib.List
-SwipeTrackerClass_slistautoptr :: ^glib.SList
-SwipeTrackerClass_queueautoptr :: ^glib.Queue
-_AdwSwitchRow :: struct #packed {}
-SwitchRow :: _AdwSwitchRow
+SwitchRow :: struct #packed {}
+
 SwitchRowClass :: struct {
     parent_class: ActionRowClass,
 }
-SwitchRow_autoptr :: ^SwitchRow
-SwitchRow_listautoptr :: ^glib.List
-SwitchRow_slistautoptr :: ^glib.SList
-SwitchRow_queueautoptr :: ^glib.Queue
-SwitchRowClass_autoptr :: ^SwitchRowClass
-SwitchRowClass_listautoptr :: ^glib.List
-SwitchRowClass_slistautoptr :: ^glib.SList
-SwitchRowClass_queueautoptr :: ^glib.Queue
-_AdwTabPage :: struct #packed {}
-TabPage :: _AdwTabPage
+TabViewShortcuts :: enum u32 {NONE = 0, CONTROL_TAB = 1, CONTROL_SHIFT_TAB = 2, CONTROL_PAGE_UP = 4, CONTROL_PAGE_DOWN = 8, CONTROL_HOME = 16, CONTROL_END = 32, CONTROL_SHIFT_PAGE_UP = 64, CONTROL_SHIFT_PAGE_DOWN = 128, CONTROL_SHIFT_HOME = 256, CONTROL_SHIFT_END = 512, ALT_DIGITS = 1024, ALT_ZERO = 2048, ALL_SHORTCUTS = 4095 }
+TabPage :: struct #packed {}
+
 TabPageClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-TabPage_autoptr :: ^TabPage
-TabPage_listautoptr :: ^glib.List
-TabPage_slistautoptr :: ^glib.SList
-TabPage_queueautoptr :: ^glib.Queue
-TabPageClass_autoptr :: ^TabPageClass
-TabPageClass_listautoptr :: ^glib.List
-TabPageClass_slistautoptr :: ^glib.SList
-TabPageClass_queueautoptr :: ^glib.Queue
-_AdwTabView :: struct #packed {}
-TabView :: _AdwTabView
+TabView :: struct #packed {}
+
 TabViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-TabView_autoptr :: ^TabView
-TabView_listautoptr :: ^glib.List
-TabView_slistautoptr :: ^glib.SList
-TabView_queueautoptr :: ^glib.Queue
-TabViewClass_autoptr :: ^TabViewClass
-TabViewClass_listautoptr :: ^glib.List
-TabViewClass_slistautoptr :: ^glib.SList
-TabViewClass_queueautoptr :: ^glib.Queue
-_AdwTabBar :: struct #packed {}
-TabBar :: _AdwTabBar
+TabBar :: struct #packed {}
+
 TabBarClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-TabBar_autoptr :: ^TabBar
-TabBar_listautoptr :: ^glib.List
-TabBar_slistautoptr :: ^glib.SList
-TabBar_queueautoptr :: ^glib.Queue
-TabBarClass_autoptr :: ^TabBarClass
-TabBarClass_listautoptr :: ^glib.List
-TabBarClass_slistautoptr :: ^glib.SList
-TabBarClass_queueautoptr :: ^glib.Queue
-_AdwTabButton :: struct #packed {}
-TabButton :: _AdwTabButton
+TabButton :: struct #packed {}
+
 TabButtonClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-TabButton_autoptr :: ^TabButton
-TabButton_listautoptr :: ^glib.List
-TabButton_slistautoptr :: ^glib.SList
-TabButton_queueautoptr :: ^glib.Queue
-TabButtonClass_autoptr :: ^TabButtonClass
-TabButtonClass_listautoptr :: ^glib.List
-TabButtonClass_slistautoptr :: ^glib.SList
-TabButtonClass_queueautoptr :: ^glib.Queue
-_AdwTabOverview :: struct #packed {}
-TabOverview :: _AdwTabOverview
+TabOverview :: struct #packed {}
+
 TabOverviewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-TabOverview_autoptr :: ^TabOverview
-TabOverview_listautoptr :: ^glib.List
-TabOverview_slistautoptr :: ^glib.SList
-TabOverview_queueautoptr :: ^glib.Queue
-TabOverviewClass_autoptr :: ^TabOverviewClass
-TabOverviewClass_listautoptr :: ^glib.List
-TabOverviewClass_slistautoptr :: ^glib.SList
-TabOverviewClass_queueautoptr :: ^glib.Queue
-_AdwTimedAnimation :: struct #packed {}
-TimedAnimation :: _AdwTimedAnimation
-_AdwTimedAnimationClass :: struct #packed {}
-TimedAnimationClass :: _AdwTimedAnimationClass
-TimedAnimation_autoptr :: ^TimedAnimation
-TimedAnimation_listautoptr :: ^glib.List
-TimedAnimation_slistautoptr :: ^glib.SList
-TimedAnimation_queueautoptr :: ^glib.Queue
-TimedAnimationClass_autoptr :: ^TimedAnimationClass
-TimedAnimationClass_listautoptr :: ^glib.List
-TimedAnimationClass_slistautoptr :: ^glib.SList
-TimedAnimationClass_queueautoptr :: ^glib.Queue
-_AdwToastOverlay :: struct #packed {}
-ToastOverlay :: _AdwToastOverlay
+TimedAnimation :: struct #packed {}
+
+TimedAnimationClass :: struct #packed {}
+
+ToastOverlay :: struct #packed {}
+
 ToastOverlayClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ToastOverlay_autoptr :: ^ToastOverlay
-ToastOverlay_listautoptr :: ^glib.List
-ToastOverlay_slistautoptr :: ^glib.SList
-ToastOverlay_queueautoptr :: ^glib.Queue
-ToastOverlayClass_autoptr :: ^ToastOverlayClass
-ToastOverlayClass_listautoptr :: ^glib.List
-ToastOverlayClass_slistautoptr :: ^glib.SList
-ToastOverlayClass_queueautoptr :: ^glib.Queue
-_AdwToggle :: struct #packed {}
-Toggle :: _AdwToggle
+Toggle :: struct #packed {}
+
 ToggleClass :: struct {
     parent_class: gobj.ObjectClass,
 }
-Toggle_autoptr :: ^Toggle
-Toggle_listautoptr :: ^glib.List
-Toggle_slistautoptr :: ^glib.SList
-Toggle_queueautoptr :: ^glib.Queue
-ToggleClass_autoptr :: ^ToggleClass
-ToggleClass_listautoptr :: ^glib.List
-ToggleClass_slistautoptr :: ^glib.SList
-ToggleClass_queueautoptr :: ^glib.Queue
-_AdwToggleGroup :: struct #packed {}
-ToggleGroup :: _AdwToggleGroup
+ToggleGroup :: struct #packed {}
+
 ToggleGroupClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ToggleGroup_autoptr :: ^ToggleGroup
-ToggleGroup_listautoptr :: ^glib.List
-ToggleGroup_slistautoptr :: ^glib.SList
-ToggleGroup_queueautoptr :: ^glib.Queue
-ToggleGroupClass_autoptr :: ^ToggleGroupClass
-ToggleGroupClass_listautoptr :: ^glib.List
-ToggleGroupClass_slistautoptr :: ^glib.SList
-ToggleGroupClass_queueautoptr :: ^glib.Queue
-_AdwToolbarView :: struct #packed {}
-ToolbarView :: _AdwToolbarView
+ToolbarStyle :: enum u32 {FLAT = 0, RAISED = 1, RAISED_BORDER = 2 }
+ToolbarView :: struct #packed {}
+
 ToolbarViewClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ToolbarView_autoptr :: ^ToolbarView
-ToolbarView_listautoptr :: ^glib.List
-ToolbarView_slistautoptr :: ^glib.SList
-ToolbarView_queueautoptr :: ^glib.Queue
-ToolbarViewClass_autoptr :: ^ToolbarViewClass
-ToolbarViewClass_listautoptr :: ^glib.List
-ToolbarViewClass_slistautoptr :: ^glib.SList
-ToolbarViewClass_queueautoptr :: ^glib.Queue
-_AdwViewSwitcher :: struct #packed {}
-ViewSwitcher :: _AdwViewSwitcher
+ViewSwitcher :: struct #packed {}
+
 ViewSwitcherClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ViewSwitcher_autoptr :: ^ViewSwitcher
-ViewSwitcher_listautoptr :: ^glib.List
-ViewSwitcher_slistautoptr :: ^glib.SList
-ViewSwitcher_queueautoptr :: ^glib.Queue
-ViewSwitcherClass_autoptr :: ^ViewSwitcherClass
-ViewSwitcherClass_listautoptr :: ^glib.List
-ViewSwitcherClass_slistautoptr :: ^glib.SList
-ViewSwitcherClass_queueautoptr :: ^glib.Queue
-_AdwViewSwitcherBar :: struct #packed {}
-ViewSwitcherBar :: _AdwViewSwitcherBar
+ViewSwitcherPolicy :: enum u32 {NARROW = 0, WIDE = 1 }
+ViewSwitcherBar :: struct #packed {}
+
 ViewSwitcherBarClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ViewSwitcherBar_autoptr :: ^ViewSwitcherBar
-ViewSwitcherBar_listautoptr :: ^glib.List
-ViewSwitcherBar_slistautoptr :: ^glib.SList
-ViewSwitcherBar_queueautoptr :: ^glib.Queue
-ViewSwitcherBarClass_autoptr :: ^ViewSwitcherBarClass
-ViewSwitcherBarClass_listautoptr :: ^glib.List
-ViewSwitcherBarClass_slistautoptr :: ^glib.SList
-ViewSwitcherBarClass_queueautoptr :: ^glib.Queue
-_AdwViewSwitcherTitle :: struct #packed {}
-ViewSwitcherTitle :: _AdwViewSwitcherTitle
+ViewSwitcherSidebar :: struct #packed {}
+
+ViewSwitcherSidebarClass :: struct {
+    parent_class: gtk.WidgetClass,
+}
+ViewSwitcherTitle :: struct #packed {}
+
 ViewSwitcherTitleClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-ViewSwitcherTitle_autoptr :: ^ViewSwitcherTitle
-ViewSwitcherTitle_listautoptr :: ^glib.List
-ViewSwitcherTitle_slistautoptr :: ^glib.SList
-ViewSwitcherTitle_queueautoptr :: ^glib.Queue
-ViewSwitcherTitleClass_autoptr :: ^ViewSwitcherTitleClass
-ViewSwitcherTitleClass_listautoptr :: ^glib.List
-ViewSwitcherTitleClass_slistautoptr :: ^glib.SList
-ViewSwitcherTitleClass_queueautoptr :: ^glib.Queue
-_AdwWindowTitle :: struct #packed {}
-WindowTitle :: _AdwWindowTitle
+WindowTitle :: struct #packed {}
+
 WindowTitleClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-WindowTitle_autoptr :: ^WindowTitle
-WindowTitle_listautoptr :: ^glib.List
-WindowTitle_slistautoptr :: ^glib.SList
-WindowTitle_queueautoptr :: ^glib.Queue
-WindowTitleClass_autoptr :: ^WindowTitleClass
-WindowTitleClass_listautoptr :: ^glib.List
-WindowTitleClass_slistautoptr :: ^glib.SList
-WindowTitleClass_queueautoptr :: ^glib.Queue
-_AdwWrapLayout :: struct #packed {}
-WrapLayout :: _AdwWrapLayout
+WrapLayout :: struct #packed {}
+
 WrapLayoutClass :: struct {
     parent_class: gtk.LayoutManagerClass,
 }
-WrapLayout_autoptr :: ^WrapLayout
-WrapLayout_listautoptr :: ^glib.List
-WrapLayout_slistautoptr :: ^glib.SList
-WrapLayout_queueautoptr :: ^glib.Queue
-WrapLayoutClass_autoptr :: ^WrapLayoutClass
-WrapLayoutClass_listautoptr :: ^glib.List
-WrapLayoutClass_slistautoptr :: ^glib.SList
-WrapLayoutClass_queueautoptr :: ^glib.Queue
-_AdwWrapBox :: struct #packed {}
-WrapBox :: _AdwWrapBox
+JustifyMode :: enum u32 {JUSTIFY_NONE = 0, JUSTIFY_FILL = 1, JUSTIFY_SPREAD = 2 }
+PackDirection :: enum u32 {PACK_START_TO_END = 0, PACK_END_TO_START = 1 }
+WrapPolicy :: enum u32 {WRAP_MINIMUM = 0, WRAP_NATURAL = 1 }
+WrapBox :: struct #packed {}
+
 WrapBoxClass :: struct {
     parent_class: gtk.WidgetClass,
 }
-WrapBox_autoptr :: ^WrapBox
-WrapBox_listautoptr :: ^glib.List
-WrapBox_slistautoptr :: ^glib.SList
-WrapBox_queueautoptr :: ^glib.Queue
-WrapBoxClass_autoptr :: ^WrapBoxClass
-WrapBoxClass_listautoptr :: ^glib.List
-WrapBoxClass_slistautoptr :: ^glib.SList
-WrapBoxClass_queueautoptr :: ^glib.Queue
 
 @(default_calling_convention = "c")
 foreign adwaita_runic {
@@ -1406,6 +831,9 @@ foreign adwaita_runic {
     @(link_name = "adw_navigation_direction_get_type")
     navigation_direction_get_type :: proc() -> gobj.Type ---
 
+    @(link_name = "adw_sidebar_mode_get_type")
+    sidebar_mode_get_type :: proc() -> gobj.Type ---
+
     @(link_name = "adw_squeezer_transition_type_get_type")
     squeezer_transition_type_get_type :: proc() -> gobj.Type ---
 
@@ -1513,9 +941,6 @@ foreign adwaita_runic {
 
     @(link_name = "adw_about_dialog_new")
     about_dialog_new :: proc() -> ^Dialog ---
-
-    @(link_name = "adw_about_dialog_new_from_appdata")
-    about_dialog_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^Dialog ---
 
     @(link_name = "adw_about_dialog_get_application_name")
     about_dialog_get_application_name :: proc(self: ^AboutDialog) -> cstring ---
@@ -1655,9 +1080,6 @@ foreign adwaita_runic {
     @(link_name = "adw_show_about_dialog")
     show_about_dialog :: proc(parent: ^gtk.Widget, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
-    @(link_name = "adw_show_about_dialog_from_appdata")
-    show_about_dialog_from_appdata :: proc(parent: ^gtk.Widget, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
-
     @(link_name = "adw_window_get_type")
     window_get_type :: proc() -> gobj.Type ---
 
@@ -1693,9 +1115,6 @@ foreign adwaita_runic {
 
     @(link_name = "adw_about_window_new")
     about_window_new :: proc() -> ^gtk.Widget ---
-
-    @(link_name = "adw_about_window_new_from_appdata")
-    about_window_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^gtk.Widget ---
 
     @(link_name = "adw_about_window_get_application_name")
     about_window_get_application_name :: proc(self: ^AboutWindow) -> cstring ---
@@ -1831,9 +1250,6 @@ foreign adwaita_runic {
 
     @(link_name = "adw_show_about_window")
     show_about_window :: proc(parent: ^gtk.Window, first_property_name: cstring, #c_vararg var_args: ..any) ---
-
-    @(link_name = "adw_show_about_window_from_appdata")
-    show_about_window_from_appdata :: proc(parent: ^gtk.Window, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
     @(link_name = "adw_accent_color_to_rgba")
     accent_color_to_rgba :: proc(self: AccentColor, rgba: ^gtk.RGBA) ---
@@ -2032,6 +1448,12 @@ foreign adwaita_runic {
 
     @(link_name = "adw_animation_target_get_type")
     animation_target_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_none_animation_target_get_type")
+    none_animation_target_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_none_animation_target_new")
+    none_animation_target_new :: proc() -> ^AnimationTarget ---
 
     @(link_name = "adw_callback_animation_target_get_type")
     callback_animation_target_get_type :: proc() -> gobj.Type ---
@@ -3041,6 +2463,18 @@ foreign adwaita_runic {
     @(link_name = "adw_view_stack_page_set_visible")
     view_stack_page_set_visible :: proc(self: ^ViewStackPage, visible: glib.boolean) ---
 
+    @(link_name = "adw_view_stack_page_get_starts_section")
+    view_stack_page_get_starts_section :: proc(self: ^ViewStackPage) -> glib.boolean ---
+
+    @(link_name = "adw_view_stack_page_set_starts_section")
+    view_stack_page_set_starts_section :: proc(self: ^ViewStackPage, starts_section: glib.boolean) ---
+
+    @(link_name = "adw_view_stack_page_get_section_title")
+    view_stack_page_get_section_title :: proc(self: ^ViewStackPage) -> cstring ---
+
+    @(link_name = "adw_view_stack_page_set_section_title")
+    view_stack_page_set_section_title :: proc(self: ^ViewStackPage, section_title: cstring) ---
+
     @(link_name = "adw_view_stack_get_type")
     view_stack_get_type :: proc() -> gobj.Type ---
 
@@ -3692,6 +3126,9 @@ foreign adwaita_runic {
     @(link_name = "adw_preferences_group_remove")
     preferences_group_remove :: proc(self: ^PreferencesGroup, child: ^gtk.Widget) ---
 
+    @(link_name = "adw_preferences_group_get_row")
+    preferences_group_get_row :: proc(self: ^PreferencesGroup, index: glib.uint_) -> ^gtk.Widget ---
+
     @(link_name = "adw_preferences_group_get_title")
     preferences_group_get_title :: proc(self: ^PreferencesGroup) -> cstring ---
 
@@ -3716,6 +3153,9 @@ foreign adwaita_runic {
     @(link_name = "adw_preferences_group_set_separate_rows")
     preferences_group_set_separate_rows :: proc(self: ^PreferencesGroup, separate_rows: glib.boolean) ---
 
+    @(link_name = "adw_preferences_group_bind_model")
+    preferences_group_bind_model :: proc(self: ^PreferencesGroup, model: ^gio.ListModel, create_row_func: gtk.ListBoxCreateWidgetFunc, user_data: glib.pointer, user_data_free_func: glib.DestroyNotify) ---
+
     @(link_name = "adw_preferences_page_get_type")
     preferences_page_get_type :: proc() -> gobj.Type ---
 
@@ -3727,6 +3167,12 @@ foreign adwaita_runic {
 
     @(link_name = "adw_preferences_page_remove")
     preferences_page_remove :: proc(self: ^PreferencesPage, group: ^PreferencesGroup) ---
+
+    @(link_name = "adw_preferences_page_insert")
+    preferences_page_insert :: proc(self: ^PreferencesPage, group: ^PreferencesGroup, index: i32) ---
+
+    @(link_name = "adw_preferences_page_get_group")
+    preferences_page_get_group :: proc(self: ^PreferencesPage, index: glib.uint_) -> ^PreferencesGroup ---
 
     @(link_name = "adw_preferences_page_get_icon_name")
     preferences_page_get_icon_name :: proc(self: ^PreferencesPage) -> cstring ---
@@ -3928,6 +3374,282 @@ foreign adwaita_runic {
 
     @(link_name = "adw_preferences_window_add_toast")
     preferences_window_add_toast :: proc(self: ^PreferencesWindow, toast: ^Toast) ---
+
+    @(link_name = "adw_shortcut_label_get_type")
+    shortcut_label_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_shortcut_label_new")
+    shortcut_label_new :: proc(accelerator: cstring) -> ^gtk.Widget ---
+
+    @(link_name = "adw_shortcut_label_get_accelerator")
+    shortcut_label_get_accelerator :: proc(self: ^ShortcutLabel) -> cstring ---
+
+    @(link_name = "adw_shortcut_label_set_accelerator")
+    shortcut_label_set_accelerator :: proc(self: ^ShortcutLabel, accelerator: cstring) ---
+
+    @(link_name = "adw_shortcut_label_get_disabled_text")
+    shortcut_label_get_disabled_text :: proc(self: ^ShortcutLabel) -> cstring ---
+
+    @(link_name = "adw_shortcut_label_set_disabled_text")
+    shortcut_label_set_disabled_text :: proc(self: ^ShortcutLabel, disabled_text: cstring) ---
+
+    @(link_name = "adw_shortcuts_item_get_type")
+    shortcuts_item_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_shortcuts_item_new")
+    shortcuts_item_new :: proc(title: cstring, accelerator: cstring) -> ^ShortcutsItem ---
+
+    @(link_name = "adw_shortcuts_item_new_from_action")
+    shortcuts_item_new_from_action :: proc(title: cstring, action_name: cstring) -> ^ShortcutsItem ---
+
+    @(link_name = "adw_shortcuts_item_get_title")
+    shortcuts_item_get_title :: proc(self: ^ShortcutsItem) -> cstring ---
+
+    @(link_name = "adw_shortcuts_item_set_title")
+    shortcuts_item_set_title :: proc(self: ^ShortcutsItem, title: cstring) ---
+
+    @(link_name = "adw_shortcuts_item_get_subtitle")
+    shortcuts_item_get_subtitle :: proc(self: ^ShortcutsItem) -> cstring ---
+
+    @(link_name = "adw_shortcuts_item_set_subtitle")
+    shortcuts_item_set_subtitle :: proc(self: ^ShortcutsItem, subtitle: cstring) ---
+
+    @(link_name = "adw_shortcuts_item_get_accelerator")
+    shortcuts_item_get_accelerator :: proc(self: ^ShortcutsItem) -> cstring ---
+
+    @(link_name = "adw_shortcuts_item_set_accelerator")
+    shortcuts_item_set_accelerator :: proc(self: ^ShortcutsItem, accelerator: cstring) ---
+
+    @(link_name = "adw_shortcuts_item_get_action_name")
+    shortcuts_item_get_action_name :: proc(self: ^ShortcutsItem) -> cstring ---
+
+    @(link_name = "adw_shortcuts_item_set_action_name")
+    shortcuts_item_set_action_name :: proc(self: ^ShortcutsItem, action_name: cstring) ---
+
+    @(link_name = "adw_shortcuts_item_get_direction")
+    shortcuts_item_get_direction :: proc(self: ^ShortcutsItem) -> gtk.TextDirection ---
+
+    @(link_name = "adw_shortcuts_item_set_direction")
+    shortcuts_item_set_direction :: proc(self: ^ShortcutsItem, direction: gtk.TextDirection) ---
+
+    @(link_name = "adw_shortcuts_section_get_type")
+    shortcuts_section_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_shortcuts_section_new")
+    shortcuts_section_new :: proc(title: cstring) -> ^ShortcutsSection ---
+
+    @(link_name = "adw_shortcuts_section_get_title")
+    shortcuts_section_get_title :: proc(self: ^ShortcutsSection) -> cstring ---
+
+    @(link_name = "adw_shortcuts_section_set_title")
+    shortcuts_section_set_title :: proc(self: ^ShortcutsSection, title: cstring) ---
+
+    @(link_name = "adw_shortcuts_section_add")
+    shortcuts_section_add :: proc(self: ^ShortcutsSection, item: ^ShortcutsItem) ---
+
+    @(link_name = "adw_shortcuts_dialog_get_type")
+    shortcuts_dialog_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_shortcuts_dialog_new")
+    shortcuts_dialog_new :: proc() -> ^Dialog ---
+
+    @(link_name = "adw_shortcuts_dialog_add")
+    shortcuts_dialog_add :: proc(self: ^ShortcutsDialog, section: ^ShortcutsSection) ---
+
+    @(link_name = "adw_sidebar_item_get_type")
+    sidebar_item_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_sidebar_item_new")
+    sidebar_item_new :: proc(title: cstring) -> ^SidebarItem ---
+
+    @(link_name = "adw_sidebar_item_get_title")
+    sidebar_item_get_title :: proc(self: ^SidebarItem) -> cstring ---
+
+    @(link_name = "adw_sidebar_item_set_title")
+    sidebar_item_set_title :: proc(self: ^SidebarItem, title: cstring) ---
+
+    @(link_name = "adw_sidebar_item_get_subtitle")
+    sidebar_item_get_subtitle :: proc(self: ^SidebarItem) -> cstring ---
+
+    @(link_name = "adw_sidebar_item_set_subtitle")
+    sidebar_item_set_subtitle :: proc(self: ^SidebarItem, subtitle: cstring) ---
+
+    @(link_name = "adw_sidebar_item_get_use_underline")
+    sidebar_item_get_use_underline :: proc(self: ^SidebarItem) -> glib.boolean ---
+
+    @(link_name = "adw_sidebar_item_set_use_underline")
+    sidebar_item_set_use_underline :: proc(self: ^SidebarItem, use_underline: glib.boolean) ---
+
+    @(link_name = "adw_sidebar_item_get_icon_name")
+    sidebar_item_get_icon_name :: proc(self: ^SidebarItem) -> cstring ---
+
+    @(link_name = "adw_sidebar_item_set_icon_name")
+    sidebar_item_set_icon_name :: proc(self: ^SidebarItem, icon_name: cstring) ---
+
+    @(link_name = "adw_sidebar_item_get_icon_paintable")
+    sidebar_item_get_icon_paintable :: proc(self: ^SidebarItem) -> ^gtk.Paintable ---
+
+    @(link_name = "adw_sidebar_item_set_icon_paintable")
+    sidebar_item_set_icon_paintable :: proc(self: ^SidebarItem, paintable: ^gtk.Paintable) ---
+
+    @(link_name = "adw_sidebar_item_get_tooltip")
+    sidebar_item_get_tooltip :: proc(self: ^SidebarItem) -> cstring ---
+
+    @(link_name = "adw_sidebar_item_set_tooltip")
+    sidebar_item_set_tooltip :: proc(self: ^SidebarItem, tooltip: cstring) ---
+
+    @(link_name = "adw_sidebar_item_get_suffix")
+    sidebar_item_get_suffix :: proc(self: ^SidebarItem) -> ^gtk.Widget ---
+
+    @(link_name = "adw_sidebar_item_set_suffix")
+    sidebar_item_set_suffix :: proc(self: ^SidebarItem, suffix: ^gtk.Widget) ---
+
+    @(link_name = "adw_sidebar_item_get_visible")
+    sidebar_item_get_visible :: proc(self: ^SidebarItem) -> glib.boolean ---
+
+    @(link_name = "adw_sidebar_item_set_visible")
+    sidebar_item_set_visible :: proc(self: ^SidebarItem, visible: glib.boolean) ---
+
+    @(link_name = "adw_sidebar_item_get_enabled")
+    sidebar_item_get_enabled :: proc(self: ^SidebarItem) -> glib.boolean ---
+
+    @(link_name = "adw_sidebar_item_set_enabled")
+    sidebar_item_set_enabled :: proc(self: ^SidebarItem, enabled: glib.boolean) ---
+
+    @(link_name = "adw_sidebar_item_get_drag_motion_activate")
+    sidebar_item_get_drag_motion_activate :: proc(self: ^SidebarItem) -> glib.boolean ---
+
+    @(link_name = "adw_sidebar_item_set_drag_motion_activate")
+    sidebar_item_set_drag_motion_activate :: proc(self: ^SidebarItem, drag_motion_activate: glib.boolean) ---
+
+    @(link_name = "adw_sidebar_item_get_section")
+    sidebar_item_get_section :: proc(self: ^SidebarItem) -> ^SidebarSection ---
+
+    @(link_name = "adw_sidebar_item_get_index")
+    sidebar_item_get_index :: proc(self: ^SidebarItem) -> glib.uint_ ---
+
+    @(link_name = "adw_sidebar_item_get_section_index")
+    sidebar_item_get_section_index :: proc(self: ^SidebarItem) -> glib.uint_ ---
+
+    @(link_name = "adw_sidebar_section_get_type")
+    sidebar_section_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_sidebar_section_new")
+    sidebar_section_new :: proc() -> ^SidebarSection ---
+
+    @(link_name = "adw_sidebar_section_get_title")
+    sidebar_section_get_title :: proc(self: ^SidebarSection) -> cstring ---
+
+    @(link_name = "adw_sidebar_section_set_title")
+    sidebar_section_set_title :: proc(self: ^SidebarSection, title: cstring) ---
+
+    @(link_name = "adw_sidebar_section_get_menu_model")
+    sidebar_section_get_menu_model :: proc(self: ^SidebarSection) -> ^gio.MenuModel ---
+
+    @(link_name = "adw_sidebar_section_set_menu_model")
+    sidebar_section_set_menu_model :: proc(self: ^SidebarSection, menu_model: ^gio.MenuModel) ---
+
+    @(link_name = "adw_sidebar_section_get_items")
+    sidebar_section_get_items :: proc(self: ^SidebarSection) -> ^gio.ListModel ---
+
+    @(link_name = "adw_sidebar_section_get_item")
+    sidebar_section_get_item :: proc(self: ^SidebarSection, index: glib.uint_) -> ^SidebarItem ---
+
+    @(link_name = "adw_sidebar_section_append")
+    sidebar_section_append :: proc(self: ^SidebarSection, item: ^SidebarItem) ---
+
+    @(link_name = "adw_sidebar_section_prepend")
+    sidebar_section_prepend :: proc(self: ^SidebarSection, item: ^SidebarItem) ---
+
+    @(link_name = "adw_sidebar_section_insert")
+    sidebar_section_insert :: proc(self: ^SidebarSection, item: ^SidebarItem, position: i32) ---
+
+    @(link_name = "adw_sidebar_section_remove")
+    sidebar_section_remove :: proc(self: ^SidebarSection, item: ^SidebarItem) ---
+
+    @(link_name = "adw_sidebar_section_remove_all")
+    sidebar_section_remove_all :: proc(self: ^SidebarSection) ---
+
+    @(link_name = "adw_sidebar_section_bind_model")
+    sidebar_section_bind_model :: proc(self: ^SidebarSection, model: ^gio.ListModel, create_item_func: SidebarSectionCreateItemFunc, user_data: glib.pointer, user_data_free_func: glib.DestroyNotify) ---
+
+    @(link_name = "adw_sidebar_section_get_sidebar")
+    sidebar_section_get_sidebar :: proc(self: ^SidebarSection) -> ^Sidebar ---
+
+    @(link_name = "adw_sidebar_get_type")
+    sidebar_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_sidebar_new")
+    sidebar_new :: proc() -> ^gtk.Widget ---
+
+    @(link_name = "adw_sidebar_get_mode")
+    sidebar_get_mode :: proc(self: ^Sidebar) -> SidebarMode ---
+
+    @(link_name = "adw_sidebar_set_mode")
+    sidebar_set_mode :: proc(self: ^Sidebar, mode: SidebarMode) ---
+
+    @(link_name = "adw_sidebar_get_selected")
+    sidebar_get_selected :: proc(self: ^Sidebar) -> glib.uint_ ---
+
+    @(link_name = "adw_sidebar_set_selected")
+    sidebar_set_selected :: proc(self: ^Sidebar, selected: glib.uint_) ---
+
+    @(link_name = "adw_sidebar_get_selected_item")
+    sidebar_get_selected_item :: proc(self: ^Sidebar) -> ^SidebarItem ---
+
+    @(link_name = "adw_sidebar_get_filter")
+    sidebar_get_filter :: proc(self: ^Sidebar) -> ^gtk.Filter ---
+
+    @(link_name = "adw_sidebar_set_filter")
+    sidebar_set_filter :: proc(self: ^Sidebar, filter: ^gtk.Filter) ---
+
+    @(link_name = "adw_sidebar_get_placeholder")
+    sidebar_get_placeholder :: proc(self: ^Sidebar) -> ^gtk.Widget ---
+
+    @(link_name = "adw_sidebar_set_placeholder")
+    sidebar_set_placeholder :: proc(self: ^Sidebar, placeholder: ^gtk.Widget) ---
+
+    @(link_name = "adw_sidebar_get_items")
+    sidebar_get_items :: proc(self: ^Sidebar) -> ^gtk.SelectionModel ---
+
+    @(link_name = "adw_sidebar_get_sections")
+    sidebar_get_sections :: proc(self: ^Sidebar) -> ^gio.ListModel ---
+
+    @(link_name = "adw_sidebar_get_item")
+    sidebar_get_item :: proc(self: ^Sidebar, index: glib.uint_) -> ^SidebarItem ---
+
+    @(link_name = "adw_sidebar_get_section")
+    sidebar_get_section :: proc(self: ^Sidebar, index: glib.uint_) -> ^SidebarSection ---
+
+    @(link_name = "adw_sidebar_append")
+    sidebar_append :: proc(self: ^Sidebar, section: ^SidebarSection) ---
+
+    @(link_name = "adw_sidebar_prepend")
+    sidebar_prepend :: proc(self: ^Sidebar, section: ^SidebarSection) ---
+
+    @(link_name = "adw_sidebar_insert")
+    sidebar_insert :: proc(self: ^Sidebar, section: ^SidebarSection, position: i32) ---
+
+    @(link_name = "adw_sidebar_remove")
+    sidebar_remove :: proc(self: ^Sidebar, section: ^SidebarSection) ---
+
+    @(link_name = "adw_sidebar_remove_all")
+    sidebar_remove_all :: proc(self: ^Sidebar) ---
+
+    @(link_name = "adw_sidebar_setup_drop_target")
+    sidebar_setup_drop_target :: proc(self: ^Sidebar, actions: gtk.DragAction, types: [^]gobj.Type, n_types: glib.size) ---
+
+    @(link_name = "adw_sidebar_get_drop_preload")
+    sidebar_get_drop_preload :: proc(self: ^Sidebar) -> glib.boolean ---
+
+    @(link_name = "adw_sidebar_set_drop_preload")
+    sidebar_set_drop_preload :: proc(self: ^Sidebar, preload: glib.boolean) ---
+
+    @(link_name = "adw_sidebar_get_menu_model")
+    sidebar_get_menu_model :: proc(self: ^Sidebar) -> ^gio.MenuModel ---
+
+    @(link_name = "adw_sidebar_set_menu_model")
+    sidebar_set_menu_model :: proc(self: ^Sidebar, menu_model: ^gio.MenuModel) ---
 
     @(link_name = "adw_spin_row_get_type")
     spin_row_get_type :: proc() -> gobj.Type ---
@@ -4799,6 +4521,12 @@ foreign adwaita_runic {
     @(link_name = "adw_toggle_set_tooltip")
     toggle_set_tooltip :: proc(self: ^Toggle, tooltip: cstring) ---
 
+    @(link_name = "adw_toggle_get_description")
+    toggle_get_description :: proc(self: ^Toggle) -> cstring ---
+
+    @(link_name = "adw_toggle_set_description")
+    toggle_set_description :: proc(self: ^Toggle, description: cstring) ---
+
     @(link_name = "adw_toggle_get_child")
     toggle_get_child :: proc(self: ^Toggle) -> ^gtk.Widget ---
 
@@ -4963,6 +4691,36 @@ foreign adwaita_runic {
 
     @(link_name = "adw_view_switcher_bar_set_reveal")
     view_switcher_bar_set_reveal :: proc(self: ^ViewSwitcherBar, reveal: glib.boolean) ---
+
+    @(link_name = "adw_view_switcher_sidebar_get_type")
+    view_switcher_sidebar_get_type :: proc() -> gobj.Type ---
+
+    @(link_name = "adw_view_switcher_sidebar_new")
+    view_switcher_sidebar_new :: proc() -> ^gtk.Widget ---
+
+    @(link_name = "adw_view_switcher_sidebar_get_stack")
+    view_switcher_sidebar_get_stack :: proc(self: ^ViewSwitcherSidebar) -> ^ViewStack ---
+
+    @(link_name = "adw_view_switcher_sidebar_set_stack")
+    view_switcher_sidebar_set_stack :: proc(self: ^ViewSwitcherSidebar, stack: ^ViewStack) ---
+
+    @(link_name = "adw_view_switcher_sidebar_get_mode")
+    view_switcher_sidebar_get_mode :: proc(self: ^ViewSwitcherSidebar) -> SidebarMode ---
+
+    @(link_name = "adw_view_switcher_sidebar_set_mode")
+    view_switcher_sidebar_set_mode :: proc(self: ^ViewSwitcherSidebar, mode: SidebarMode) ---
+
+    @(link_name = "adw_view_switcher_sidebar_get_filter")
+    view_switcher_sidebar_get_filter :: proc(self: ^ViewSwitcherSidebar) -> ^gtk.Filter ---
+
+    @(link_name = "adw_view_switcher_sidebar_set_filter")
+    view_switcher_sidebar_set_filter :: proc(self: ^ViewSwitcherSidebar, filter: ^gtk.Filter) ---
+
+    @(link_name = "adw_view_switcher_sidebar_get_placeholder")
+    view_switcher_sidebar_get_placeholder :: proc(self: ^ViewSwitcherSidebar) -> ^gtk.Widget ---
+
+    @(link_name = "adw_view_switcher_sidebar_set_placeholder")
+    view_switcher_sidebar_set_placeholder :: proc(self: ^ViewSwitcherSidebar, placeholder: ^gtk.Widget) ---
 
     @(link_name = "adw_view_switcher_title_get_type")
     view_switcher_title_get_type :: proc() -> gobj.Type ---
@@ -5198,3746 +4956,31 @@ foreign adwaita_runic {
     @(link_name = "adw_wrap_box_remove")
     wrap_box_remove :: proc(self: ^WrapBox, child: ^gtk.Widget) ---
 
-    @(link_name = "glib_autoptr_clear_AdwBreakpointCondition_wrapper")
-    autoptr_clear_AdwBreakpointCondition :: proc(_ptr: ^BreakpointCondition) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBreakpointCondition_wrapper")
-    autoptr_cleanup_AdwBreakpointCondition :: proc(_ptr: ^^BreakpointCondition) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBreakpointCondition_wrapper")
-    autoptr_destroy_AdwBreakpointCondition :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBreakpointCondition_wrapper")
-    listautoptr_cleanup_AdwBreakpointCondition :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBreakpointCondition_wrapper")
-    slistautoptr_cleanup_AdwBreakpointCondition :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBreakpointCondition_wrapper")
-    queueautoptr_cleanup_AdwBreakpointCondition :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBreakpoint_wrapper")
-    autoptr_clear_AdwBreakpoint :: proc(_ptr: ^Breakpoint) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBreakpoint_wrapper")
-    autoptr_cleanup_AdwBreakpoint :: proc(_ptr: ^^Breakpoint) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBreakpoint_wrapper")
-    autoptr_destroy_AdwBreakpoint :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBreakpoint_wrapper")
-    listautoptr_cleanup_AdwBreakpoint :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBreakpoint_wrapper")
-    slistautoptr_cleanup_AdwBreakpoint :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBreakpoint_wrapper")
-    queueautoptr_cleanup_AdwBreakpoint :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBreakpointClass_wrapper")
-    autoptr_clear_AdwBreakpointClass :: proc(_ptr: ^BreakpointClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBreakpointClass_wrapper")
-    autoptr_cleanup_AdwBreakpointClass :: proc(_ptr: ^^BreakpointClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBreakpointClass_wrapper")
-    autoptr_destroy_AdwBreakpointClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBreakpointClass_wrapper")
-    listautoptr_cleanup_AdwBreakpointClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBreakpointClass_wrapper")
-    slistautoptr_cleanup_AdwBreakpointClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBreakpointClass_wrapper")
-    queueautoptr_cleanup_AdwBreakpointClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BREAKPOINT_wrapper")
-    BREAKPOINT :: proc(ptr: glib.pointer) -> ^Breakpoint ---
-
-    @(link_name = "ADW_IS_BREAKPOINT_wrapper")
-    IS_BREAKPOINT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwDialog_wrapper")
-    autoptr_clear_AdwDialog :: proc(_ptr: ^Dialog) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwDialog_wrapper")
-    autoptr_cleanup_AdwDialog :: proc(_ptr: ^^Dialog) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwDialog_wrapper")
-    autoptr_destroy_AdwDialog :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwDialog_wrapper")
-    listautoptr_cleanup_AdwDialog :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwDialog_wrapper")
-    slistautoptr_cleanup_AdwDialog :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwDialog_wrapper")
-    queueautoptr_cleanup_AdwDialog :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwDialogClass_wrapper")
-    autoptr_clear_AdwDialogClass :: proc(_ptr: ^DialogClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwDialogClass_wrapper")
-    autoptr_cleanup_AdwDialogClass :: proc(_ptr: ^^DialogClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwDialogClass_wrapper")
-    autoptr_destroy_AdwDialogClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwDialogClass_wrapper")
-    listautoptr_cleanup_AdwDialogClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwDialogClass_wrapper")
-    slistautoptr_cleanup_AdwDialogClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwDialogClass_wrapper")
-    queueautoptr_cleanup_AdwDialogClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_DIALOG_wrapper")
-    DIALOG :: proc(ptr: glib.pointer) -> ^Dialog ---
-
-    @(link_name = "ADW_DIALOG_CLASS_wrapper")
-    DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^DialogClass ---
-
-    @(link_name = "ADW_IS_DIALOG_wrapper")
-    IS_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_DIALOG_CLASS_wrapper")
-    IS_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_DIALOG_GET_CLASS_wrapper")
-    DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^DialogClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAboutDialog_wrapper")
-    autoptr_clear_AdwAboutDialog :: proc(_ptr: ^AboutDialog) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAboutDialog_wrapper")
-    autoptr_cleanup_AdwAboutDialog :: proc(_ptr: ^^AboutDialog) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAboutDialog_wrapper")
-    autoptr_destroy_AdwAboutDialog :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAboutDialog_wrapper")
-    listautoptr_cleanup_AdwAboutDialog :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAboutDialog_wrapper")
-    slistautoptr_cleanup_AdwAboutDialog :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAboutDialog_wrapper")
-    queueautoptr_cleanup_AdwAboutDialog :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAboutDialogClass_wrapper")
-    autoptr_clear_AdwAboutDialogClass :: proc(_ptr: ^AboutDialogClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAboutDialogClass_wrapper")
-    autoptr_cleanup_AdwAboutDialogClass :: proc(_ptr: ^^AboutDialogClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAboutDialogClass_wrapper")
-    autoptr_destroy_AdwAboutDialogClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAboutDialogClass_wrapper")
-    listautoptr_cleanup_AdwAboutDialogClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAboutDialogClass_wrapper")
-    slistautoptr_cleanup_AdwAboutDialogClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAboutDialogClass_wrapper")
-    queueautoptr_cleanup_AdwAboutDialogClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ABOUT_DIALOG_wrapper")
-    ABOUT_DIALOG :: proc(ptr: glib.pointer) -> ^AboutDialog ---
-
-    @(link_name = "ADW_IS_ABOUT_DIALOG_wrapper")
-    IS_ABOUT_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwWindow_wrapper")
-    autoptr_clear_AdwWindow :: proc(_ptr: ^Window) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWindow_wrapper")
-    autoptr_cleanup_AdwWindow :: proc(_ptr: ^^Window) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWindow_wrapper")
-    autoptr_destroy_AdwWindow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWindow_wrapper")
-    listautoptr_cleanup_AdwWindow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWindow_wrapper")
-    slistautoptr_cleanup_AdwWindow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWindow_wrapper")
-    queueautoptr_cleanup_AdwWindow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwWindowClass_wrapper")
-    autoptr_clear_AdwWindowClass :: proc(_ptr: ^WindowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWindowClass_wrapper")
-    autoptr_cleanup_AdwWindowClass :: proc(_ptr: ^^WindowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWindowClass_wrapper")
-    autoptr_destroy_AdwWindowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWindowClass_wrapper")
-    listautoptr_cleanup_AdwWindowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWindowClass_wrapper")
-    slistautoptr_cleanup_AdwWindowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWindowClass_wrapper")
-    queueautoptr_cleanup_AdwWindowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_WINDOW_wrapper")
-    WINDOW :: proc(ptr: glib.pointer) -> ^Window ---
-
-    @(link_name = "ADW_WINDOW_CLASS_wrapper")
-    WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^WindowClass ---
-
-    @(link_name = "ADW_IS_WINDOW_wrapper")
-    IS_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_WINDOW_CLASS_wrapper")
-    IS_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_WINDOW_GET_CLASS_wrapper")
-    WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^WindowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAboutWindow_wrapper")
-    autoptr_clear_AdwAboutWindow :: proc(_ptr: ^AboutWindow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAboutWindow_wrapper")
-    autoptr_cleanup_AdwAboutWindow :: proc(_ptr: ^^AboutWindow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAboutWindow_wrapper")
-    autoptr_destroy_AdwAboutWindow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAboutWindow_wrapper")
-    listautoptr_cleanup_AdwAboutWindow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAboutWindow_wrapper")
-    slistautoptr_cleanup_AdwAboutWindow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAboutWindow_wrapper")
-    queueautoptr_cleanup_AdwAboutWindow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAboutWindowClass_wrapper")
-    autoptr_clear_AdwAboutWindowClass :: proc(_ptr: ^AboutWindowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAboutWindowClass_wrapper")
-    autoptr_cleanup_AdwAboutWindowClass :: proc(_ptr: ^^AboutWindowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAboutWindowClass_wrapper")
-    autoptr_destroy_AdwAboutWindowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAboutWindowClass_wrapper")
-    listautoptr_cleanup_AdwAboutWindowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAboutWindowClass_wrapper")
-    slistautoptr_cleanup_AdwAboutWindowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAboutWindowClass_wrapper")
-    queueautoptr_cleanup_AdwAboutWindowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ABOUT_WINDOW_wrapper")
-    ABOUT_WINDOW :: proc(ptr: glib.pointer) -> ^AboutWindow ---
-
-    @(link_name = "ADW_IS_ABOUT_WINDOW_wrapper")
-    IS_ABOUT_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesRow_wrapper")
-    autoptr_clear_AdwPreferencesRow :: proc(_ptr: ^PreferencesRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesRow_wrapper")
-    autoptr_cleanup_AdwPreferencesRow :: proc(_ptr: ^^PreferencesRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesRow_wrapper")
-    autoptr_destroy_AdwPreferencesRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesRow_wrapper")
-    listautoptr_cleanup_AdwPreferencesRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesRow_wrapper")
-    slistautoptr_cleanup_AdwPreferencesRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesRow_wrapper")
-    queueautoptr_cleanup_AdwPreferencesRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesRowClass_wrapper")
-    autoptr_clear_AdwPreferencesRowClass :: proc(_ptr: ^PreferencesRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesRowClass_wrapper")
-    autoptr_cleanup_AdwPreferencesRowClass :: proc(_ptr: ^^PreferencesRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesRowClass_wrapper")
-    autoptr_destroy_AdwPreferencesRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesRowClass_wrapper")
-    listautoptr_cleanup_AdwPreferencesRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesRowClass_wrapper")
-    slistautoptr_cleanup_AdwPreferencesRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesRowClass_wrapper")
-    queueautoptr_cleanup_AdwPreferencesRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_wrapper")
-    PREFERENCES_ROW :: proc(ptr: glib.pointer) -> ^PreferencesRow ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_CLASS_wrapper")
-    PREFERENCES_ROW_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesRowClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_ROW_wrapper")
-    IS_PREFERENCES_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_ROW_CLASS_wrapper")
-    IS_PREFERENCES_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_ROW_GET_CLASS_wrapper")
-    PREFERENCES_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesRowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwActionRow_wrapper")
-    autoptr_clear_AdwActionRow :: proc(_ptr: ^ActionRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwActionRow_wrapper")
-    autoptr_cleanup_AdwActionRow :: proc(_ptr: ^^ActionRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwActionRow_wrapper")
-    autoptr_destroy_AdwActionRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwActionRow_wrapper")
-    listautoptr_cleanup_AdwActionRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwActionRow_wrapper")
-    slistautoptr_cleanup_AdwActionRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwActionRow_wrapper")
-    queueautoptr_cleanup_AdwActionRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwActionRowClass_wrapper")
-    autoptr_clear_AdwActionRowClass :: proc(_ptr: ^ActionRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwActionRowClass_wrapper")
-    autoptr_cleanup_AdwActionRowClass :: proc(_ptr: ^^ActionRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwActionRowClass_wrapper")
-    autoptr_destroy_AdwActionRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwActionRowClass_wrapper")
-    listautoptr_cleanup_AdwActionRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwActionRowClass_wrapper")
-    slistautoptr_cleanup_AdwActionRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwActionRowClass_wrapper")
-    queueautoptr_cleanup_AdwActionRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ACTION_ROW_wrapper")
-    ACTION_ROW :: proc(ptr: glib.pointer) -> ^ActionRow ---
-
-    @(link_name = "ADW_ACTION_ROW_CLASS_wrapper")
-    ACTION_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ActionRowClass ---
-
-    @(link_name = "ADW_IS_ACTION_ROW_wrapper")
-    IS_ACTION_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ACTION_ROW_CLASS_wrapper")
-    IS_ACTION_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ACTION_ROW_GET_CLASS_wrapper")
-    ACTION_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ActionRowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAlertDialog_wrapper")
-    autoptr_clear_AdwAlertDialog :: proc(_ptr: ^AlertDialog) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAlertDialog_wrapper")
-    autoptr_cleanup_AdwAlertDialog :: proc(_ptr: ^^AlertDialog) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAlertDialog_wrapper")
-    autoptr_destroy_AdwAlertDialog :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAlertDialog_wrapper")
-    listautoptr_cleanup_AdwAlertDialog :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAlertDialog_wrapper")
-    slistautoptr_cleanup_AdwAlertDialog :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAlertDialog_wrapper")
-    queueautoptr_cleanup_AdwAlertDialog :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAlertDialogClass_wrapper")
-    autoptr_clear_AdwAlertDialogClass :: proc(_ptr: ^AlertDialogClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAlertDialogClass_wrapper")
-    autoptr_cleanup_AdwAlertDialogClass :: proc(_ptr: ^^AlertDialogClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAlertDialogClass_wrapper")
-    autoptr_destroy_AdwAlertDialogClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAlertDialogClass_wrapper")
-    listautoptr_cleanup_AdwAlertDialogClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAlertDialogClass_wrapper")
-    slistautoptr_cleanup_AdwAlertDialogClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAlertDialogClass_wrapper")
-    queueautoptr_cleanup_AdwAlertDialogClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ALERT_DIALOG_wrapper")
-    ALERT_DIALOG :: proc(ptr: glib.pointer) -> ^AlertDialog ---
-
-    @(link_name = "ADW_ALERT_DIALOG_CLASS_wrapper")
-    ALERT_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^AlertDialogClass ---
-
-    @(link_name = "ADW_IS_ALERT_DIALOG_wrapper")
-    IS_ALERT_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ALERT_DIALOG_CLASS_wrapper")
-    IS_ALERT_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ALERT_DIALOG_GET_CLASS_wrapper")
-    ALERT_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^AlertDialogClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAnimationTarget_wrapper")
-    autoptr_clear_AdwAnimationTarget :: proc(_ptr: ^AnimationTarget) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAnimationTarget_wrapper")
-    autoptr_cleanup_AdwAnimationTarget :: proc(_ptr: ^^AnimationTarget) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAnimationTarget_wrapper")
-    autoptr_destroy_AdwAnimationTarget :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAnimationTarget_wrapper")
-    listautoptr_cleanup_AdwAnimationTarget :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAnimationTarget_wrapper")
-    slistautoptr_cleanup_AdwAnimationTarget :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAnimationTarget_wrapper")
-    queueautoptr_cleanup_AdwAnimationTarget :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAnimationTargetClass_wrapper")
-    autoptr_clear_AdwAnimationTargetClass :: proc(_ptr: ^AnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAnimationTargetClass_wrapper")
-    autoptr_cleanup_AdwAnimationTargetClass :: proc(_ptr: ^^AnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAnimationTargetClass_wrapper")
-    autoptr_destroy_AdwAnimationTargetClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAnimationTargetClass_wrapper")
-    listautoptr_cleanup_AdwAnimationTargetClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAnimationTargetClass_wrapper")
-    slistautoptr_cleanup_AdwAnimationTargetClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAnimationTargetClass_wrapper")
-    queueautoptr_cleanup_AdwAnimationTargetClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_wrapper")
-    ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^AnimationTarget ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_CLASS_wrapper")
-    ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationTargetClass ---
-
-    @(link_name = "ADW_IS_ANIMATION_TARGET_wrapper")
-    IS_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ANIMATION_TARGET_CLASS_wrapper")
-    IS_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ANIMATION_TARGET_GET_CLASS_wrapper")
-    ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationTargetClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwCallbackAnimationTarget_wrapper")
-    autoptr_clear_AdwCallbackAnimationTarget :: proc(_ptr: ^CallbackAnimationTarget) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCallbackAnimationTarget_wrapper")
-    autoptr_cleanup_AdwCallbackAnimationTarget :: proc(_ptr: ^^CallbackAnimationTarget) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCallbackAnimationTarget_wrapper")
-    autoptr_destroy_AdwCallbackAnimationTarget :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCallbackAnimationTarget_wrapper")
-    listautoptr_cleanup_AdwCallbackAnimationTarget :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCallbackAnimationTarget_wrapper")
-    slistautoptr_cleanup_AdwCallbackAnimationTarget :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCallbackAnimationTarget_wrapper")
-    queueautoptr_cleanup_AdwCallbackAnimationTarget :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwCallbackAnimationTargetClass_wrapper")
-    autoptr_clear_AdwCallbackAnimationTargetClass :: proc(_ptr: ^CallbackAnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCallbackAnimationTargetClass_wrapper")
-    autoptr_cleanup_AdwCallbackAnimationTargetClass :: proc(_ptr: ^^CallbackAnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCallbackAnimationTargetClass_wrapper")
-    autoptr_destroy_AdwCallbackAnimationTargetClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCallbackAnimationTargetClass_wrapper")
-    listautoptr_cleanup_AdwCallbackAnimationTargetClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCallbackAnimationTargetClass_wrapper")
-    slistautoptr_cleanup_AdwCallbackAnimationTargetClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCallbackAnimationTargetClass_wrapper")
-    queueautoptr_cleanup_AdwCallbackAnimationTargetClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_wrapper")
-    CALLBACK_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^CallbackAnimationTarget ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_CLASS_wrapper")
-    CALLBACK_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^CallbackAnimationTargetClass ---
-
-    @(link_name = "ADW_IS_CALLBACK_ANIMATION_TARGET_wrapper")
-    IS_CALLBACK_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_CALLBACK_ANIMATION_TARGET_CLASS_wrapper")
-    IS_CALLBACK_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_CALLBACK_ANIMATION_TARGET_GET_CLASS_wrapper")
-    CALLBACK_ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^CallbackAnimationTargetClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwPropertyAnimationTarget_wrapper")
-    autoptr_clear_AdwPropertyAnimationTarget :: proc(_ptr: ^PropertyAnimationTarget) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPropertyAnimationTarget_wrapper")
-    autoptr_cleanup_AdwPropertyAnimationTarget :: proc(_ptr: ^^PropertyAnimationTarget) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPropertyAnimationTarget_wrapper")
-    autoptr_destroy_AdwPropertyAnimationTarget :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPropertyAnimationTarget_wrapper")
-    listautoptr_cleanup_AdwPropertyAnimationTarget :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPropertyAnimationTarget_wrapper")
-    slistautoptr_cleanup_AdwPropertyAnimationTarget :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPropertyAnimationTarget_wrapper")
-    queueautoptr_cleanup_AdwPropertyAnimationTarget :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPropertyAnimationTargetClass_wrapper")
-    autoptr_clear_AdwPropertyAnimationTargetClass :: proc(_ptr: ^PropertyAnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPropertyAnimationTargetClass_wrapper")
-    autoptr_cleanup_AdwPropertyAnimationTargetClass :: proc(_ptr: ^^PropertyAnimationTargetClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPropertyAnimationTargetClass_wrapper")
-    autoptr_destroy_AdwPropertyAnimationTargetClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPropertyAnimationTargetClass_wrapper")
-    listautoptr_cleanup_AdwPropertyAnimationTargetClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPropertyAnimationTargetClass_wrapper")
-    slistautoptr_cleanup_AdwPropertyAnimationTargetClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPropertyAnimationTargetClass_wrapper")
-    queueautoptr_cleanup_AdwPropertyAnimationTargetClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_wrapper")
-    PROPERTY_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> ^PropertyAnimationTarget ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_CLASS_wrapper")
-    PROPERTY_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> ^PropertyAnimationTargetClass ---
-
-    @(link_name = "ADW_IS_PROPERTY_ANIMATION_TARGET_wrapper")
-    IS_PROPERTY_ANIMATION_TARGET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PROPERTY_ANIMATION_TARGET_CLASS_wrapper")
-    IS_PROPERTY_ANIMATION_TARGET_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PROPERTY_ANIMATION_TARGET_GET_CLASS_wrapper")
-    PROPERTY_ANIMATION_TARGET_GET_CLASS :: proc(ptr: glib.pointer) -> ^PropertyAnimationTargetClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAnimation_wrapper")
-    autoptr_clear_AdwAnimation :: proc(_ptr: ^Animation) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAnimation_wrapper")
-    autoptr_cleanup_AdwAnimation :: proc(_ptr: ^^Animation) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAnimation_wrapper")
-    autoptr_destroy_AdwAnimation :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAnimation_wrapper")
-    listautoptr_cleanup_AdwAnimation :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAnimation_wrapper")
-    slistautoptr_cleanup_AdwAnimation :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAnimation_wrapper")
-    queueautoptr_cleanup_AdwAnimation :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAnimationClass_wrapper")
-    autoptr_clear_AdwAnimationClass :: proc(_ptr: ^AnimationClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAnimationClass_wrapper")
-    autoptr_cleanup_AdwAnimationClass :: proc(_ptr: ^^AnimationClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAnimationClass_wrapper")
-    autoptr_destroy_AdwAnimationClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAnimationClass_wrapper")
-    listautoptr_cleanup_AdwAnimationClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAnimationClass_wrapper")
-    slistautoptr_cleanup_AdwAnimationClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAnimationClass_wrapper")
-    queueautoptr_cleanup_AdwAnimationClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ANIMATION_wrapper")
-    ANIMATION :: proc(ptr: glib.pointer) -> ^Animation ---
-
-    @(link_name = "ADW_ANIMATION_CLASS_wrapper")
-    ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^AnimationClass ---
-
-    @(link_name = "ADW_IS_ANIMATION_wrapper")
-    IS_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ANIMATION_CLASS_wrapper")
-    IS_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ANIMATION_GET_CLASS_wrapper")
-    ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^AnimationClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwStyleManager_wrapper")
-    autoptr_clear_AdwStyleManager :: proc(_ptr: ^StyleManager) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwStyleManager_wrapper")
-    autoptr_cleanup_AdwStyleManager :: proc(_ptr: ^^StyleManager) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwStyleManager_wrapper")
-    autoptr_destroy_AdwStyleManager :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwStyleManager_wrapper")
-    listautoptr_cleanup_AdwStyleManager :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwStyleManager_wrapper")
-    slistautoptr_cleanup_AdwStyleManager :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwStyleManager_wrapper")
-    queueautoptr_cleanup_AdwStyleManager :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwStyleManagerClass_wrapper")
-    autoptr_clear_AdwStyleManagerClass :: proc(_ptr: ^StyleManagerClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwStyleManagerClass_wrapper")
-    autoptr_cleanup_AdwStyleManagerClass :: proc(_ptr: ^^StyleManagerClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwStyleManagerClass_wrapper")
-    autoptr_destroy_AdwStyleManagerClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwStyleManagerClass_wrapper")
-    listautoptr_cleanup_AdwStyleManagerClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwStyleManagerClass_wrapper")
-    slistautoptr_cleanup_AdwStyleManagerClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwStyleManagerClass_wrapper")
-    queueautoptr_cleanup_AdwStyleManagerClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_STYLE_MANAGER_wrapper")
-    STYLE_MANAGER :: proc(ptr: glib.pointer) -> ^StyleManager ---
-
-    @(link_name = "ADW_IS_STYLE_MANAGER_wrapper")
-    IS_STYLE_MANAGER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwApplication_wrapper")
-    autoptr_clear_AdwApplication :: proc(_ptr: ^Application) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwApplication_wrapper")
-    autoptr_cleanup_AdwApplication :: proc(_ptr: ^^Application) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwApplication_wrapper")
-    autoptr_destroy_AdwApplication :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwApplication_wrapper")
-    listautoptr_cleanup_AdwApplication :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwApplication_wrapper")
-    slistautoptr_cleanup_AdwApplication :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwApplication_wrapper")
-    queueautoptr_cleanup_AdwApplication :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwApplicationClass_wrapper")
-    autoptr_clear_AdwApplicationClass :: proc(_ptr: ^ApplicationClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwApplicationClass_wrapper")
-    autoptr_cleanup_AdwApplicationClass :: proc(_ptr: ^^ApplicationClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwApplicationClass_wrapper")
-    autoptr_destroy_AdwApplicationClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwApplicationClass_wrapper")
-    listautoptr_cleanup_AdwApplicationClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwApplicationClass_wrapper")
-    slistautoptr_cleanup_AdwApplicationClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwApplicationClass_wrapper")
-    queueautoptr_cleanup_AdwApplicationClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_APPLICATION_wrapper")
-    APPLICATION :: proc(ptr: glib.pointer) -> ^Application ---
-
-    @(link_name = "ADW_APPLICATION_CLASS_wrapper")
-    APPLICATION_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationClass ---
-
-    @(link_name = "ADW_IS_APPLICATION_wrapper")
-    IS_APPLICATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_APPLICATION_CLASS_wrapper")
-    IS_APPLICATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_APPLICATION_GET_CLASS_wrapper")
-    APPLICATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwApplicationWindow_wrapper")
-    autoptr_clear_AdwApplicationWindow :: proc(_ptr: ^ApplicationWindow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwApplicationWindow_wrapper")
-    autoptr_cleanup_AdwApplicationWindow :: proc(_ptr: ^^ApplicationWindow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwApplicationWindow_wrapper")
-    autoptr_destroy_AdwApplicationWindow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwApplicationWindow_wrapper")
-    listautoptr_cleanup_AdwApplicationWindow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwApplicationWindow_wrapper")
-    slistautoptr_cleanup_AdwApplicationWindow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwApplicationWindow_wrapper")
-    queueautoptr_cleanup_AdwApplicationWindow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwApplicationWindowClass_wrapper")
-    autoptr_clear_AdwApplicationWindowClass :: proc(_ptr: ^ApplicationWindowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwApplicationWindowClass_wrapper")
-    autoptr_cleanup_AdwApplicationWindowClass :: proc(_ptr: ^^ApplicationWindowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwApplicationWindowClass_wrapper")
-    autoptr_destroy_AdwApplicationWindowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwApplicationWindowClass_wrapper")
-    listautoptr_cleanup_AdwApplicationWindowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwApplicationWindowClass_wrapper")
-    slistautoptr_cleanup_AdwApplicationWindowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwApplicationWindowClass_wrapper")
-    queueautoptr_cleanup_AdwApplicationWindowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_wrapper")
-    APPLICATION_WINDOW :: proc(ptr: glib.pointer) -> ^ApplicationWindow ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_CLASS_wrapper")
-    APPLICATION_WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationWindowClass ---
-
-    @(link_name = "ADW_IS_APPLICATION_WINDOW_wrapper")
-    IS_APPLICATION_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_APPLICATION_WINDOW_CLASS_wrapper")
-    IS_APPLICATION_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_APPLICATION_WINDOW_GET_CLASS_wrapper")
-    APPLICATION_WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ApplicationWindowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwAvatar_wrapper")
-    autoptr_clear_AdwAvatar :: proc(_ptr: ^Avatar) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAvatar_wrapper")
-    autoptr_cleanup_AdwAvatar :: proc(_ptr: ^^Avatar) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAvatar_wrapper")
-    autoptr_destroy_AdwAvatar :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAvatar_wrapper")
-    listautoptr_cleanup_AdwAvatar :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAvatar_wrapper")
-    slistautoptr_cleanup_AdwAvatar :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAvatar_wrapper")
-    queueautoptr_cleanup_AdwAvatar :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwAvatarClass_wrapper")
-    autoptr_clear_AdwAvatarClass :: proc(_ptr: ^AvatarClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwAvatarClass_wrapper")
-    autoptr_cleanup_AdwAvatarClass :: proc(_ptr: ^^AvatarClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwAvatarClass_wrapper")
-    autoptr_destroy_AdwAvatarClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwAvatarClass_wrapper")
-    listautoptr_cleanup_AdwAvatarClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwAvatarClass_wrapper")
-    slistautoptr_cleanup_AdwAvatarClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwAvatarClass_wrapper")
-    queueautoptr_cleanup_AdwAvatarClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_AVATAR_wrapper")
-    AVATAR :: proc(ptr: glib.pointer) -> ^Avatar ---
-
-    @(link_name = "ADW_IS_AVATAR_wrapper")
-    IS_AVATAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwBanner_wrapper")
-    autoptr_clear_AdwBanner :: proc(_ptr: ^Banner) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBanner_wrapper")
-    autoptr_cleanup_AdwBanner :: proc(_ptr: ^^Banner) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBanner_wrapper")
-    autoptr_destroy_AdwBanner :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBanner_wrapper")
-    listautoptr_cleanup_AdwBanner :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBanner_wrapper")
-    slistautoptr_cleanup_AdwBanner :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBanner_wrapper")
-    queueautoptr_cleanup_AdwBanner :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBannerClass_wrapper")
-    autoptr_clear_AdwBannerClass :: proc(_ptr: ^BannerClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBannerClass_wrapper")
-    autoptr_cleanup_AdwBannerClass :: proc(_ptr: ^^BannerClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBannerClass_wrapper")
-    autoptr_destroy_AdwBannerClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBannerClass_wrapper")
-    listautoptr_cleanup_AdwBannerClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBannerClass_wrapper")
-    slistautoptr_cleanup_AdwBannerClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBannerClass_wrapper")
-    queueautoptr_cleanup_AdwBannerClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BANNER_wrapper")
-    BANNER :: proc(ptr: glib.pointer) -> ^Banner ---
-
-    @(link_name = "ADW_IS_BANNER_wrapper")
-    IS_BANNER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwBin_wrapper")
-    autoptr_clear_AdwBin :: proc(_ptr: ^Bin) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBin_wrapper")
-    autoptr_cleanup_AdwBin :: proc(_ptr: ^^Bin) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBin_wrapper")
-    autoptr_destroy_AdwBin :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBin_wrapper")
-    listautoptr_cleanup_AdwBin :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBin_wrapper")
-    slistautoptr_cleanup_AdwBin :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBin_wrapper")
-    queueautoptr_cleanup_AdwBin :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBinClass_wrapper")
-    autoptr_clear_AdwBinClass :: proc(_ptr: ^BinClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBinClass_wrapper")
-    autoptr_cleanup_AdwBinClass :: proc(_ptr: ^^BinClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBinClass_wrapper")
-    autoptr_destroy_AdwBinClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBinClass_wrapper")
-    listautoptr_cleanup_AdwBinClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBinClass_wrapper")
-    slistautoptr_cleanup_AdwBinClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBinClass_wrapper")
-    queueautoptr_cleanup_AdwBinClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BIN_wrapper")
-    BIN :: proc(ptr: glib.pointer) -> ^Bin ---
-
-    @(link_name = "ADW_BIN_CLASS_wrapper")
-    BIN_CLASS :: proc(ptr: glib.pointer) -> ^BinClass ---
-
-    @(link_name = "ADW_IS_BIN_wrapper")
-    IS_BIN :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_BIN_CLASS_wrapper")
-    IS_BIN_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BIN_GET_CLASS_wrapper")
-    BIN_GET_CLASS :: proc(ptr: glib.pointer) -> ^BinClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwBottomSheet_wrapper")
-    autoptr_clear_AdwBottomSheet :: proc(_ptr: ^BottomSheet) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBottomSheet_wrapper")
-    autoptr_cleanup_AdwBottomSheet :: proc(_ptr: ^^BottomSheet) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBottomSheet_wrapper")
-    autoptr_destroy_AdwBottomSheet :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBottomSheet_wrapper")
-    listautoptr_cleanup_AdwBottomSheet :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBottomSheet_wrapper")
-    slistautoptr_cleanup_AdwBottomSheet :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBottomSheet_wrapper")
-    queueautoptr_cleanup_AdwBottomSheet :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBottomSheetClass_wrapper")
-    autoptr_clear_AdwBottomSheetClass :: proc(_ptr: ^BottomSheetClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBottomSheetClass_wrapper")
-    autoptr_cleanup_AdwBottomSheetClass :: proc(_ptr: ^^BottomSheetClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBottomSheetClass_wrapper")
-    autoptr_destroy_AdwBottomSheetClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBottomSheetClass_wrapper")
-    listautoptr_cleanup_AdwBottomSheetClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBottomSheetClass_wrapper")
-    slistautoptr_cleanup_AdwBottomSheetClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBottomSheetClass_wrapper")
-    queueautoptr_cleanup_AdwBottomSheetClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BOTTOM_SHEET_wrapper")
-    BOTTOM_SHEET :: proc(ptr: glib.pointer) -> ^BottomSheet ---
-
-    @(link_name = "ADW_IS_BOTTOM_SHEET_wrapper")
-    IS_BOTTOM_SHEET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwBreakpointBin_wrapper")
-    autoptr_clear_AdwBreakpointBin :: proc(_ptr: ^BreakpointBin) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBreakpointBin_wrapper")
-    autoptr_cleanup_AdwBreakpointBin :: proc(_ptr: ^^BreakpointBin) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBreakpointBin_wrapper")
-    autoptr_destroy_AdwBreakpointBin :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBreakpointBin_wrapper")
-    listautoptr_cleanup_AdwBreakpointBin :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBreakpointBin_wrapper")
-    slistautoptr_cleanup_AdwBreakpointBin :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBreakpointBin_wrapper")
-    queueautoptr_cleanup_AdwBreakpointBin :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwBreakpointBinClass_wrapper")
-    autoptr_clear_AdwBreakpointBinClass :: proc(_ptr: ^BreakpointBinClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwBreakpointBinClass_wrapper")
-    autoptr_cleanup_AdwBreakpointBinClass :: proc(_ptr: ^^BreakpointBinClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwBreakpointBinClass_wrapper")
-    autoptr_destroy_AdwBreakpointBinClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwBreakpointBinClass_wrapper")
-    listautoptr_cleanup_AdwBreakpointBinClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwBreakpointBinClass_wrapper")
-    slistautoptr_cleanup_AdwBreakpointBinClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwBreakpointBinClass_wrapper")
-    queueautoptr_cleanup_AdwBreakpointBinClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_wrapper")
-    BREAKPOINT_BIN :: proc(ptr: glib.pointer) -> ^BreakpointBin ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_CLASS_wrapper")
-    BREAKPOINT_BIN_CLASS :: proc(ptr: glib.pointer) -> ^BreakpointBinClass ---
-
-    @(link_name = "ADW_IS_BREAKPOINT_BIN_wrapper")
-    IS_BREAKPOINT_BIN :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_BREAKPOINT_BIN_CLASS_wrapper")
-    IS_BREAKPOINT_BIN_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_BREAKPOINT_BIN_GET_CLASS_wrapper")
-    BREAKPOINT_BIN_GET_CLASS :: proc(ptr: glib.pointer) -> ^BreakpointBinClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwButtonContent_wrapper")
-    autoptr_clear_AdwButtonContent :: proc(_ptr: ^ButtonContent) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwButtonContent_wrapper")
-    autoptr_cleanup_AdwButtonContent :: proc(_ptr: ^^ButtonContent) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwButtonContent_wrapper")
-    autoptr_destroy_AdwButtonContent :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwButtonContent_wrapper")
-    listautoptr_cleanup_AdwButtonContent :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwButtonContent_wrapper")
-    slistautoptr_cleanup_AdwButtonContent :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwButtonContent_wrapper")
-    queueautoptr_cleanup_AdwButtonContent :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwButtonContentClass_wrapper")
-    autoptr_clear_AdwButtonContentClass :: proc(_ptr: ^ButtonContentClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwButtonContentClass_wrapper")
-    autoptr_cleanup_AdwButtonContentClass :: proc(_ptr: ^^ButtonContentClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwButtonContentClass_wrapper")
-    autoptr_destroy_AdwButtonContentClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwButtonContentClass_wrapper")
-    listautoptr_cleanup_AdwButtonContentClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwButtonContentClass_wrapper")
-    slistautoptr_cleanup_AdwButtonContentClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwButtonContentClass_wrapper")
-    queueautoptr_cleanup_AdwButtonContentClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BUTTON_CONTENT_wrapper")
-    BUTTON_CONTENT :: proc(ptr: glib.pointer) -> ^ButtonContent ---
-
-    @(link_name = "ADW_IS_BUTTON_CONTENT_wrapper")
-    IS_BUTTON_CONTENT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwButtonRow_wrapper")
-    autoptr_clear_AdwButtonRow :: proc(_ptr: ^ButtonRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwButtonRow_wrapper")
-    autoptr_cleanup_AdwButtonRow :: proc(_ptr: ^^ButtonRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwButtonRow_wrapper")
-    autoptr_destroy_AdwButtonRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwButtonRow_wrapper")
-    listautoptr_cleanup_AdwButtonRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwButtonRow_wrapper")
-    slistautoptr_cleanup_AdwButtonRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwButtonRow_wrapper")
-    queueautoptr_cleanup_AdwButtonRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwButtonRowClass_wrapper")
-    autoptr_clear_AdwButtonRowClass :: proc(_ptr: ^ButtonRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwButtonRowClass_wrapper")
-    autoptr_cleanup_AdwButtonRowClass :: proc(_ptr: ^^ButtonRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwButtonRowClass_wrapper")
-    autoptr_destroy_AdwButtonRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwButtonRowClass_wrapper")
-    listautoptr_cleanup_AdwButtonRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwButtonRowClass_wrapper")
-    slistautoptr_cleanup_AdwButtonRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwButtonRowClass_wrapper")
-    queueautoptr_cleanup_AdwButtonRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_BUTTON_ROW_wrapper")
-    BUTTON_ROW :: proc(ptr: glib.pointer) -> ^ButtonRow ---
-
-    @(link_name = "ADW_IS_BUTTON_ROW_wrapper")
-    IS_BUTTON_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpringParams_wrapper")
-    autoptr_clear_AdwSpringParams :: proc(_ptr: ^SpringParams) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpringParams_wrapper")
-    autoptr_cleanup_AdwSpringParams :: proc(_ptr: ^^SpringParams) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpringParams_wrapper")
-    autoptr_destroy_AdwSpringParams :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpringParams_wrapper")
-    listautoptr_cleanup_AdwSpringParams :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpringParams_wrapper")
-    slistautoptr_cleanup_AdwSpringParams :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpringParams_wrapper")
-    queueautoptr_cleanup_AdwSpringParams :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarousel_wrapper")
-    autoptr_clear_AdwCarousel :: proc(_ptr: ^Carousel) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarousel_wrapper")
-    autoptr_cleanup_AdwCarousel :: proc(_ptr: ^^Carousel) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarousel_wrapper")
-    autoptr_destroy_AdwCarousel :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarousel_wrapper")
-    listautoptr_cleanup_AdwCarousel :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarousel_wrapper")
-    slistautoptr_cleanup_AdwCarousel :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarousel_wrapper")
-    queueautoptr_cleanup_AdwCarousel :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarouselClass_wrapper")
-    autoptr_clear_AdwCarouselClass :: proc(_ptr: ^CarouselClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarouselClass_wrapper")
-    autoptr_cleanup_AdwCarouselClass :: proc(_ptr: ^^CarouselClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarouselClass_wrapper")
-    autoptr_destroy_AdwCarouselClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarouselClass_wrapper")
-    listautoptr_cleanup_AdwCarouselClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarouselClass_wrapper")
-    slistautoptr_cleanup_AdwCarouselClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarouselClass_wrapper")
-    queueautoptr_cleanup_AdwCarouselClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CAROUSEL_wrapper")
-    CAROUSEL :: proc(ptr: glib.pointer) -> ^Carousel ---
-
-    @(link_name = "ADW_IS_CAROUSEL_wrapper")
-    IS_CAROUSEL :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarouselIndicatorDots_wrapper")
-    autoptr_clear_AdwCarouselIndicatorDots :: proc(_ptr: ^CarouselIndicatorDots) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarouselIndicatorDots_wrapper")
-    autoptr_cleanup_AdwCarouselIndicatorDots :: proc(_ptr: ^^CarouselIndicatorDots) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarouselIndicatorDots_wrapper")
-    autoptr_destroy_AdwCarouselIndicatorDots :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarouselIndicatorDots_wrapper")
-    listautoptr_cleanup_AdwCarouselIndicatorDots :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarouselIndicatorDots_wrapper")
-    slistautoptr_cleanup_AdwCarouselIndicatorDots :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarouselIndicatorDots_wrapper")
-    queueautoptr_cleanup_AdwCarouselIndicatorDots :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarouselIndicatorDotsClass_wrapper")
-    autoptr_clear_AdwCarouselIndicatorDotsClass :: proc(_ptr: ^CarouselIndicatorDotsClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarouselIndicatorDotsClass_wrapper")
-    autoptr_cleanup_AdwCarouselIndicatorDotsClass :: proc(_ptr: ^^CarouselIndicatorDotsClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarouselIndicatorDotsClass_wrapper")
-    autoptr_destroy_AdwCarouselIndicatorDotsClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarouselIndicatorDotsClass_wrapper")
-    listautoptr_cleanup_AdwCarouselIndicatorDotsClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarouselIndicatorDotsClass_wrapper")
-    slistautoptr_cleanup_AdwCarouselIndicatorDotsClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarouselIndicatorDotsClass_wrapper")
-    queueautoptr_cleanup_AdwCarouselIndicatorDotsClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CAROUSEL_INDICATOR_DOTS_wrapper")
-    CAROUSEL_INDICATOR_DOTS :: proc(ptr: glib.pointer) -> ^CarouselIndicatorDots ---
-
-    @(link_name = "ADW_IS_CAROUSEL_INDICATOR_DOTS_wrapper")
-    IS_CAROUSEL_INDICATOR_DOTS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarouselIndicatorLines_wrapper")
-    autoptr_clear_AdwCarouselIndicatorLines :: proc(_ptr: ^CarouselIndicatorLines) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarouselIndicatorLines_wrapper")
-    autoptr_cleanup_AdwCarouselIndicatorLines :: proc(_ptr: ^^CarouselIndicatorLines) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarouselIndicatorLines_wrapper")
-    autoptr_destroy_AdwCarouselIndicatorLines :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarouselIndicatorLines_wrapper")
-    listautoptr_cleanup_AdwCarouselIndicatorLines :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarouselIndicatorLines_wrapper")
-    slistautoptr_cleanup_AdwCarouselIndicatorLines :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarouselIndicatorLines_wrapper")
-    queueautoptr_cleanup_AdwCarouselIndicatorLines :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwCarouselIndicatorLinesClass_wrapper")
-    autoptr_clear_AdwCarouselIndicatorLinesClass :: proc(_ptr: ^CarouselIndicatorLinesClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwCarouselIndicatorLinesClass_wrapper")
-    autoptr_cleanup_AdwCarouselIndicatorLinesClass :: proc(_ptr: ^^CarouselIndicatorLinesClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwCarouselIndicatorLinesClass_wrapper")
-    autoptr_destroy_AdwCarouselIndicatorLinesClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwCarouselIndicatorLinesClass_wrapper")
-    listautoptr_cleanup_AdwCarouselIndicatorLinesClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwCarouselIndicatorLinesClass_wrapper")
-    slistautoptr_cleanup_AdwCarouselIndicatorLinesClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwCarouselIndicatorLinesClass_wrapper")
-    queueautoptr_cleanup_AdwCarouselIndicatorLinesClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CAROUSEL_INDICATOR_LINES_wrapper")
-    CAROUSEL_INDICATOR_LINES :: proc(ptr: glib.pointer) -> ^CarouselIndicatorLines ---
-
-    @(link_name = "ADW_IS_CAROUSEL_INDICATOR_LINES_wrapper")
-    IS_CAROUSEL_INDICATOR_LINES :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwClamp_wrapper")
-    autoptr_clear_AdwClamp :: proc(_ptr: ^Clamp) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClamp_wrapper")
-    autoptr_cleanup_AdwClamp :: proc(_ptr: ^^Clamp) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClamp_wrapper")
-    autoptr_destroy_AdwClamp :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClamp_wrapper")
-    listautoptr_cleanup_AdwClamp :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClamp_wrapper")
-    slistautoptr_cleanup_AdwClamp :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClamp_wrapper")
-    queueautoptr_cleanup_AdwClamp :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwClampClass_wrapper")
-    autoptr_clear_AdwClampClass :: proc(_ptr: ^ClampClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClampClass_wrapper")
-    autoptr_cleanup_AdwClampClass :: proc(_ptr: ^^ClampClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClampClass_wrapper")
-    autoptr_destroy_AdwClampClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClampClass_wrapper")
-    listautoptr_cleanup_AdwClampClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClampClass_wrapper")
-    slistautoptr_cleanup_AdwClampClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClampClass_wrapper")
-    queueautoptr_cleanup_AdwClampClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CLAMP_wrapper")
-    CLAMP :: proc(ptr: glib.pointer) -> ^Clamp ---
-
-    @(link_name = "ADW_IS_CLAMP_wrapper")
-    IS_CLAMP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwClampLayout_wrapper")
-    autoptr_clear_AdwClampLayout :: proc(_ptr: ^ClampLayout) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClampLayout_wrapper")
-    autoptr_cleanup_AdwClampLayout :: proc(_ptr: ^^ClampLayout) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClampLayout_wrapper")
-    autoptr_destroy_AdwClampLayout :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClampLayout_wrapper")
-    listautoptr_cleanup_AdwClampLayout :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClampLayout_wrapper")
-    slistautoptr_cleanup_AdwClampLayout :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClampLayout_wrapper")
-    queueautoptr_cleanup_AdwClampLayout :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwClampLayoutClass_wrapper")
-    autoptr_clear_AdwClampLayoutClass :: proc(_ptr: ^ClampLayoutClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClampLayoutClass_wrapper")
-    autoptr_cleanup_AdwClampLayoutClass :: proc(_ptr: ^^ClampLayoutClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClampLayoutClass_wrapper")
-    autoptr_destroy_AdwClampLayoutClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClampLayoutClass_wrapper")
-    listautoptr_cleanup_AdwClampLayoutClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClampLayoutClass_wrapper")
-    slistautoptr_cleanup_AdwClampLayoutClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClampLayoutClass_wrapper")
-    queueautoptr_cleanup_AdwClampLayoutClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CLAMP_LAYOUT_wrapper")
-    CLAMP_LAYOUT :: proc(ptr: glib.pointer) -> ^ClampLayout ---
-
-    @(link_name = "ADW_IS_CLAMP_LAYOUT_wrapper")
-    IS_CLAMP_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwClampScrollable_wrapper")
-    autoptr_clear_AdwClampScrollable :: proc(_ptr: ^ClampScrollable) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClampScrollable_wrapper")
-    autoptr_cleanup_AdwClampScrollable :: proc(_ptr: ^^ClampScrollable) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClampScrollable_wrapper")
-    autoptr_destroy_AdwClampScrollable :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClampScrollable_wrapper")
-    listautoptr_cleanup_AdwClampScrollable :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClampScrollable_wrapper")
-    slistautoptr_cleanup_AdwClampScrollable :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClampScrollable_wrapper")
-    queueautoptr_cleanup_AdwClampScrollable :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwClampScrollableClass_wrapper")
-    autoptr_clear_AdwClampScrollableClass :: proc(_ptr: ^ClampScrollableClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwClampScrollableClass_wrapper")
-    autoptr_cleanup_AdwClampScrollableClass :: proc(_ptr: ^^ClampScrollableClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwClampScrollableClass_wrapper")
-    autoptr_destroy_AdwClampScrollableClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwClampScrollableClass_wrapper")
-    listautoptr_cleanup_AdwClampScrollableClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwClampScrollableClass_wrapper")
-    slistautoptr_cleanup_AdwClampScrollableClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwClampScrollableClass_wrapper")
-    queueautoptr_cleanup_AdwClampScrollableClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_CLAMP_SCROLLABLE_wrapper")
-    CLAMP_SCROLLABLE :: proc(ptr: glib.pointer) -> ^ClampScrollable ---
-
-    @(link_name = "ADW_IS_CLAMP_SCROLLABLE_wrapper")
-    IS_CLAMP_SCROLLABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwComboRow_wrapper")
-    autoptr_clear_AdwComboRow :: proc(_ptr: ^ComboRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwComboRow_wrapper")
-    autoptr_cleanup_AdwComboRow :: proc(_ptr: ^^ComboRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwComboRow_wrapper")
-    autoptr_destroy_AdwComboRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwComboRow_wrapper")
-    listautoptr_cleanup_AdwComboRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwComboRow_wrapper")
-    slistautoptr_cleanup_AdwComboRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwComboRow_wrapper")
-    queueautoptr_cleanup_AdwComboRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwComboRowClass_wrapper")
-    autoptr_clear_AdwComboRowClass :: proc(_ptr: ^ComboRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwComboRowClass_wrapper")
-    autoptr_cleanup_AdwComboRowClass :: proc(_ptr: ^^ComboRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwComboRowClass_wrapper")
-    autoptr_destroy_AdwComboRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwComboRowClass_wrapper")
-    listautoptr_cleanup_AdwComboRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwComboRowClass_wrapper")
-    slistautoptr_cleanup_AdwComboRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwComboRowClass_wrapper")
-    queueautoptr_cleanup_AdwComboRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_COMBO_ROW_wrapper")
-    COMBO_ROW :: proc(ptr: glib.pointer) -> ^ComboRow ---
-
-    @(link_name = "ADW_COMBO_ROW_CLASS_wrapper")
-    COMBO_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ComboRowClass ---
-
-    @(link_name = "ADW_IS_COMBO_ROW_wrapper")
-    IS_COMBO_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_COMBO_ROW_CLASS_wrapper")
-    IS_COMBO_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_COMBO_ROW_GET_CLASS_wrapper")
-    COMBO_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ComboRowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwEntryRow_wrapper")
-    autoptr_clear_AdwEntryRow :: proc(_ptr: ^EntryRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEntryRow_wrapper")
-    autoptr_cleanup_AdwEntryRow :: proc(_ptr: ^^EntryRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEntryRow_wrapper")
-    autoptr_destroy_AdwEntryRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEntryRow_wrapper")
-    listautoptr_cleanup_AdwEntryRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEntryRow_wrapper")
-    slistautoptr_cleanup_AdwEntryRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEntryRow_wrapper")
-    queueautoptr_cleanup_AdwEntryRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwEntryRowClass_wrapper")
-    autoptr_clear_AdwEntryRowClass :: proc(_ptr: ^EntryRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEntryRowClass_wrapper")
-    autoptr_cleanup_AdwEntryRowClass :: proc(_ptr: ^^EntryRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEntryRowClass_wrapper")
-    autoptr_destroy_AdwEntryRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEntryRowClass_wrapper")
-    listautoptr_cleanup_AdwEntryRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEntryRowClass_wrapper")
-    slistautoptr_cleanup_AdwEntryRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEntryRowClass_wrapper")
-    queueautoptr_cleanup_AdwEntryRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ENTRY_ROW_wrapper")
-    ENTRY_ROW :: proc(ptr: glib.pointer) -> ^EntryRow ---
-
-    @(link_name = "ADW_ENTRY_ROW_CLASS_wrapper")
-    ENTRY_ROW_CLASS :: proc(ptr: glib.pointer) -> ^EntryRowClass ---
-
-    @(link_name = "ADW_IS_ENTRY_ROW_wrapper")
-    IS_ENTRY_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_ENTRY_ROW_CLASS_wrapper")
-    IS_ENTRY_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_ENTRY_ROW_GET_CLASS_wrapper")
-    ENTRY_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^EntryRowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwEnumListItem_wrapper")
-    autoptr_clear_AdwEnumListItem :: proc(_ptr: ^EnumListItem) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEnumListItem_wrapper")
-    autoptr_cleanup_AdwEnumListItem :: proc(_ptr: ^^EnumListItem) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEnumListItem_wrapper")
-    autoptr_destroy_AdwEnumListItem :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEnumListItem_wrapper")
-    listautoptr_cleanup_AdwEnumListItem :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEnumListItem_wrapper")
-    slistautoptr_cleanup_AdwEnumListItem :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEnumListItem_wrapper")
-    queueautoptr_cleanup_AdwEnumListItem :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwEnumListItemClass_wrapper")
-    autoptr_clear_AdwEnumListItemClass :: proc(_ptr: ^EnumListItemClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEnumListItemClass_wrapper")
-    autoptr_cleanup_AdwEnumListItemClass :: proc(_ptr: ^^EnumListItemClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEnumListItemClass_wrapper")
-    autoptr_destroy_AdwEnumListItemClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEnumListItemClass_wrapper")
-    listautoptr_cleanup_AdwEnumListItemClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEnumListItemClass_wrapper")
-    slistautoptr_cleanup_AdwEnumListItemClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEnumListItemClass_wrapper")
-    queueautoptr_cleanup_AdwEnumListItemClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ENUM_LIST_ITEM_wrapper")
-    ENUM_LIST_ITEM :: proc(ptr: glib.pointer) -> ^EnumListItem ---
-
-    @(link_name = "ADW_IS_ENUM_LIST_ITEM_wrapper")
-    IS_ENUM_LIST_ITEM :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwEnumListModel_wrapper")
-    autoptr_clear_AdwEnumListModel :: proc(_ptr: ^EnumListModel) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEnumListModel_wrapper")
-    autoptr_cleanup_AdwEnumListModel :: proc(_ptr: ^^EnumListModel) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEnumListModel_wrapper")
-    autoptr_destroy_AdwEnumListModel :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEnumListModel_wrapper")
-    listautoptr_cleanup_AdwEnumListModel :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEnumListModel_wrapper")
-    slistautoptr_cleanup_AdwEnumListModel :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEnumListModel_wrapper")
-    queueautoptr_cleanup_AdwEnumListModel :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwEnumListModelClass_wrapper")
-    autoptr_clear_AdwEnumListModelClass :: proc(_ptr: ^EnumListModelClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwEnumListModelClass_wrapper")
-    autoptr_cleanup_AdwEnumListModelClass :: proc(_ptr: ^^EnumListModelClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwEnumListModelClass_wrapper")
-    autoptr_destroy_AdwEnumListModelClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwEnumListModelClass_wrapper")
-    listautoptr_cleanup_AdwEnumListModelClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwEnumListModelClass_wrapper")
-    slistautoptr_cleanup_AdwEnumListModelClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwEnumListModelClass_wrapper")
-    queueautoptr_cleanup_AdwEnumListModelClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_ENUM_LIST_MODEL_wrapper")
-    ENUM_LIST_MODEL :: proc(ptr: glib.pointer) -> ^EnumListModel ---
-
-    @(link_name = "ADW_IS_ENUM_LIST_MODEL_wrapper")
-    IS_ENUM_LIST_MODEL :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwExpanderRow_wrapper")
-    autoptr_clear_AdwExpanderRow :: proc(_ptr: ^ExpanderRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwExpanderRow_wrapper")
-    autoptr_cleanup_AdwExpanderRow :: proc(_ptr: ^^ExpanderRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwExpanderRow_wrapper")
-    autoptr_destroy_AdwExpanderRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwExpanderRow_wrapper")
-    listautoptr_cleanup_AdwExpanderRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwExpanderRow_wrapper")
-    slistautoptr_cleanup_AdwExpanderRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwExpanderRow_wrapper")
-    queueautoptr_cleanup_AdwExpanderRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwExpanderRowClass_wrapper")
-    autoptr_clear_AdwExpanderRowClass :: proc(_ptr: ^ExpanderRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwExpanderRowClass_wrapper")
-    autoptr_cleanup_AdwExpanderRowClass :: proc(_ptr: ^^ExpanderRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwExpanderRowClass_wrapper")
-    autoptr_destroy_AdwExpanderRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwExpanderRowClass_wrapper")
-    listautoptr_cleanup_AdwExpanderRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwExpanderRowClass_wrapper")
-    slistautoptr_cleanup_AdwExpanderRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwExpanderRowClass_wrapper")
-    queueautoptr_cleanup_AdwExpanderRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_EXPANDER_ROW_wrapper")
-    EXPANDER_ROW :: proc(ptr: glib.pointer) -> ^ExpanderRow ---
-
-    @(link_name = "ADW_EXPANDER_ROW_CLASS_wrapper")
-    EXPANDER_ROW_CLASS :: proc(ptr: glib.pointer) -> ^ExpanderRowClass ---
-
-    @(link_name = "ADW_IS_EXPANDER_ROW_wrapper")
-    IS_EXPANDER_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_EXPANDER_ROW_CLASS_wrapper")
-    IS_EXPANDER_ROW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_EXPANDER_ROW_GET_CLASS_wrapper")
-    EXPANDER_ROW_GET_CLASS :: proc(ptr: glib.pointer) -> ^ExpanderRowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwFlap_wrapper")
-    autoptr_clear_AdwFlap :: proc(_ptr: ^Flap) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwFlap_wrapper")
-    autoptr_cleanup_AdwFlap :: proc(_ptr: ^^Flap) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwFlap_wrapper")
-    autoptr_destroy_AdwFlap :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwFlap_wrapper")
-    listautoptr_cleanup_AdwFlap :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwFlap_wrapper")
-    slistautoptr_cleanup_AdwFlap :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwFlap_wrapper")
-    queueautoptr_cleanup_AdwFlap :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwFlapClass_wrapper")
-    autoptr_clear_AdwFlapClass :: proc(_ptr: ^FlapClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwFlapClass_wrapper")
-    autoptr_cleanup_AdwFlapClass :: proc(_ptr: ^^FlapClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwFlapClass_wrapper")
-    autoptr_destroy_AdwFlapClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwFlapClass_wrapper")
-    listautoptr_cleanup_AdwFlapClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwFlapClass_wrapper")
-    slistautoptr_cleanup_AdwFlapClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwFlapClass_wrapper")
-    queueautoptr_cleanup_AdwFlapClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_FLAP_wrapper")
-    FLAP :: proc(ptr: glib.pointer) -> ^Flap ---
-
-    @(link_name = "ADW_IS_FLAP_wrapper")
-    IS_FLAP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwHeaderBar_wrapper")
-    autoptr_clear_AdwHeaderBar :: proc(_ptr: ^HeaderBar) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwHeaderBar_wrapper")
-    autoptr_cleanup_AdwHeaderBar :: proc(_ptr: ^^HeaderBar) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwHeaderBar_wrapper")
-    autoptr_destroy_AdwHeaderBar :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwHeaderBar_wrapper")
-    listautoptr_cleanup_AdwHeaderBar :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwHeaderBar_wrapper")
-    slistautoptr_cleanup_AdwHeaderBar :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwHeaderBar_wrapper")
-    queueautoptr_cleanup_AdwHeaderBar :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwHeaderBarClass_wrapper")
-    autoptr_clear_AdwHeaderBarClass :: proc(_ptr: ^HeaderBarClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwHeaderBarClass_wrapper")
-    autoptr_cleanup_AdwHeaderBarClass :: proc(_ptr: ^^HeaderBarClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwHeaderBarClass_wrapper")
-    autoptr_destroy_AdwHeaderBarClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwHeaderBarClass_wrapper")
-    listautoptr_cleanup_AdwHeaderBarClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwHeaderBarClass_wrapper")
-    slistautoptr_cleanup_AdwHeaderBarClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwHeaderBarClass_wrapper")
-    queueautoptr_cleanup_AdwHeaderBarClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_HEADER_BAR_wrapper")
-    HEADER_BAR :: proc(ptr: glib.pointer) -> ^HeaderBar ---
-
-    @(link_name = "ADW_IS_HEADER_BAR_wrapper")
-    IS_HEADER_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStackPage_wrapper")
-    autoptr_clear_AdwViewStackPage :: proc(_ptr: ^ViewStackPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStackPage_wrapper")
-    autoptr_cleanup_AdwViewStackPage :: proc(_ptr: ^^ViewStackPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStackPage_wrapper")
-    autoptr_destroy_AdwViewStackPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStackPage_wrapper")
-    listautoptr_cleanup_AdwViewStackPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStackPage_wrapper")
-    slistautoptr_cleanup_AdwViewStackPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStackPage_wrapper")
-    queueautoptr_cleanup_AdwViewStackPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStackPageClass_wrapper")
-    autoptr_clear_AdwViewStackPageClass :: proc(_ptr: ^ViewStackPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStackPageClass_wrapper")
-    autoptr_cleanup_AdwViewStackPageClass :: proc(_ptr: ^^ViewStackPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStackPageClass_wrapper")
-    autoptr_destroy_AdwViewStackPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStackPageClass_wrapper")
-    listautoptr_cleanup_AdwViewStackPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStackPageClass_wrapper")
-    slistautoptr_cleanup_AdwViewStackPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStackPageClass_wrapper")
-    queueautoptr_cleanup_AdwViewStackPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_STACK_PAGE_wrapper")
-    VIEW_STACK_PAGE :: proc(ptr: glib.pointer) -> ^ViewStackPage ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_PAGE_wrapper")
-    IS_VIEW_STACK_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStack_wrapper")
-    autoptr_clear_AdwViewStack :: proc(_ptr: ^ViewStack) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStack_wrapper")
-    autoptr_cleanup_AdwViewStack :: proc(_ptr: ^^ViewStack) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStack_wrapper")
-    autoptr_destroy_AdwViewStack :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStack_wrapper")
-    listautoptr_cleanup_AdwViewStack :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStack_wrapper")
-    slistautoptr_cleanup_AdwViewStack :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStack_wrapper")
-    queueautoptr_cleanup_AdwViewStack :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStackClass_wrapper")
-    autoptr_clear_AdwViewStackClass :: proc(_ptr: ^ViewStackClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStackClass_wrapper")
-    autoptr_cleanup_AdwViewStackClass :: proc(_ptr: ^^ViewStackClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStackClass_wrapper")
-    autoptr_destroy_AdwViewStackClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStackClass_wrapper")
-    listautoptr_cleanup_AdwViewStackClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStackClass_wrapper")
-    slistautoptr_cleanup_AdwViewStackClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStackClass_wrapper")
-    queueautoptr_cleanup_AdwViewStackClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_STACK_wrapper")
-    VIEW_STACK :: proc(ptr: glib.pointer) -> ^ViewStack ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_wrapper")
-    IS_VIEW_STACK :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStackPages_wrapper")
-    autoptr_clear_AdwViewStackPages :: proc(_ptr: ^ViewStackPages) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStackPages_wrapper")
-    autoptr_cleanup_AdwViewStackPages :: proc(_ptr: ^^ViewStackPages) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStackPages_wrapper")
-    autoptr_destroy_AdwViewStackPages :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStackPages_wrapper")
-    listautoptr_cleanup_AdwViewStackPages :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStackPages_wrapper")
-    slistautoptr_cleanup_AdwViewStackPages :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStackPages_wrapper")
-    queueautoptr_cleanup_AdwViewStackPages :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewStackPagesClass_wrapper")
-    autoptr_clear_AdwViewStackPagesClass :: proc(_ptr: ^ViewStackPagesClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewStackPagesClass_wrapper")
-    autoptr_cleanup_AdwViewStackPagesClass :: proc(_ptr: ^^ViewStackPagesClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewStackPagesClass_wrapper")
-    autoptr_destroy_AdwViewStackPagesClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewStackPagesClass_wrapper")
-    listautoptr_cleanup_AdwViewStackPagesClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewStackPagesClass_wrapper")
-    slistautoptr_cleanup_AdwViewStackPagesClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewStackPagesClass_wrapper")
-    queueautoptr_cleanup_AdwViewStackPagesClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_STACK_PAGES_wrapper")
-    VIEW_STACK_PAGES :: proc(ptr: glib.pointer) -> ^ViewStackPages ---
-
-    @(link_name = "ADW_IS_VIEW_STACK_PAGES_wrapper")
-    IS_VIEW_STACK_PAGES :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwInlineViewSwitcher_wrapper")
-    autoptr_clear_AdwInlineViewSwitcher :: proc(_ptr: ^InlineViewSwitcher) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwInlineViewSwitcher_wrapper")
-    autoptr_cleanup_AdwInlineViewSwitcher :: proc(_ptr: ^^InlineViewSwitcher) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwInlineViewSwitcher_wrapper")
-    autoptr_destroy_AdwInlineViewSwitcher :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwInlineViewSwitcher_wrapper")
-    listautoptr_cleanup_AdwInlineViewSwitcher :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwInlineViewSwitcher_wrapper")
-    slistautoptr_cleanup_AdwInlineViewSwitcher :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwInlineViewSwitcher_wrapper")
-    queueautoptr_cleanup_AdwInlineViewSwitcher :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwInlineViewSwitcherClass_wrapper")
-    autoptr_clear_AdwInlineViewSwitcherClass :: proc(_ptr: ^InlineViewSwitcherClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwInlineViewSwitcherClass_wrapper")
-    autoptr_cleanup_AdwInlineViewSwitcherClass :: proc(_ptr: ^^InlineViewSwitcherClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwInlineViewSwitcherClass_wrapper")
-    autoptr_destroy_AdwInlineViewSwitcherClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwInlineViewSwitcherClass_wrapper")
-    listautoptr_cleanup_AdwInlineViewSwitcherClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwInlineViewSwitcherClass_wrapper")
-    slistautoptr_cleanup_AdwInlineViewSwitcherClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwInlineViewSwitcherClass_wrapper")
-    queueautoptr_cleanup_AdwInlineViewSwitcherClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_INLINE_VIEW_SWITCHER_wrapper")
-    INLINE_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> ^InlineViewSwitcher ---
-
-    @(link_name = "ADW_IS_INLINE_VIEW_SWITCHER_wrapper")
-    IS_INLINE_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwLayout_wrapper")
-    autoptr_clear_AdwLayout :: proc(_ptr: ^Layout) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLayout_wrapper")
-    autoptr_cleanup_AdwLayout :: proc(_ptr: ^^Layout) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLayout_wrapper")
-    autoptr_destroy_AdwLayout :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLayout_wrapper")
-    listautoptr_cleanup_AdwLayout :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLayout_wrapper")
-    slistautoptr_cleanup_AdwLayout :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLayout_wrapper")
-    queueautoptr_cleanup_AdwLayout :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwLayoutClass_wrapper")
-    autoptr_clear_AdwLayoutClass :: proc(_ptr: ^LayoutClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLayoutClass_wrapper")
-    autoptr_cleanup_AdwLayoutClass :: proc(_ptr: ^^LayoutClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLayoutClass_wrapper")
-    autoptr_destroy_AdwLayoutClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLayoutClass_wrapper")
-    listautoptr_cleanup_AdwLayoutClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLayoutClass_wrapper")
-    slistautoptr_cleanup_AdwLayoutClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLayoutClass_wrapper")
-    queueautoptr_cleanup_AdwLayoutClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_LAYOUT_wrapper")
-    LAYOUT :: proc(ptr: glib.pointer) -> ^Layout ---
-
-    @(link_name = "ADW_IS_LAYOUT_wrapper")
-    IS_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwLayoutSlot_wrapper")
-    autoptr_clear_AdwLayoutSlot :: proc(_ptr: ^LayoutSlot) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLayoutSlot_wrapper")
-    autoptr_cleanup_AdwLayoutSlot :: proc(_ptr: ^^LayoutSlot) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLayoutSlot_wrapper")
-    autoptr_destroy_AdwLayoutSlot :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLayoutSlot_wrapper")
-    listautoptr_cleanup_AdwLayoutSlot :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLayoutSlot_wrapper")
-    slistautoptr_cleanup_AdwLayoutSlot :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLayoutSlot_wrapper")
-    queueautoptr_cleanup_AdwLayoutSlot :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwLayoutSlotClass_wrapper")
-    autoptr_clear_AdwLayoutSlotClass :: proc(_ptr: ^LayoutSlotClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLayoutSlotClass_wrapper")
-    autoptr_cleanup_AdwLayoutSlotClass :: proc(_ptr: ^^LayoutSlotClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLayoutSlotClass_wrapper")
-    autoptr_destroy_AdwLayoutSlotClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLayoutSlotClass_wrapper")
-    listautoptr_cleanup_AdwLayoutSlotClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLayoutSlotClass_wrapper")
-    slistautoptr_cleanup_AdwLayoutSlotClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLayoutSlotClass_wrapper")
-    queueautoptr_cleanup_AdwLayoutSlotClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_LAYOUT_SLOT_wrapper")
-    LAYOUT_SLOT :: proc(ptr: glib.pointer) -> ^LayoutSlot ---
-
-    @(link_name = "ADW_IS_LAYOUT_SLOT_wrapper")
-    IS_LAYOUT_SLOT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwLeafletPage_wrapper")
-    autoptr_clear_AdwLeafletPage :: proc(_ptr: ^LeafletPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLeafletPage_wrapper")
-    autoptr_cleanup_AdwLeafletPage :: proc(_ptr: ^^LeafletPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLeafletPage_wrapper")
-    autoptr_destroy_AdwLeafletPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLeafletPage_wrapper")
-    listautoptr_cleanup_AdwLeafletPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLeafletPage_wrapper")
-    slistautoptr_cleanup_AdwLeafletPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLeafletPage_wrapper")
-    queueautoptr_cleanup_AdwLeafletPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwLeafletPageClass_wrapper")
-    autoptr_clear_AdwLeafletPageClass :: proc(_ptr: ^LeafletPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLeafletPageClass_wrapper")
-    autoptr_cleanup_AdwLeafletPageClass :: proc(_ptr: ^^LeafletPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLeafletPageClass_wrapper")
-    autoptr_destroy_AdwLeafletPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLeafletPageClass_wrapper")
-    listautoptr_cleanup_AdwLeafletPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLeafletPageClass_wrapper")
-    slistautoptr_cleanup_AdwLeafletPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLeafletPageClass_wrapper")
-    queueautoptr_cleanup_AdwLeafletPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_LEAFLET_PAGE_wrapper")
-    LEAFLET_PAGE :: proc(ptr: glib.pointer) -> ^LeafletPage ---
-
-    @(link_name = "ADW_IS_LEAFLET_PAGE_wrapper")
-    IS_LEAFLET_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwLeaflet_wrapper")
-    autoptr_clear_AdwLeaflet :: proc(_ptr: ^Leaflet) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLeaflet_wrapper")
-    autoptr_cleanup_AdwLeaflet :: proc(_ptr: ^^Leaflet) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLeaflet_wrapper")
-    autoptr_destroy_AdwLeaflet :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLeaflet_wrapper")
-    listautoptr_cleanup_AdwLeaflet :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLeaflet_wrapper")
-    slistautoptr_cleanup_AdwLeaflet :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLeaflet_wrapper")
-    queueautoptr_cleanup_AdwLeaflet :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwLeafletClass_wrapper")
-    autoptr_clear_AdwLeafletClass :: proc(_ptr: ^LeafletClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwLeafletClass_wrapper")
-    autoptr_cleanup_AdwLeafletClass :: proc(_ptr: ^^LeafletClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwLeafletClass_wrapper")
-    autoptr_destroy_AdwLeafletClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwLeafletClass_wrapper")
-    listautoptr_cleanup_AdwLeafletClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwLeafletClass_wrapper")
-    slistautoptr_cleanup_AdwLeafletClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwLeafletClass_wrapper")
-    queueautoptr_cleanup_AdwLeafletClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_LEAFLET_wrapper")
-    LEAFLET :: proc(ptr: glib.pointer) -> ^Leaflet ---
-
-    @(link_name = "ADW_IS_LEAFLET_wrapper")
-    IS_LEAFLET :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwMessageDialog_wrapper")
-    autoptr_clear_AdwMessageDialog :: proc(_ptr: ^MessageDialog) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwMessageDialog_wrapper")
-    autoptr_cleanup_AdwMessageDialog :: proc(_ptr: ^^MessageDialog) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwMessageDialog_wrapper")
-    autoptr_destroy_AdwMessageDialog :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwMessageDialog_wrapper")
-    listautoptr_cleanup_AdwMessageDialog :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwMessageDialog_wrapper")
-    slistautoptr_cleanup_AdwMessageDialog :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwMessageDialog_wrapper")
-    queueautoptr_cleanup_AdwMessageDialog :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwMessageDialogClass_wrapper")
-    autoptr_clear_AdwMessageDialogClass :: proc(_ptr: ^MessageDialogClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwMessageDialogClass_wrapper")
-    autoptr_cleanup_AdwMessageDialogClass :: proc(_ptr: ^^MessageDialogClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwMessageDialogClass_wrapper")
-    autoptr_destroy_AdwMessageDialogClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwMessageDialogClass_wrapper")
-    listautoptr_cleanup_AdwMessageDialogClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwMessageDialogClass_wrapper")
-    slistautoptr_cleanup_AdwMessageDialogClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwMessageDialogClass_wrapper")
-    queueautoptr_cleanup_AdwMessageDialogClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_wrapper")
-    MESSAGE_DIALOG :: proc(ptr: glib.pointer) -> ^MessageDialog ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_CLASS_wrapper")
-    MESSAGE_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^MessageDialogClass ---
-
-    @(link_name = "ADW_IS_MESSAGE_DIALOG_wrapper")
-    IS_MESSAGE_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_MESSAGE_DIALOG_CLASS_wrapper")
-    IS_MESSAGE_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_MESSAGE_DIALOG_GET_CLASS_wrapper")
-    MESSAGE_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^MessageDialogClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwMultiLayoutView_wrapper")
-    autoptr_clear_AdwMultiLayoutView :: proc(_ptr: ^MultiLayoutView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwMultiLayoutView_wrapper")
-    autoptr_cleanup_AdwMultiLayoutView :: proc(_ptr: ^^MultiLayoutView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwMultiLayoutView_wrapper")
-    autoptr_destroy_AdwMultiLayoutView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwMultiLayoutView_wrapper")
-    listautoptr_cleanup_AdwMultiLayoutView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwMultiLayoutView_wrapper")
-    slistautoptr_cleanup_AdwMultiLayoutView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwMultiLayoutView_wrapper")
-    queueautoptr_cleanup_AdwMultiLayoutView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwMultiLayoutViewClass_wrapper")
-    autoptr_clear_AdwMultiLayoutViewClass :: proc(_ptr: ^MultiLayoutViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwMultiLayoutViewClass_wrapper")
-    autoptr_cleanup_AdwMultiLayoutViewClass :: proc(_ptr: ^^MultiLayoutViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwMultiLayoutViewClass_wrapper")
-    autoptr_destroy_AdwMultiLayoutViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwMultiLayoutViewClass_wrapper")
-    listautoptr_cleanup_AdwMultiLayoutViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwMultiLayoutViewClass_wrapper")
-    slistautoptr_cleanup_AdwMultiLayoutViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwMultiLayoutViewClass_wrapper")
-    queueautoptr_cleanup_AdwMultiLayoutViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_MULTI_LAYOUT_VIEW_wrapper")
-    MULTI_LAYOUT_VIEW :: proc(ptr: glib.pointer) -> ^MultiLayoutView ---
-
-    @(link_name = "ADW_IS_MULTI_LAYOUT_VIEW_wrapper")
-    IS_MULTI_LAYOUT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationPage_wrapper")
-    autoptr_clear_AdwNavigationPage :: proc(_ptr: ^NavigationPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationPage_wrapper")
-    autoptr_cleanup_AdwNavigationPage :: proc(_ptr: ^^NavigationPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationPage_wrapper")
-    autoptr_destroy_AdwNavigationPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationPage_wrapper")
-    listautoptr_cleanup_AdwNavigationPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationPage_wrapper")
-    slistautoptr_cleanup_AdwNavigationPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationPage_wrapper")
-    queueautoptr_cleanup_AdwNavigationPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationPageClass_wrapper")
-    autoptr_clear_AdwNavigationPageClass :: proc(_ptr: ^NavigationPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationPageClass_wrapper")
-    autoptr_cleanup_AdwNavigationPageClass :: proc(_ptr: ^^NavigationPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationPageClass_wrapper")
-    autoptr_destroy_AdwNavigationPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationPageClass_wrapper")
-    listautoptr_cleanup_AdwNavigationPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationPageClass_wrapper")
-    slistautoptr_cleanup_AdwNavigationPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationPageClass_wrapper")
-    queueautoptr_cleanup_AdwNavigationPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_wrapper")
-    NAVIGATION_PAGE :: proc(ptr: glib.pointer) -> ^NavigationPage ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_CLASS_wrapper")
-    NAVIGATION_PAGE_CLASS :: proc(ptr: glib.pointer) -> ^NavigationPageClass ---
-
-    @(link_name = "ADW_IS_NAVIGATION_PAGE_wrapper")
-    IS_NAVIGATION_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_NAVIGATION_PAGE_CLASS_wrapper")
-    IS_NAVIGATION_PAGE_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_NAVIGATION_PAGE_GET_CLASS_wrapper")
-    NAVIGATION_PAGE_GET_CLASS :: proc(ptr: glib.pointer) -> ^NavigationPageClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationView_wrapper")
-    autoptr_clear_AdwNavigationView :: proc(_ptr: ^NavigationView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationView_wrapper")
-    autoptr_cleanup_AdwNavigationView :: proc(_ptr: ^^NavigationView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationView_wrapper")
-    autoptr_destroy_AdwNavigationView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationView_wrapper")
-    listautoptr_cleanup_AdwNavigationView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationView_wrapper")
-    slistautoptr_cleanup_AdwNavigationView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationView_wrapper")
-    queueautoptr_cleanup_AdwNavigationView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationViewClass_wrapper")
-    autoptr_clear_AdwNavigationViewClass :: proc(_ptr: ^NavigationViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationViewClass_wrapper")
-    autoptr_cleanup_AdwNavigationViewClass :: proc(_ptr: ^^NavigationViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationViewClass_wrapper")
-    autoptr_destroy_AdwNavigationViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationViewClass_wrapper")
-    listautoptr_cleanup_AdwNavigationViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationViewClass_wrapper")
-    slistautoptr_cleanup_AdwNavigationViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationViewClass_wrapper")
-    queueautoptr_cleanup_AdwNavigationViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_NAVIGATION_VIEW_wrapper")
-    NAVIGATION_VIEW :: proc(ptr: glib.pointer) -> ^NavigationView ---
-
-    @(link_name = "ADW_IS_NAVIGATION_VIEW_wrapper")
-    IS_NAVIGATION_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationSplitView_wrapper")
-    autoptr_clear_AdwNavigationSplitView :: proc(_ptr: ^NavigationSplitView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationSplitView_wrapper")
-    autoptr_cleanup_AdwNavigationSplitView :: proc(_ptr: ^^NavigationSplitView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationSplitView_wrapper")
-    autoptr_destroy_AdwNavigationSplitView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationSplitView_wrapper")
-    listautoptr_cleanup_AdwNavigationSplitView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationSplitView_wrapper")
-    slistautoptr_cleanup_AdwNavigationSplitView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationSplitView_wrapper")
-    queueautoptr_cleanup_AdwNavigationSplitView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwNavigationSplitViewClass_wrapper")
-    autoptr_clear_AdwNavigationSplitViewClass :: proc(_ptr: ^NavigationSplitViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwNavigationSplitViewClass_wrapper")
-    autoptr_cleanup_AdwNavigationSplitViewClass :: proc(_ptr: ^^NavigationSplitViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwNavigationSplitViewClass_wrapper")
-    autoptr_destroy_AdwNavigationSplitViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwNavigationSplitViewClass_wrapper")
-    listautoptr_cleanup_AdwNavigationSplitViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwNavigationSplitViewClass_wrapper")
-    slistautoptr_cleanup_AdwNavigationSplitViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwNavigationSplitViewClass_wrapper")
-    queueautoptr_cleanup_AdwNavigationSplitViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_NAVIGATION_SPLIT_VIEW_wrapper")
-    NAVIGATION_SPLIT_VIEW :: proc(ptr: glib.pointer) -> ^NavigationSplitView ---
-
-    @(link_name = "ADW_IS_NAVIGATION_SPLIT_VIEW_wrapper")
-    IS_NAVIGATION_SPLIT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwOverlaySplitView_wrapper")
-    autoptr_clear_AdwOverlaySplitView :: proc(_ptr: ^OverlaySplitView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwOverlaySplitView_wrapper")
-    autoptr_cleanup_AdwOverlaySplitView :: proc(_ptr: ^^OverlaySplitView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwOverlaySplitView_wrapper")
-    autoptr_destroy_AdwOverlaySplitView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwOverlaySplitView_wrapper")
-    listautoptr_cleanup_AdwOverlaySplitView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwOverlaySplitView_wrapper")
-    slistautoptr_cleanup_AdwOverlaySplitView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwOverlaySplitView_wrapper")
-    queueautoptr_cleanup_AdwOverlaySplitView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwOverlaySplitViewClass_wrapper")
-    autoptr_clear_AdwOverlaySplitViewClass :: proc(_ptr: ^OverlaySplitViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwOverlaySplitViewClass_wrapper")
-    autoptr_cleanup_AdwOverlaySplitViewClass :: proc(_ptr: ^^OverlaySplitViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwOverlaySplitViewClass_wrapper")
-    autoptr_destroy_AdwOverlaySplitViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwOverlaySplitViewClass_wrapper")
-    listautoptr_cleanup_AdwOverlaySplitViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwOverlaySplitViewClass_wrapper")
-    slistautoptr_cleanup_AdwOverlaySplitViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwOverlaySplitViewClass_wrapper")
-    queueautoptr_cleanup_AdwOverlaySplitViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_OVERLAY_SPLIT_VIEW_wrapper")
-    OVERLAY_SPLIT_VIEW :: proc(ptr: glib.pointer) -> ^OverlaySplitView ---
-
-    @(link_name = "ADW_IS_OVERLAY_SPLIT_VIEW_wrapper")
-    IS_OVERLAY_SPLIT_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwPasswordEntryRow_wrapper")
-    autoptr_clear_AdwPasswordEntryRow :: proc(_ptr: ^PasswordEntryRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPasswordEntryRow_wrapper")
-    autoptr_cleanup_AdwPasswordEntryRow :: proc(_ptr: ^^PasswordEntryRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPasswordEntryRow_wrapper")
-    autoptr_destroy_AdwPasswordEntryRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPasswordEntryRow_wrapper")
-    listautoptr_cleanup_AdwPasswordEntryRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPasswordEntryRow_wrapper")
-    slistautoptr_cleanup_AdwPasswordEntryRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPasswordEntryRow_wrapper")
-    queueautoptr_cleanup_AdwPasswordEntryRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPasswordEntryRowClass_wrapper")
-    autoptr_clear_AdwPasswordEntryRowClass :: proc(_ptr: ^PasswordEntryRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPasswordEntryRowClass_wrapper")
-    autoptr_cleanup_AdwPasswordEntryRowClass :: proc(_ptr: ^^PasswordEntryRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPasswordEntryRowClass_wrapper")
-    autoptr_destroy_AdwPasswordEntryRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPasswordEntryRowClass_wrapper")
-    listautoptr_cleanup_AdwPasswordEntryRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPasswordEntryRowClass_wrapper")
-    slistautoptr_cleanup_AdwPasswordEntryRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPasswordEntryRowClass_wrapper")
-    queueautoptr_cleanup_AdwPasswordEntryRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PASSWORD_ENTRY_ROW_wrapper")
-    PASSWORD_ENTRY_ROW :: proc(ptr: glib.pointer) -> ^PasswordEntryRow ---
-
-    @(link_name = "ADW_IS_PASSWORD_ENTRY_ROW_wrapper")
-    IS_PASSWORD_ENTRY_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesGroup_wrapper")
-    autoptr_clear_AdwPreferencesGroup :: proc(_ptr: ^PreferencesGroup) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesGroup_wrapper")
-    autoptr_cleanup_AdwPreferencesGroup :: proc(_ptr: ^^PreferencesGroup) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesGroup_wrapper")
-    autoptr_destroy_AdwPreferencesGroup :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesGroup_wrapper")
-    listautoptr_cleanup_AdwPreferencesGroup :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesGroup_wrapper")
-    slistautoptr_cleanup_AdwPreferencesGroup :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesGroup_wrapper")
-    queueautoptr_cleanup_AdwPreferencesGroup :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesGroupClass_wrapper")
-    autoptr_clear_AdwPreferencesGroupClass :: proc(_ptr: ^PreferencesGroupClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesGroupClass_wrapper")
-    autoptr_cleanup_AdwPreferencesGroupClass :: proc(_ptr: ^^PreferencesGroupClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesGroupClass_wrapper")
-    autoptr_destroy_AdwPreferencesGroupClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesGroupClass_wrapper")
-    listautoptr_cleanup_AdwPreferencesGroupClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesGroupClass_wrapper")
-    slistautoptr_cleanup_AdwPreferencesGroupClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesGroupClass_wrapper")
-    queueautoptr_cleanup_AdwPreferencesGroupClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_wrapper")
-    PREFERENCES_GROUP :: proc(ptr: glib.pointer) -> ^PreferencesGroup ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_CLASS_wrapper")
-    PREFERENCES_GROUP_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesGroupClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_GROUP_wrapper")
-    IS_PREFERENCES_GROUP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_GROUP_CLASS_wrapper")
-    IS_PREFERENCES_GROUP_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_GROUP_GET_CLASS_wrapper")
-    PREFERENCES_GROUP_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesGroupClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesPage_wrapper")
-    autoptr_clear_AdwPreferencesPage :: proc(_ptr: ^PreferencesPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesPage_wrapper")
-    autoptr_cleanup_AdwPreferencesPage :: proc(_ptr: ^^PreferencesPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesPage_wrapper")
-    autoptr_destroy_AdwPreferencesPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesPage_wrapper")
-    listautoptr_cleanup_AdwPreferencesPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesPage_wrapper")
-    slistautoptr_cleanup_AdwPreferencesPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesPage_wrapper")
-    queueautoptr_cleanup_AdwPreferencesPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesPageClass_wrapper")
-    autoptr_clear_AdwPreferencesPageClass :: proc(_ptr: ^PreferencesPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesPageClass_wrapper")
-    autoptr_cleanup_AdwPreferencesPageClass :: proc(_ptr: ^^PreferencesPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesPageClass_wrapper")
-    autoptr_destroy_AdwPreferencesPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesPageClass_wrapper")
-    listautoptr_cleanup_AdwPreferencesPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesPageClass_wrapper")
-    slistautoptr_cleanup_AdwPreferencesPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesPageClass_wrapper")
-    queueautoptr_cleanup_AdwPreferencesPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_wrapper")
-    PREFERENCES_PAGE :: proc(ptr: glib.pointer) -> ^PreferencesPage ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_CLASS_wrapper")
-    PREFERENCES_PAGE_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesPageClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_PAGE_wrapper")
-    IS_PREFERENCES_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_PAGE_CLASS_wrapper")
-    IS_PREFERENCES_PAGE_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_PAGE_GET_CLASS_wrapper")
-    PREFERENCES_PAGE_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesPageClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwToast_wrapper")
-    autoptr_clear_AdwToast :: proc(_ptr: ^Toast) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToast_wrapper")
-    autoptr_cleanup_AdwToast :: proc(_ptr: ^^Toast) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToast_wrapper")
-    autoptr_destroy_AdwToast :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToast_wrapper")
-    listautoptr_cleanup_AdwToast :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToast_wrapper")
-    slistautoptr_cleanup_AdwToast :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToast_wrapper")
-    queueautoptr_cleanup_AdwToast :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwToastClass_wrapper")
-    autoptr_clear_AdwToastClass :: proc(_ptr: ^ToastClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToastClass_wrapper")
-    autoptr_cleanup_AdwToastClass :: proc(_ptr: ^^ToastClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToastClass_wrapper")
-    autoptr_destroy_AdwToastClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToastClass_wrapper")
-    listautoptr_cleanup_AdwToastClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToastClass_wrapper")
-    slistautoptr_cleanup_AdwToastClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToastClass_wrapper")
-    queueautoptr_cleanup_AdwToastClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TOAST_wrapper")
-    TOAST :: proc(ptr: glib.pointer) -> ^Toast ---
-
-    @(link_name = "ADW_IS_TOAST_wrapper")
-    IS_TOAST :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesDialog_wrapper")
-    autoptr_clear_AdwPreferencesDialog :: proc(_ptr: ^PreferencesDialog) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesDialog_wrapper")
-    autoptr_cleanup_AdwPreferencesDialog :: proc(_ptr: ^^PreferencesDialog) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesDialog_wrapper")
-    autoptr_destroy_AdwPreferencesDialog :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesDialog_wrapper")
-    listautoptr_cleanup_AdwPreferencesDialog :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesDialog_wrapper")
-    slistautoptr_cleanup_AdwPreferencesDialog :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesDialog_wrapper")
-    queueautoptr_cleanup_AdwPreferencesDialog :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesDialogClass_wrapper")
-    autoptr_clear_AdwPreferencesDialogClass :: proc(_ptr: ^PreferencesDialogClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesDialogClass_wrapper")
-    autoptr_cleanup_AdwPreferencesDialogClass :: proc(_ptr: ^^PreferencesDialogClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesDialogClass_wrapper")
-    autoptr_destroy_AdwPreferencesDialogClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesDialogClass_wrapper")
-    listautoptr_cleanup_AdwPreferencesDialogClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesDialogClass_wrapper")
-    slistautoptr_cleanup_AdwPreferencesDialogClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesDialogClass_wrapper")
-    queueautoptr_cleanup_AdwPreferencesDialogClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_wrapper")
-    PREFERENCES_DIALOG :: proc(ptr: glib.pointer) -> ^PreferencesDialog ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_CLASS_wrapper")
-    PREFERENCES_DIALOG_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesDialogClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_DIALOG_wrapper")
-    IS_PREFERENCES_DIALOG :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_DIALOG_CLASS_wrapper")
-    IS_PREFERENCES_DIALOG_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_DIALOG_GET_CLASS_wrapper")
-    PREFERENCES_DIALOG_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesDialogClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesWindow_wrapper")
-    autoptr_clear_AdwPreferencesWindow :: proc(_ptr: ^PreferencesWindow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesWindow_wrapper")
-    autoptr_cleanup_AdwPreferencesWindow :: proc(_ptr: ^^PreferencesWindow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesWindow_wrapper")
-    autoptr_destroy_AdwPreferencesWindow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesWindow_wrapper")
-    listautoptr_cleanup_AdwPreferencesWindow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesWindow_wrapper")
-    slistautoptr_cleanup_AdwPreferencesWindow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesWindow_wrapper")
-    queueautoptr_cleanup_AdwPreferencesWindow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwPreferencesWindowClass_wrapper")
-    autoptr_clear_AdwPreferencesWindowClass :: proc(_ptr: ^PreferencesWindowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwPreferencesWindowClass_wrapper")
-    autoptr_cleanup_AdwPreferencesWindowClass :: proc(_ptr: ^^PreferencesWindowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwPreferencesWindowClass_wrapper")
-    autoptr_destroy_AdwPreferencesWindowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwPreferencesWindowClass_wrapper")
-    listautoptr_cleanup_AdwPreferencesWindowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwPreferencesWindowClass_wrapper")
-    slistautoptr_cleanup_AdwPreferencesWindowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwPreferencesWindowClass_wrapper")
-    queueautoptr_cleanup_AdwPreferencesWindowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_wrapper")
-    PREFERENCES_WINDOW :: proc(ptr: glib.pointer) -> ^PreferencesWindow ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_CLASS_wrapper")
-    PREFERENCES_WINDOW_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesWindowClass ---
-
-    @(link_name = "ADW_IS_PREFERENCES_WINDOW_wrapper")
-    IS_PREFERENCES_WINDOW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_PREFERENCES_WINDOW_CLASS_wrapper")
-    IS_PREFERENCES_WINDOW_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_PREFERENCES_WINDOW_GET_CLASS_wrapper")
-    PREFERENCES_WINDOW_GET_CLASS :: proc(ptr: glib.pointer) -> ^PreferencesWindowClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinRow_wrapper")
-    autoptr_clear_AdwSpinRow :: proc(_ptr: ^SpinRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinRow_wrapper")
-    autoptr_cleanup_AdwSpinRow :: proc(_ptr: ^^SpinRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinRow_wrapper")
-    autoptr_destroy_AdwSpinRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinRow_wrapper")
-    listautoptr_cleanup_AdwSpinRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinRow_wrapper")
-    slistautoptr_cleanup_AdwSpinRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinRow_wrapper")
-    queueautoptr_cleanup_AdwSpinRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinRowClass_wrapper")
-    autoptr_clear_AdwSpinRowClass :: proc(_ptr: ^SpinRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinRowClass_wrapper")
-    autoptr_cleanup_AdwSpinRowClass :: proc(_ptr: ^^SpinRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinRowClass_wrapper")
-    autoptr_destroy_AdwSpinRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinRowClass_wrapper")
-    listautoptr_cleanup_AdwSpinRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinRowClass_wrapper")
-    slistautoptr_cleanup_AdwSpinRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinRowClass_wrapper")
-    queueautoptr_cleanup_AdwSpinRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SPIN_ROW_wrapper")
-    SPIN_ROW :: proc(ptr: glib.pointer) -> ^SpinRow ---
-
-    @(link_name = "ADW_IS_SPIN_ROW_wrapper")
-    IS_SPIN_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinner_wrapper")
-    autoptr_clear_AdwSpinner :: proc(_ptr: ^Spinner) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinner_wrapper")
-    autoptr_cleanup_AdwSpinner :: proc(_ptr: ^^Spinner) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinner_wrapper")
-    autoptr_destroy_AdwSpinner :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinner_wrapper")
-    listautoptr_cleanup_AdwSpinner :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinner_wrapper")
-    slistautoptr_cleanup_AdwSpinner :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinner_wrapper")
-    queueautoptr_cleanup_AdwSpinner :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinnerClass_wrapper")
-    autoptr_clear_AdwSpinnerClass :: proc(_ptr: ^SpinnerClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinnerClass_wrapper")
-    autoptr_cleanup_AdwSpinnerClass :: proc(_ptr: ^^SpinnerClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinnerClass_wrapper")
-    autoptr_destroy_AdwSpinnerClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinnerClass_wrapper")
-    listautoptr_cleanup_AdwSpinnerClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinnerClass_wrapper")
-    slistautoptr_cleanup_AdwSpinnerClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinnerClass_wrapper")
-    queueautoptr_cleanup_AdwSpinnerClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SPINNER_wrapper")
-    SPINNER :: proc(ptr: glib.pointer) -> ^Spinner ---
-
-    @(link_name = "ADW_IS_SPINNER_wrapper")
-    IS_SPINNER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinnerPaintable_wrapper")
-    autoptr_clear_AdwSpinnerPaintable :: proc(_ptr: ^SpinnerPaintable) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinnerPaintable_wrapper")
-    autoptr_cleanup_AdwSpinnerPaintable :: proc(_ptr: ^^SpinnerPaintable) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinnerPaintable_wrapper")
-    autoptr_destroy_AdwSpinnerPaintable :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinnerPaintable_wrapper")
-    listautoptr_cleanup_AdwSpinnerPaintable :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinnerPaintable_wrapper")
-    slistautoptr_cleanup_AdwSpinnerPaintable :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinnerPaintable_wrapper")
-    queueautoptr_cleanup_AdwSpinnerPaintable :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpinnerPaintableClass_wrapper")
-    autoptr_clear_AdwSpinnerPaintableClass :: proc(_ptr: ^SpinnerPaintableClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpinnerPaintableClass_wrapper")
-    autoptr_cleanup_AdwSpinnerPaintableClass :: proc(_ptr: ^^SpinnerPaintableClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpinnerPaintableClass_wrapper")
-    autoptr_destroy_AdwSpinnerPaintableClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpinnerPaintableClass_wrapper")
-    listautoptr_cleanup_AdwSpinnerPaintableClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpinnerPaintableClass_wrapper")
-    slistautoptr_cleanup_AdwSpinnerPaintableClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpinnerPaintableClass_wrapper")
-    queueautoptr_cleanup_AdwSpinnerPaintableClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SPINNER_PAINTABLE_wrapper")
-    SPINNER_PAINTABLE :: proc(ptr: glib.pointer) -> ^SpinnerPaintable ---
-
-    @(link_name = "ADW_IS_SPINNER_PAINTABLE_wrapper")
-    IS_SPINNER_PAINTABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSplitButton_wrapper")
-    autoptr_clear_AdwSplitButton :: proc(_ptr: ^SplitButton) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSplitButton_wrapper")
-    autoptr_cleanup_AdwSplitButton :: proc(_ptr: ^^SplitButton) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSplitButton_wrapper")
-    autoptr_destroy_AdwSplitButton :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSplitButton_wrapper")
-    listautoptr_cleanup_AdwSplitButton :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSplitButton_wrapper")
-    slistautoptr_cleanup_AdwSplitButton :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSplitButton_wrapper")
-    queueautoptr_cleanup_AdwSplitButton :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSplitButtonClass_wrapper")
-    autoptr_clear_AdwSplitButtonClass :: proc(_ptr: ^SplitButtonClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSplitButtonClass_wrapper")
-    autoptr_cleanup_AdwSplitButtonClass :: proc(_ptr: ^^SplitButtonClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSplitButtonClass_wrapper")
-    autoptr_destroy_AdwSplitButtonClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSplitButtonClass_wrapper")
-    listautoptr_cleanup_AdwSplitButtonClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSplitButtonClass_wrapper")
-    slistautoptr_cleanup_AdwSplitButtonClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSplitButtonClass_wrapper")
-    queueautoptr_cleanup_AdwSplitButtonClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SPLIT_BUTTON_wrapper")
-    SPLIT_BUTTON :: proc(ptr: glib.pointer) -> ^SplitButton ---
-
-    @(link_name = "ADW_IS_SPLIT_BUTTON_wrapper")
-    IS_SPLIT_BUTTON :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpringAnimation_wrapper")
-    autoptr_clear_AdwSpringAnimation :: proc(_ptr: ^SpringAnimation) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpringAnimation_wrapper")
-    autoptr_cleanup_AdwSpringAnimation :: proc(_ptr: ^^SpringAnimation) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpringAnimation_wrapper")
-    autoptr_destroy_AdwSpringAnimation :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpringAnimation_wrapper")
-    listautoptr_cleanup_AdwSpringAnimation :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpringAnimation_wrapper")
-    slistautoptr_cleanup_AdwSpringAnimation :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpringAnimation_wrapper")
-    queueautoptr_cleanup_AdwSpringAnimation :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSpringAnimationClass_wrapper")
-    autoptr_clear_AdwSpringAnimationClass :: proc(_ptr: ^SpringAnimationClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSpringAnimationClass_wrapper")
-    autoptr_cleanup_AdwSpringAnimationClass :: proc(_ptr: ^^SpringAnimationClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSpringAnimationClass_wrapper")
-    autoptr_destroy_AdwSpringAnimationClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSpringAnimationClass_wrapper")
-    listautoptr_cleanup_AdwSpringAnimationClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSpringAnimationClass_wrapper")
-    slistautoptr_cleanup_AdwSpringAnimationClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSpringAnimationClass_wrapper")
-    queueautoptr_cleanup_AdwSpringAnimationClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_wrapper")
-    SPRING_ANIMATION :: proc(ptr: glib.pointer) -> ^SpringAnimation ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_CLASS_wrapper")
-    SPRING_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^SpringAnimationClass ---
-
-    @(link_name = "ADW_IS_SPRING_ANIMATION_wrapper")
-    IS_SPRING_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_SPRING_ANIMATION_CLASS_wrapper")
-    IS_SPRING_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SPRING_ANIMATION_GET_CLASS_wrapper")
-    SPRING_ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^SpringAnimationClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwSqueezerPage_wrapper")
-    autoptr_clear_AdwSqueezerPage :: proc(_ptr: ^SqueezerPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSqueezerPage_wrapper")
-    autoptr_cleanup_AdwSqueezerPage :: proc(_ptr: ^^SqueezerPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSqueezerPage_wrapper")
-    autoptr_destroy_AdwSqueezerPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSqueezerPage_wrapper")
-    listautoptr_cleanup_AdwSqueezerPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSqueezerPage_wrapper")
-    slistautoptr_cleanup_AdwSqueezerPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSqueezerPage_wrapper")
-    queueautoptr_cleanup_AdwSqueezerPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSqueezerPageClass_wrapper")
-    autoptr_clear_AdwSqueezerPageClass :: proc(_ptr: ^SqueezerPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSqueezerPageClass_wrapper")
-    autoptr_cleanup_AdwSqueezerPageClass :: proc(_ptr: ^^SqueezerPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSqueezerPageClass_wrapper")
-    autoptr_destroy_AdwSqueezerPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSqueezerPageClass_wrapper")
-    listautoptr_cleanup_AdwSqueezerPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSqueezerPageClass_wrapper")
-    slistautoptr_cleanup_AdwSqueezerPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSqueezerPageClass_wrapper")
-    queueautoptr_cleanup_AdwSqueezerPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SQUEEZER_PAGE_wrapper")
-    SQUEEZER_PAGE :: proc(ptr: glib.pointer) -> ^SqueezerPage ---
-
-    @(link_name = "ADW_IS_SQUEEZER_PAGE_wrapper")
-    IS_SQUEEZER_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSqueezer_wrapper")
-    autoptr_clear_AdwSqueezer :: proc(_ptr: ^Squeezer) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSqueezer_wrapper")
-    autoptr_cleanup_AdwSqueezer :: proc(_ptr: ^^Squeezer) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSqueezer_wrapper")
-    autoptr_destroy_AdwSqueezer :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSqueezer_wrapper")
-    listautoptr_cleanup_AdwSqueezer :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSqueezer_wrapper")
-    slistautoptr_cleanup_AdwSqueezer :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSqueezer_wrapper")
-    queueautoptr_cleanup_AdwSqueezer :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSqueezerClass_wrapper")
-    autoptr_clear_AdwSqueezerClass :: proc(_ptr: ^SqueezerClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSqueezerClass_wrapper")
-    autoptr_cleanup_AdwSqueezerClass :: proc(_ptr: ^^SqueezerClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSqueezerClass_wrapper")
-    autoptr_destroy_AdwSqueezerClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSqueezerClass_wrapper")
-    listautoptr_cleanup_AdwSqueezerClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSqueezerClass_wrapper")
-    slistautoptr_cleanup_AdwSqueezerClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSqueezerClass_wrapper")
-    queueautoptr_cleanup_AdwSqueezerClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SQUEEZER_wrapper")
-    SQUEEZER :: proc(ptr: glib.pointer) -> ^Squeezer ---
-
-    @(link_name = "ADW_IS_SQUEEZER_wrapper")
-    IS_SQUEEZER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwStatusPage_wrapper")
-    autoptr_clear_AdwStatusPage :: proc(_ptr: ^StatusPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwStatusPage_wrapper")
-    autoptr_cleanup_AdwStatusPage :: proc(_ptr: ^^StatusPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwStatusPage_wrapper")
-    autoptr_destroy_AdwStatusPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwStatusPage_wrapper")
-    listautoptr_cleanup_AdwStatusPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwStatusPage_wrapper")
-    slistautoptr_cleanup_AdwStatusPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwStatusPage_wrapper")
-    queueautoptr_cleanup_AdwStatusPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwStatusPageClass_wrapper")
-    autoptr_clear_AdwStatusPageClass :: proc(_ptr: ^StatusPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwStatusPageClass_wrapper")
-    autoptr_cleanup_AdwStatusPageClass :: proc(_ptr: ^^StatusPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwStatusPageClass_wrapper")
-    autoptr_destroy_AdwStatusPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwStatusPageClass_wrapper")
-    listautoptr_cleanup_AdwStatusPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwStatusPageClass_wrapper")
-    slistautoptr_cleanup_AdwStatusPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwStatusPageClass_wrapper")
-    queueautoptr_cleanup_AdwStatusPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_STATUS_PAGE_wrapper")
-    STATUS_PAGE :: proc(ptr: glib.pointer) -> ^StatusPage ---
-
-    @(link_name = "ADW_IS_STATUS_PAGE_wrapper")
-    IS_STATUS_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSwipeable_wrapper")
-    autoptr_clear_AdwSwipeable :: proc(_ptr: ^Swipeable) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSwipeable_wrapper")
-    autoptr_cleanup_AdwSwipeable :: proc(_ptr: ^^Swipeable) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSwipeable_wrapper")
-    autoptr_destroy_AdwSwipeable :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSwipeable_wrapper")
-    listautoptr_cleanup_AdwSwipeable :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSwipeable_wrapper")
-    slistautoptr_cleanup_AdwSwipeable :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSwipeable_wrapper")
-    queueautoptr_cleanup_AdwSwipeable :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SWIPEABLE_wrapper")
-    SWIPEABLE :: proc(ptr: glib.pointer) -> ^Swipeable ---
-
-    @(link_name = "ADW_IS_SWIPEABLE_wrapper")
-    IS_SWIPEABLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_SWIPEABLE_GET_IFACE_wrapper")
-    SWIPEABLE_GET_IFACE :: proc(ptr: glib.pointer) -> ^SwipeableInterface ---
-
-    @(link_name = "glib_autoptr_clear_AdwSwipeTracker_wrapper")
-    autoptr_clear_AdwSwipeTracker :: proc(_ptr: ^SwipeTracker) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSwipeTracker_wrapper")
-    autoptr_cleanup_AdwSwipeTracker :: proc(_ptr: ^^SwipeTracker) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSwipeTracker_wrapper")
-    autoptr_destroy_AdwSwipeTracker :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSwipeTracker_wrapper")
-    listautoptr_cleanup_AdwSwipeTracker :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSwipeTracker_wrapper")
-    slistautoptr_cleanup_AdwSwipeTracker :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSwipeTracker_wrapper")
-    queueautoptr_cleanup_AdwSwipeTracker :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSwipeTrackerClass_wrapper")
-    autoptr_clear_AdwSwipeTrackerClass :: proc(_ptr: ^SwipeTrackerClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSwipeTrackerClass_wrapper")
-    autoptr_cleanup_AdwSwipeTrackerClass :: proc(_ptr: ^^SwipeTrackerClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSwipeTrackerClass_wrapper")
-    autoptr_destroy_AdwSwipeTrackerClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSwipeTrackerClass_wrapper")
-    listautoptr_cleanup_AdwSwipeTrackerClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSwipeTrackerClass_wrapper")
-    slistautoptr_cleanup_AdwSwipeTrackerClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSwipeTrackerClass_wrapper")
-    queueautoptr_cleanup_AdwSwipeTrackerClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SWIPE_TRACKER_wrapper")
-    SWIPE_TRACKER :: proc(ptr: glib.pointer) -> ^SwipeTracker ---
-
-    @(link_name = "ADW_IS_SWIPE_TRACKER_wrapper")
-    IS_SWIPE_TRACKER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwSwitchRow_wrapper")
-    autoptr_clear_AdwSwitchRow :: proc(_ptr: ^SwitchRow) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSwitchRow_wrapper")
-    autoptr_cleanup_AdwSwitchRow :: proc(_ptr: ^^SwitchRow) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSwitchRow_wrapper")
-    autoptr_destroy_AdwSwitchRow :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSwitchRow_wrapper")
-    listautoptr_cleanup_AdwSwitchRow :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSwitchRow_wrapper")
-    slistautoptr_cleanup_AdwSwitchRow :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSwitchRow_wrapper")
-    queueautoptr_cleanup_AdwSwitchRow :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwSwitchRowClass_wrapper")
-    autoptr_clear_AdwSwitchRowClass :: proc(_ptr: ^SwitchRowClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwSwitchRowClass_wrapper")
-    autoptr_cleanup_AdwSwitchRowClass :: proc(_ptr: ^^SwitchRowClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwSwitchRowClass_wrapper")
-    autoptr_destroy_AdwSwitchRowClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwSwitchRowClass_wrapper")
-    listautoptr_cleanup_AdwSwitchRowClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwSwitchRowClass_wrapper")
-    slistautoptr_cleanup_AdwSwitchRowClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwSwitchRowClass_wrapper")
-    queueautoptr_cleanup_AdwSwitchRowClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_SWITCH_ROW_wrapper")
-    SWITCH_ROW :: proc(ptr: glib.pointer) -> ^SwitchRow ---
-
-    @(link_name = "ADW_IS_SWITCH_ROW_wrapper")
-    IS_SWITCH_ROW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabPage_wrapper")
-    autoptr_clear_AdwTabPage :: proc(_ptr: ^TabPage) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabPage_wrapper")
-    autoptr_cleanup_AdwTabPage :: proc(_ptr: ^^TabPage) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabPage_wrapper")
-    autoptr_destroy_AdwTabPage :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabPage_wrapper")
-    listautoptr_cleanup_AdwTabPage :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabPage_wrapper")
-    slistautoptr_cleanup_AdwTabPage :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabPage_wrapper")
-    queueautoptr_cleanup_AdwTabPage :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabPageClass_wrapper")
-    autoptr_clear_AdwTabPageClass :: proc(_ptr: ^TabPageClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabPageClass_wrapper")
-    autoptr_cleanup_AdwTabPageClass :: proc(_ptr: ^^TabPageClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabPageClass_wrapper")
-    autoptr_destroy_AdwTabPageClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabPageClass_wrapper")
-    listautoptr_cleanup_AdwTabPageClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabPageClass_wrapper")
-    slistautoptr_cleanup_AdwTabPageClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabPageClass_wrapper")
-    queueautoptr_cleanup_AdwTabPageClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TAB_PAGE_wrapper")
-    TAB_PAGE :: proc(ptr: glib.pointer) -> ^TabPage ---
-
-    @(link_name = "ADW_IS_TAB_PAGE_wrapper")
-    IS_TAB_PAGE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabView_wrapper")
-    autoptr_clear_AdwTabView :: proc(_ptr: ^TabView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabView_wrapper")
-    autoptr_cleanup_AdwTabView :: proc(_ptr: ^^TabView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabView_wrapper")
-    autoptr_destroy_AdwTabView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabView_wrapper")
-    listautoptr_cleanup_AdwTabView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabView_wrapper")
-    slistautoptr_cleanup_AdwTabView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabView_wrapper")
-    queueautoptr_cleanup_AdwTabView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabViewClass_wrapper")
-    autoptr_clear_AdwTabViewClass :: proc(_ptr: ^TabViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabViewClass_wrapper")
-    autoptr_cleanup_AdwTabViewClass :: proc(_ptr: ^^TabViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabViewClass_wrapper")
-    autoptr_destroy_AdwTabViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabViewClass_wrapper")
-    listautoptr_cleanup_AdwTabViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabViewClass_wrapper")
-    slistautoptr_cleanup_AdwTabViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabViewClass_wrapper")
-    queueautoptr_cleanup_AdwTabViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TAB_VIEW_wrapper")
-    TAB_VIEW :: proc(ptr: glib.pointer) -> ^TabView ---
-
-    @(link_name = "ADW_IS_TAB_VIEW_wrapper")
-    IS_TAB_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabBar_wrapper")
-    autoptr_clear_AdwTabBar :: proc(_ptr: ^TabBar) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabBar_wrapper")
-    autoptr_cleanup_AdwTabBar :: proc(_ptr: ^^TabBar) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabBar_wrapper")
-    autoptr_destroy_AdwTabBar :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabBar_wrapper")
-    listautoptr_cleanup_AdwTabBar :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabBar_wrapper")
-    slistautoptr_cleanup_AdwTabBar :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabBar_wrapper")
-    queueautoptr_cleanup_AdwTabBar :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabBarClass_wrapper")
-    autoptr_clear_AdwTabBarClass :: proc(_ptr: ^TabBarClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabBarClass_wrapper")
-    autoptr_cleanup_AdwTabBarClass :: proc(_ptr: ^^TabBarClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabBarClass_wrapper")
-    autoptr_destroy_AdwTabBarClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabBarClass_wrapper")
-    listautoptr_cleanup_AdwTabBarClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabBarClass_wrapper")
-    slistautoptr_cleanup_AdwTabBarClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabBarClass_wrapper")
-    queueautoptr_cleanup_AdwTabBarClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TAB_BAR_wrapper")
-    TAB_BAR :: proc(ptr: glib.pointer) -> ^TabBar ---
-
-    @(link_name = "ADW_IS_TAB_BAR_wrapper")
-    IS_TAB_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabButton_wrapper")
-    autoptr_clear_AdwTabButton :: proc(_ptr: ^TabButton) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabButton_wrapper")
-    autoptr_cleanup_AdwTabButton :: proc(_ptr: ^^TabButton) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabButton_wrapper")
-    autoptr_destroy_AdwTabButton :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabButton_wrapper")
-    listautoptr_cleanup_AdwTabButton :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabButton_wrapper")
-    slistautoptr_cleanup_AdwTabButton :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabButton_wrapper")
-    queueautoptr_cleanup_AdwTabButton :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabButtonClass_wrapper")
-    autoptr_clear_AdwTabButtonClass :: proc(_ptr: ^TabButtonClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabButtonClass_wrapper")
-    autoptr_cleanup_AdwTabButtonClass :: proc(_ptr: ^^TabButtonClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabButtonClass_wrapper")
-    autoptr_destroy_AdwTabButtonClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabButtonClass_wrapper")
-    listautoptr_cleanup_AdwTabButtonClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabButtonClass_wrapper")
-    slistautoptr_cleanup_AdwTabButtonClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabButtonClass_wrapper")
-    queueautoptr_cleanup_AdwTabButtonClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TAB_BUTTON_wrapper")
-    TAB_BUTTON :: proc(ptr: glib.pointer) -> ^TabButton ---
-
-    @(link_name = "ADW_IS_TAB_BUTTON_wrapper")
-    IS_TAB_BUTTON :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabOverview_wrapper")
-    autoptr_clear_AdwTabOverview :: proc(_ptr: ^TabOverview) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabOverview_wrapper")
-    autoptr_cleanup_AdwTabOverview :: proc(_ptr: ^^TabOverview) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabOverview_wrapper")
-    autoptr_destroy_AdwTabOverview :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabOverview_wrapper")
-    listautoptr_cleanup_AdwTabOverview :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabOverview_wrapper")
-    slistautoptr_cleanup_AdwTabOverview :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabOverview_wrapper")
-    queueautoptr_cleanup_AdwTabOverview :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTabOverviewClass_wrapper")
-    autoptr_clear_AdwTabOverviewClass :: proc(_ptr: ^TabOverviewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTabOverviewClass_wrapper")
-    autoptr_cleanup_AdwTabOverviewClass :: proc(_ptr: ^^TabOverviewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTabOverviewClass_wrapper")
-    autoptr_destroy_AdwTabOverviewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTabOverviewClass_wrapper")
-    listautoptr_cleanup_AdwTabOverviewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTabOverviewClass_wrapper")
-    slistautoptr_cleanup_AdwTabOverviewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTabOverviewClass_wrapper")
-    queueautoptr_cleanup_AdwTabOverviewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TAB_OVERVIEW_wrapper")
-    TAB_OVERVIEW :: proc(ptr: glib.pointer) -> ^TabOverview ---
-
-    @(link_name = "ADW_IS_TAB_OVERVIEW_wrapper")
-    IS_TAB_OVERVIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwTimedAnimation_wrapper")
-    autoptr_clear_AdwTimedAnimation :: proc(_ptr: ^TimedAnimation) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTimedAnimation_wrapper")
-    autoptr_cleanup_AdwTimedAnimation :: proc(_ptr: ^^TimedAnimation) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTimedAnimation_wrapper")
-    autoptr_destroy_AdwTimedAnimation :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTimedAnimation_wrapper")
-    listautoptr_cleanup_AdwTimedAnimation :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTimedAnimation_wrapper")
-    slistautoptr_cleanup_AdwTimedAnimation :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTimedAnimation_wrapper")
-    queueautoptr_cleanup_AdwTimedAnimation :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwTimedAnimationClass_wrapper")
-    autoptr_clear_AdwTimedAnimationClass :: proc(_ptr: ^TimedAnimationClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwTimedAnimationClass_wrapper")
-    autoptr_cleanup_AdwTimedAnimationClass :: proc(_ptr: ^^TimedAnimationClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwTimedAnimationClass_wrapper")
-    autoptr_destroy_AdwTimedAnimationClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwTimedAnimationClass_wrapper")
-    listautoptr_cleanup_AdwTimedAnimationClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwTimedAnimationClass_wrapper")
-    slistautoptr_cleanup_AdwTimedAnimationClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwTimedAnimationClass_wrapper")
-    queueautoptr_cleanup_AdwTimedAnimationClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_wrapper")
-    TIMED_ANIMATION :: proc(ptr: glib.pointer) -> ^TimedAnimation ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_CLASS_wrapper")
-    TIMED_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> ^TimedAnimationClass ---
-
-    @(link_name = "ADW_IS_TIMED_ANIMATION_wrapper")
-    IS_TIMED_ANIMATION :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_IS_TIMED_ANIMATION_CLASS_wrapper")
-    IS_TIMED_ANIMATION_CLASS :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "ADW_TIMED_ANIMATION_GET_CLASS_wrapper")
-    TIMED_ANIMATION_GET_CLASS :: proc(ptr: glib.pointer) -> ^TimedAnimationClass ---
-
-    @(link_name = "glib_autoptr_clear_AdwToastOverlay_wrapper")
-    autoptr_clear_AdwToastOverlay :: proc(_ptr: ^ToastOverlay) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToastOverlay_wrapper")
-    autoptr_cleanup_AdwToastOverlay :: proc(_ptr: ^^ToastOverlay) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToastOverlay_wrapper")
-    autoptr_destroy_AdwToastOverlay :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToastOverlay_wrapper")
-    listautoptr_cleanup_AdwToastOverlay :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToastOverlay_wrapper")
-    slistautoptr_cleanup_AdwToastOverlay :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToastOverlay_wrapper")
-    queueautoptr_cleanup_AdwToastOverlay :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwToastOverlayClass_wrapper")
-    autoptr_clear_AdwToastOverlayClass :: proc(_ptr: ^ToastOverlayClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToastOverlayClass_wrapper")
-    autoptr_cleanup_AdwToastOverlayClass :: proc(_ptr: ^^ToastOverlayClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToastOverlayClass_wrapper")
-    autoptr_destroy_AdwToastOverlayClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToastOverlayClass_wrapper")
-    listautoptr_cleanup_AdwToastOverlayClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToastOverlayClass_wrapper")
-    slistautoptr_cleanup_AdwToastOverlayClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToastOverlayClass_wrapper")
-    queueautoptr_cleanup_AdwToastOverlayClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TOAST_OVERLAY_wrapper")
-    TOAST_OVERLAY :: proc(ptr: glib.pointer) -> ^ToastOverlay ---
-
-    @(link_name = "ADW_IS_TOAST_OVERLAY_wrapper")
-    IS_TOAST_OVERLAY :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwToggle_wrapper")
-    autoptr_clear_AdwToggle :: proc(_ptr: ^Toggle) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToggle_wrapper")
-    autoptr_cleanup_AdwToggle :: proc(_ptr: ^^Toggle) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToggle_wrapper")
-    autoptr_destroy_AdwToggle :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToggle_wrapper")
-    listautoptr_cleanup_AdwToggle :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToggle_wrapper")
-    slistautoptr_cleanup_AdwToggle :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToggle_wrapper")
-    queueautoptr_cleanup_AdwToggle :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwToggleClass_wrapper")
-    autoptr_clear_AdwToggleClass :: proc(_ptr: ^ToggleClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToggleClass_wrapper")
-    autoptr_cleanup_AdwToggleClass :: proc(_ptr: ^^ToggleClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToggleClass_wrapper")
-    autoptr_destroy_AdwToggleClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToggleClass_wrapper")
-    listautoptr_cleanup_AdwToggleClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToggleClass_wrapper")
-    slistautoptr_cleanup_AdwToggleClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToggleClass_wrapper")
-    queueautoptr_cleanup_AdwToggleClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TOGGLE_wrapper")
-    TOGGLE :: proc(ptr: glib.pointer) -> ^Toggle ---
-
-    @(link_name = "ADW_IS_TOGGLE_wrapper")
-    IS_TOGGLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwToggleGroup_wrapper")
-    autoptr_clear_AdwToggleGroup :: proc(_ptr: ^ToggleGroup) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToggleGroup_wrapper")
-    autoptr_cleanup_AdwToggleGroup :: proc(_ptr: ^^ToggleGroup) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToggleGroup_wrapper")
-    autoptr_destroy_AdwToggleGroup :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToggleGroup_wrapper")
-    listautoptr_cleanup_AdwToggleGroup :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToggleGroup_wrapper")
-    slistautoptr_cleanup_AdwToggleGroup :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToggleGroup_wrapper")
-    queueautoptr_cleanup_AdwToggleGroup :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwToggleGroupClass_wrapper")
-    autoptr_clear_AdwToggleGroupClass :: proc(_ptr: ^ToggleGroupClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToggleGroupClass_wrapper")
-    autoptr_cleanup_AdwToggleGroupClass :: proc(_ptr: ^^ToggleGroupClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToggleGroupClass_wrapper")
-    autoptr_destroy_AdwToggleGroupClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToggleGroupClass_wrapper")
-    listautoptr_cleanup_AdwToggleGroupClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToggleGroupClass_wrapper")
-    slistautoptr_cleanup_AdwToggleGroupClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToggleGroupClass_wrapper")
-    queueautoptr_cleanup_AdwToggleGroupClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TOGGLE_GROUP_wrapper")
-    TOGGLE_GROUP :: proc(ptr: glib.pointer) -> ^ToggleGroup ---
-
-    @(link_name = "ADW_IS_TOGGLE_GROUP_wrapper")
-    IS_TOGGLE_GROUP :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwToolbarView_wrapper")
-    autoptr_clear_AdwToolbarView :: proc(_ptr: ^ToolbarView) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToolbarView_wrapper")
-    autoptr_cleanup_AdwToolbarView :: proc(_ptr: ^^ToolbarView) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToolbarView_wrapper")
-    autoptr_destroy_AdwToolbarView :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToolbarView_wrapper")
-    listautoptr_cleanup_AdwToolbarView :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToolbarView_wrapper")
-    slistautoptr_cleanup_AdwToolbarView :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToolbarView_wrapper")
-    queueautoptr_cleanup_AdwToolbarView :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwToolbarViewClass_wrapper")
-    autoptr_clear_AdwToolbarViewClass :: proc(_ptr: ^ToolbarViewClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwToolbarViewClass_wrapper")
-    autoptr_cleanup_AdwToolbarViewClass :: proc(_ptr: ^^ToolbarViewClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwToolbarViewClass_wrapper")
-    autoptr_destroy_AdwToolbarViewClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwToolbarViewClass_wrapper")
-    listautoptr_cleanup_AdwToolbarViewClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwToolbarViewClass_wrapper")
-    slistautoptr_cleanup_AdwToolbarViewClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwToolbarViewClass_wrapper")
-    queueautoptr_cleanup_AdwToolbarViewClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_TOOLBAR_VIEW_wrapper")
-    TOOLBAR_VIEW :: proc(ptr: glib.pointer) -> ^ToolbarView ---
-
-    @(link_name = "ADW_IS_TOOLBAR_VIEW_wrapper")
-    IS_TOOLBAR_VIEW :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcher_wrapper")
-    autoptr_clear_AdwViewSwitcher :: proc(_ptr: ^ViewSwitcher) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcher_wrapper")
-    autoptr_cleanup_AdwViewSwitcher :: proc(_ptr: ^^ViewSwitcher) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcher_wrapper")
-    autoptr_destroy_AdwViewSwitcher :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcher_wrapper")
-    listautoptr_cleanup_AdwViewSwitcher :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcher_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcher :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcher_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcher :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcherClass_wrapper")
-    autoptr_clear_AdwViewSwitcherClass :: proc(_ptr: ^ViewSwitcherClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcherClass_wrapper")
-    autoptr_cleanup_AdwViewSwitcherClass :: proc(_ptr: ^^ViewSwitcherClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcherClass_wrapper")
-    autoptr_destroy_AdwViewSwitcherClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcherClass_wrapper")
-    listautoptr_cleanup_AdwViewSwitcherClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcherClass_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcherClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcherClass_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcherClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_wrapper")
-    VIEW_SWITCHER :: proc(ptr: glib.pointer) -> ^ViewSwitcher ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_wrapper")
-    IS_VIEW_SWITCHER :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcherBar_wrapper")
-    autoptr_clear_AdwViewSwitcherBar :: proc(_ptr: ^ViewSwitcherBar) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcherBar_wrapper")
-    autoptr_cleanup_AdwViewSwitcherBar :: proc(_ptr: ^^ViewSwitcherBar) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcherBar_wrapper")
-    autoptr_destroy_AdwViewSwitcherBar :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcherBar_wrapper")
-    listautoptr_cleanup_AdwViewSwitcherBar :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcherBar_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcherBar :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcherBar_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcherBar :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcherBarClass_wrapper")
-    autoptr_clear_AdwViewSwitcherBarClass :: proc(_ptr: ^ViewSwitcherBarClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcherBarClass_wrapper")
-    autoptr_cleanup_AdwViewSwitcherBarClass :: proc(_ptr: ^^ViewSwitcherBarClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcherBarClass_wrapper")
-    autoptr_destroy_AdwViewSwitcherBarClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcherBarClass_wrapper")
-    listautoptr_cleanup_AdwViewSwitcherBarClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcherBarClass_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcherBarClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcherBarClass_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcherBarClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_BAR_wrapper")
-    VIEW_SWITCHER_BAR :: proc(ptr: glib.pointer) -> ^ViewSwitcherBar ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_BAR_wrapper")
-    IS_VIEW_SWITCHER_BAR :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcherTitle_wrapper")
-    autoptr_clear_AdwViewSwitcherTitle :: proc(_ptr: ^ViewSwitcherTitle) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcherTitle_wrapper")
-    autoptr_cleanup_AdwViewSwitcherTitle :: proc(_ptr: ^^ViewSwitcherTitle) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcherTitle_wrapper")
-    autoptr_destroy_AdwViewSwitcherTitle :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcherTitle_wrapper")
-    listautoptr_cleanup_AdwViewSwitcherTitle :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcherTitle_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcherTitle :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcherTitle_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcherTitle :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwViewSwitcherTitleClass_wrapper")
-    autoptr_clear_AdwViewSwitcherTitleClass :: proc(_ptr: ^ViewSwitcherTitleClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwViewSwitcherTitleClass_wrapper")
-    autoptr_cleanup_AdwViewSwitcherTitleClass :: proc(_ptr: ^^ViewSwitcherTitleClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwViewSwitcherTitleClass_wrapper")
-    autoptr_destroy_AdwViewSwitcherTitleClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwViewSwitcherTitleClass_wrapper")
-    listautoptr_cleanup_AdwViewSwitcherTitleClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwViewSwitcherTitleClass_wrapper")
-    slistautoptr_cleanup_AdwViewSwitcherTitleClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwViewSwitcherTitleClass_wrapper")
-    queueautoptr_cleanup_AdwViewSwitcherTitleClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_VIEW_SWITCHER_TITLE_wrapper")
-    VIEW_SWITCHER_TITLE :: proc(ptr: glib.pointer) -> ^ViewSwitcherTitle ---
-
-    @(link_name = "ADW_IS_VIEW_SWITCHER_TITLE_wrapper")
-    IS_VIEW_SWITCHER_TITLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwWindowTitle_wrapper")
-    autoptr_clear_AdwWindowTitle :: proc(_ptr: ^WindowTitle) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWindowTitle_wrapper")
-    autoptr_cleanup_AdwWindowTitle :: proc(_ptr: ^^WindowTitle) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWindowTitle_wrapper")
-    autoptr_destroy_AdwWindowTitle :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWindowTitle_wrapper")
-    listautoptr_cleanup_AdwWindowTitle :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWindowTitle_wrapper")
-    slistautoptr_cleanup_AdwWindowTitle :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWindowTitle_wrapper")
-    queueautoptr_cleanup_AdwWindowTitle :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwWindowTitleClass_wrapper")
-    autoptr_clear_AdwWindowTitleClass :: proc(_ptr: ^WindowTitleClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWindowTitleClass_wrapper")
-    autoptr_cleanup_AdwWindowTitleClass :: proc(_ptr: ^^WindowTitleClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWindowTitleClass_wrapper")
-    autoptr_destroy_AdwWindowTitleClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWindowTitleClass_wrapper")
-    listautoptr_cleanup_AdwWindowTitleClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWindowTitleClass_wrapper")
-    slistautoptr_cleanup_AdwWindowTitleClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWindowTitleClass_wrapper")
-    queueautoptr_cleanup_AdwWindowTitleClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_WINDOW_TITLE_wrapper")
-    WINDOW_TITLE :: proc(ptr: glib.pointer) -> ^WindowTitle ---
-
-    @(link_name = "ADW_IS_WINDOW_TITLE_wrapper")
-    IS_WINDOW_TITLE :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwWrapLayout_wrapper")
-    autoptr_clear_AdwWrapLayout :: proc(_ptr: ^WrapLayout) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWrapLayout_wrapper")
-    autoptr_cleanup_AdwWrapLayout :: proc(_ptr: ^^WrapLayout) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWrapLayout_wrapper")
-    autoptr_destroy_AdwWrapLayout :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWrapLayout_wrapper")
-    listautoptr_cleanup_AdwWrapLayout :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWrapLayout_wrapper")
-    slistautoptr_cleanup_AdwWrapLayout :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWrapLayout_wrapper")
-    queueautoptr_cleanup_AdwWrapLayout :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwWrapLayoutClass_wrapper")
-    autoptr_clear_AdwWrapLayoutClass :: proc(_ptr: ^WrapLayoutClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWrapLayoutClass_wrapper")
-    autoptr_cleanup_AdwWrapLayoutClass :: proc(_ptr: ^^WrapLayoutClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWrapLayoutClass_wrapper")
-    autoptr_destroy_AdwWrapLayoutClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWrapLayoutClass_wrapper")
-    listautoptr_cleanup_AdwWrapLayoutClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWrapLayoutClass_wrapper")
-    slistautoptr_cleanup_AdwWrapLayoutClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWrapLayoutClass_wrapper")
-    queueautoptr_cleanup_AdwWrapLayoutClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_WRAP_LAYOUT_wrapper")
-    WRAP_LAYOUT :: proc(ptr: glib.pointer) -> ^WrapLayout ---
-
-    @(link_name = "ADW_IS_WRAP_LAYOUT_wrapper")
-    IS_WRAP_LAYOUT :: proc(ptr: glib.pointer) -> glib.boolean ---
-
-    @(link_name = "glib_autoptr_clear_AdwWrapBox_wrapper")
-    autoptr_clear_AdwWrapBox :: proc(_ptr: ^WrapBox) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWrapBox_wrapper")
-    autoptr_cleanup_AdwWrapBox :: proc(_ptr: ^^WrapBox) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWrapBox_wrapper")
-    autoptr_destroy_AdwWrapBox :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWrapBox_wrapper")
-    listautoptr_cleanup_AdwWrapBox :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWrapBox_wrapper")
-    slistautoptr_cleanup_AdwWrapBox :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWrapBox_wrapper")
-    queueautoptr_cleanup_AdwWrapBox :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "glib_autoptr_clear_AdwWrapBoxClass_wrapper")
-    autoptr_clear_AdwWrapBoxClass :: proc(_ptr: ^WrapBoxClass) ---
-
-    @(link_name = "glib_autoptr_cleanup_AdwWrapBoxClass_wrapper")
-    autoptr_cleanup_AdwWrapBoxClass :: proc(_ptr: ^^WrapBoxClass) ---
-
-    @(link_name = "glib_autoptr_destroy_AdwWrapBoxClass_wrapper")
-    autoptr_destroy_AdwWrapBoxClass :: proc(_ptr: rawptr) ---
-
-    @(link_name = "glib_listautoptr_cleanup_AdwWrapBoxClass_wrapper")
-    listautoptr_cleanup_AdwWrapBoxClass :: proc(_l: ^^glib.List) ---
-
-    @(link_name = "glib_slistautoptr_cleanup_AdwWrapBoxClass_wrapper")
-    slistautoptr_cleanup_AdwWrapBoxClass :: proc(_l: ^^glib.SList) ---
-
-    @(link_name = "glib_queueautoptr_cleanup_AdwWrapBoxClass_wrapper")
-    queueautoptr_cleanup_AdwWrapBoxClass :: proc(_q: ^^glib.Queue) ---
-
-    @(link_name = "ADW_WRAP_BOX_wrapper")
-    WRAP_BOX :: proc(ptr: glib.pointer) -> ^WrapBox ---
-
-    @(link_name = "ADW_IS_WRAP_BOX_wrapper")
-    IS_WRAP_BOX :: proc(ptr: glib.pointer) -> glib.boolean ---
+    @(link_name = "adw_wrap_box_remove_all")
+    wrap_box_remove_all :: proc(self: ^WrapBox) ---
 
 }
 
 when (ODIN_OS == .Linux) {
 
-LengthUnit :: enum u32 {PX = 0, PT = 1, SP = 2 }
-BreakpointConditionLengthType :: enum u32 {MIN_WIDTH = 0, MAX_WIDTH = 1, MIN_HEIGHT = 2, MAX_HEIGHT = 3 }
-BreakpointConditionRatioType :: enum u32 {MIN_ASPECT_RATIO = 0, MAX_ASPECT_RATIO = 1 }
-DialogPresentationMode :: enum u32 {AUTO = 0, FLOATING = 1, BOTTOM_SHEET = 2 }
-AccentColor :: enum u32 {BLUE = 0, TEAL = 1, GREEN = 2, YELLOW = 3, ORANGE = 4, RED = 5, PINK = 6, PURPLE = 7, SLATE = 8 }
-ResponseAppearance :: enum u32 {DEFAULT = 0, SUGGESTED = 1, DESTRUCTIVE = 2 }
-AnimationState :: enum u32 {IDLE = 0, PAUSED = 1, PLAYING = 2, FINISHED = 3 }
-ColorScheme :: enum u32 {DEFAULT = 0, FORCE_LIGHT = 1, PREFER_LIGHT = 2, PREFER_DARK = 3, FORCE_DARK = 4 }
-BannerButtonStyle :: enum u32 {BANNER_BUTTON_DEFAULT = 0, BANNER_BUTTON_SUGGESTED = 1 }
-Easing :: enum u32 {LINEAR = 0, EASE_IN_QUAD = 1, EASE_OUT_QUAD = 2, EASE_IN_OUT_QUAD = 3, EASE_IN_CUBIC = 4, EASE_OUT_CUBIC = 5, EASE_IN_OUT_CUBIC = 6, EASE_IN_QUART = 7, EASE_OUT_QUART = 8, EASE_IN_OUT_QUART = 9, EASE_IN_QUINT = 10, EASE_OUT_QUINT = 11, EASE_IN_OUT_QUINT = 12, EASE_IN_SINE = 13, EASE_OUT_SINE = 14, EASE_IN_OUT_SINE = 15, EASE_IN_EXPO = 16, EASE_OUT_EXPO = 17, EASE_IN_OUT_EXPO = 18, EASE_IN_CIRC = 19, EASE_OUT_CIRC = 20, EASE_IN_OUT_CIRC = 21, EASE_IN_ELASTIC = 22, EASE_OUT_ELASTIC = 23, EASE_IN_OUT_ELASTIC = 24, EASE_IN_BACK = 25, EASE_OUT_BACK = 26, EASE_IN_OUT_BACK = 27, EASE_IN_BOUNCE = 28, EASE_OUT_BOUNCE = 29, EASE_IN_OUT_BOUNCE = 30, EASE = 31, EASE_IN = 32, EASE_OUT = 33, EASE_IN_OUT = 34 }
-FoldThresholdPolicy :: enum u32 {MINIMUM = 0, NATURAL = 1 }
-FlapFoldPolicy :: enum u32 {NEVER = 0, ALWAYS = 1, AUTO = 2 }
-FlapTransitionType :: enum u32 {OVER = 0, UNDER = 1, SLIDE = 2 }
-CenteringPolicy :: enum u32 {LOOSE = 0, STRICT = 1 }
-InlineViewSwitcherDisplayMode :: enum u32 {INLINE_VIEW_SWITCHER_LABELS = 0, INLINE_VIEW_SWITCHER_ICONS = 1, INLINE_VIEW_SWITCHER_BOTH = 2 }
-NavigationDirection :: enum u32 {BACK = 0, FORWARD = 1 }
-LeafletTransitionType :: enum u32 {OVER = 0, UNDER = 1, SLIDE = 2 }
-ToastPriority :: enum u32 {NORMAL = 0, HIGH = 1 }
-SqueezerTransitionType :: enum u32 {NONE = 0, CROSSFADE = 1 }
-TabViewShortcuts :: enum u32 {NONE = 0, CONTROL_TAB = 1, CONTROL_SHIFT_TAB = 2, CONTROL_PAGE_UP = 4, CONTROL_PAGE_DOWN = 8, CONTROL_HOME = 16, CONTROL_END = 32, CONTROL_SHIFT_PAGE_UP = 64, CONTROL_SHIFT_PAGE_DOWN = 128, CONTROL_SHIFT_HOME = 256, CONTROL_SHIFT_END = 512, ALT_DIGITS = 1024, ALT_ZERO = 2048, ALL_SHORTCUTS = 4095 }
-ToolbarStyle :: enum u32 {FLAT = 0, RAISED = 1, RAISED_BORDER = 2 }
-ViewSwitcherPolicy :: enum u32 {NARROW = 0, WIDE = 1 }
-JustifyMode :: enum u32 {JUSTIFY_NONE = 0, JUSTIFY_FILL = 1, JUSTIFY_SPREAD = 2 }
-PackDirection :: enum u32 {PACK_START_TO_END = 0, PACK_END_TO_START = 1 }
-WrapPolicy :: enum u32 {WRAP_MINIMUM = 0, WRAP_NATURAL = 1 }
+@(default_calling_convention = "c")
+foreign adwaita_runic {
+    @(link_name = "adw_about_dialog_new_from_appdata")
+    about_dialog_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^Dialog ---
+
+    @(link_name = "adw_about_dialog_get_appdata_resource_path")
+    about_dialog_get_appdata_resource_path :: proc(self: ^AboutDialog) -> cstring ---
+
+    @(link_name = "adw_show_about_dialog_from_appdata")
+    show_about_dialog_from_appdata :: proc(parent: ^gtk.Widget, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
+
+    @(link_name = "adw_about_window_new_from_appdata")
+    about_window_new_from_appdata :: proc(resource_path: cstring, release_notes_version: cstring) -> ^gtk.Widget ---
+
+    @(link_name = "adw_show_about_window_from_appdata")
+    show_about_window_from_appdata :: proc(parent: ^gtk.Window, resource_path: cstring, release_notes_version: cstring, first_property_name: cstring, #c_vararg var_args: ..any) ---
 
 }
-
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-
-LengthUnit :: enum i32 {PX = 0, PT = 1, SP = 2 }
-BreakpointConditionLengthType :: enum i32 {MIN_WIDTH = 0, MAX_WIDTH = 1, MIN_HEIGHT = 2, MAX_HEIGHT = 3 }
-BreakpointConditionRatioType :: enum i32 {MIN_ASPECT_RATIO = 0, MAX_ASPECT_RATIO = 1 }
-DialogPresentationMode :: enum i32 {AUTO = 0, FLOATING = 1, BOTTOM_SHEET = 2 }
-AccentColor :: enum i32 {BLUE = 0, TEAL = 1, GREEN = 2, YELLOW = 3, ORANGE = 4, RED = 5, PINK = 6, PURPLE = 7, SLATE = 8 }
-ResponseAppearance :: enum i32 {DEFAULT = 0, SUGGESTED = 1, DESTRUCTIVE = 2 }
-AnimationState :: enum i32 {IDLE = 0, PAUSED = 1, PLAYING = 2, FINISHED = 3 }
-ColorScheme :: enum i32 {DEFAULT = 0, FORCE_LIGHT = 1, PREFER_LIGHT = 2, PREFER_DARK = 3, FORCE_DARK = 4 }
-BannerButtonStyle :: enum i32 {BANNER_BUTTON_DEFAULT = 0, BANNER_BUTTON_SUGGESTED = 1 }
-Easing :: enum i32 {LINEAR = 0, EASE_IN_QUAD = 1, EASE_OUT_QUAD = 2, EASE_IN_OUT_QUAD = 3, EASE_IN_CUBIC = 4, EASE_OUT_CUBIC = 5, EASE_IN_OUT_CUBIC = 6, EASE_IN_QUART = 7, EASE_OUT_QUART = 8, EASE_IN_OUT_QUART = 9, EASE_IN_QUINT = 10, EASE_OUT_QUINT = 11, EASE_IN_OUT_QUINT = 12, EASE_IN_SINE = 13, EASE_OUT_SINE = 14, EASE_IN_OUT_SINE = 15, EASE_IN_EXPO = 16, EASE_OUT_EXPO = 17, EASE_IN_OUT_EXPO = 18, EASE_IN_CIRC = 19, EASE_OUT_CIRC = 20, EASE_IN_OUT_CIRC = 21, EASE_IN_ELASTIC = 22, EASE_OUT_ELASTIC = 23, EASE_IN_OUT_ELASTIC = 24, EASE_IN_BACK = 25, EASE_OUT_BACK = 26, EASE_IN_OUT_BACK = 27, EASE_IN_BOUNCE = 28, EASE_OUT_BOUNCE = 29, EASE_IN_OUT_BOUNCE = 30, EASE = 31, EASE_IN = 32, EASE_OUT = 33, EASE_IN_OUT = 34 }
-FoldThresholdPolicy :: enum i32 {MINIMUM = 0, NATURAL = 1 }
-FlapFoldPolicy :: enum i32 {NEVER = 0, ALWAYS = 1, AUTO = 2 }
-FlapTransitionType :: enum i32 {OVER = 0, UNDER = 1, SLIDE = 2 }
-CenteringPolicy :: enum i32 {LOOSE = 0, STRICT = 1 }
-InlineViewSwitcherDisplayMode :: enum i32 {INLINE_VIEW_SWITCHER_LABELS = 0, INLINE_VIEW_SWITCHER_ICONS = 1, INLINE_VIEW_SWITCHER_BOTH = 2 }
-NavigationDirection :: enum i32 {BACK = 0, FORWARD = 1 }
-LeafletTransitionType :: enum i32 {OVER = 0, UNDER = 1, SLIDE = 2 }
-ToastPriority :: enum i32 {NORMAL = 0, HIGH = 1 }
-SqueezerTransitionType :: enum i32 {NONE = 0, CROSSFADE = 1 }
-TabViewShortcuts :: enum i32 {NONE = 0, CONTROL_TAB = 1, CONTROL_SHIFT_TAB = 2, CONTROL_PAGE_UP = 4, CONTROL_PAGE_DOWN = 8, CONTROL_HOME = 16, CONTROL_END = 32, CONTROL_SHIFT_PAGE_UP = 64, CONTROL_SHIFT_PAGE_DOWN = 128, CONTROL_SHIFT_HOME = 256, CONTROL_SHIFT_END = 512, ALT_DIGITS = 1024, ALT_ZERO = 2048, ALL_SHORTCUTS = 4095 }
-ToolbarStyle :: enum i32 {FLAT = 0, RAISED = 1, RAISED_BORDER = 2 }
-ViewSwitcherPolicy :: enum i32 {NARROW = 0, WIDE = 1 }
-JustifyMode :: enum i32 {JUSTIFY_NONE = 0, JUSTIFY_FILL = 1, JUSTIFY_SPREAD = 2 }
-PackDirection :: enum i32 {PACK_START_TO_END = 0, PACK_END_TO_START = 1 }
-WrapPolicy :: enum i32 {WRAP_MINIMUM = 0, WRAP_NATURAL = 1 }
 
 }
 
@@ -8945,11 +4988,11 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
 
 when #config(ADWAITA_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "../lib/linux/x86_64/libadwaita.a", "../lib/linux/x86_64/libglib-2.0.a", "../lib/linux/x86_64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "../lib/linux/x86_64/libadwaita.a", "../lib/linux/x86_64/libglib-2.0.a" }
 } 
 } else {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0", "../lib/linux/x86_64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0" }
 } 
 }
 
@@ -8959,11 +5002,11 @@ when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
 
 when #config(ADWAITA_STATIC, false) {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import adwaita_runic { "../lib/linux/aarch64/libadwaita.a", "../lib/linux/aarch64/libglib-2.0.a", "../lib/linux/aarch64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "../lib/linux/aarch64/libadwaita.a", "../lib/linux/aarch64/libglib-2.0.a" }
 } 
 } else {
     when (ODIN_OS == .Linux) && (ODIN_ARCH == .arm64) {
-    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0", "../lib/linux/aarch64/libadwaita-wrapper.a" }
+    foreign import adwaita_runic { "system:adwaita-1", "system:glib-2.0" }
 } 
 }
 
@@ -8971,9 +5014,7 @@ when #config(ADWAITA_STATIC, false) {
 
 when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
 
-when (ODIN_OS == .Windows) && (ODIN_ARCH == .amd64) {
-    foreign import adwaita_runic { "../lib/windows/x86_64/adwaita-1.lib", "../lib/windows/x86_64/adwaita-wrapper.lib" }
-} 
+foreign import adwaita_runic "../lib/windows/x86_64/adwaita-1.lib"
 
 }
 
