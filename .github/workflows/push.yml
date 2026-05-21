@@ -109,6 +109,16 @@ jobs:
                example widget-template-manual '' \
                example widget-template-with-helper ''
 
+      - name: test examples
+        run: |
+          build/hello-glib
+          build/hello-gmodule
+          build/hello-gobject
+          build/hello-gio build
+          build/hello-pango
+          build/hello-gdk-pixbuf build/pango_output.png build/pango_output_scaled.png 2
+          build/hello-cairo
+
 
   windows-x86_64:
     runs-on: windows-2025
