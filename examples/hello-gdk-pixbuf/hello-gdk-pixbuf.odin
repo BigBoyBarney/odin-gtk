@@ -7,7 +7,9 @@ import "core:strconv"
 import "core:strings"
 
 main :: proc() {
-    glib.print("GdkPixbuf version: %s\n", gdk.pixbuf_version)
+    when ODIN_OS != .Windows {
+        glib.print("GdkPixbuf version: %s\n", gdk.pixbuf_version)
+    }
 
     if len(os.args) != 4 {
         prog_name := strings.clone_to_cstring(os.args[0])
