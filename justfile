@@ -1,15 +1,21 @@
 set windows-shell := ['powershell.exe']
 
-default: setup
-
+[unix]
 setup: glib-setup gdk-pixbuf-setup cairo-setup pango-setup graphene-setup gtk-setup adwaita-setup
 
+[unix]
 bindings: glib-all gdk-pixbuf cairo pango-all graphene gtk gtk-layer-shell adwaita
+
+[unix]
 glib-all: glib gobject gmodule gio girepository
+
+[unix]
 pango-all: pango pangocairo
 
+[unix]
 build: glib-build cairo-build gtk-build
 
+[unix]
 clean: glib-clean gdk-pixbuf-clean gtk-clean adwaita-clean
 
 check-all: (check 'glib') (check 'glib/gobject') (check 'glib/gmodule') (check 'glib/gio') (check 'glib/girepository') (check 'gdk-pixbuf') (check 'cairo') (check 'pango') (check 'pango/pangocairo') (check 'graphene') (check 'gtk') (check 'gtk/layer-shell') (check 'adwaita')
@@ -17,6 +23,7 @@ check-all: (check 'glib') (check 'glib/gobject') (check 'glib/gmodule') (check '
 RUNIC := 'runic'
 WINDOWS_GVSBUILD_RELEASE := '2026.4.1'
 
+[unix]
 glib-setup:
     cd shared/glib && meson setup \
          --reconfigure \
@@ -39,6 +46,7 @@ glib-setup:
         'gio/gioenumtypes.h' \
         'girepository/gi-visibility.h' \
 
+[unix]
 glib-build:
     meson compile -C shared/glib/_build -j{{ num_cpus() }}
     @mkdir -p lib/{{ os() }}/{{ arch() }}
@@ -48,6 +56,7 @@ glib-build:
     ln -srf shared/glib/_build/girepository/libgirepository-2.0.a lib/{{ os() }}/{{ arch() }}/
     ln -srf shared/glib/_build/gobject/libgobject-2.0.a lib/{{ os() }}/{{ arch() }}/
 
+[unix]
 glib-clean:
     rm -rf shared/glib/_build \
            lib/{{ os() }}/{{ arch() }}/libglib-2.0.a \
@@ -56,6 +65,7 @@ glib-clean:
            lib/{{ os() }}/{{ arch() }}/libgirepository-2.0.a \
            lib/{{ os() }}/{{ arch() }}/libgobject-2.0.a \
 
+[unix]
 glib:
     {{ RUNIC }} glib/rune.yml
     sed glib/glib*.odin -i \
@@ -120,6 +130,7 @@ WRAPPER_ARCH := if arch() == 'aarch64' {
   arch()
 }
 
+[unix]
 gobject:
     {{ RUNIC }} glib/gobject/rune.yml
     sed glib/gobject/gobject*.odin -i \
@@ -139,6 +150,7 @@ gobject:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_G\1$##' \
         -e 's#^_G\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 gmodule:
     {{ RUNIC }} glib/gmodule/rune.yml
     sed glib/gmodule/gmodule*.odin -i \
@@ -238,6 +250,7 @@ gio-generate-type-casts:
         odinfmt -w "$OUTPUT_FILE"
     fi
 
+[unix]
 girepository:
     rm -f glib/girepository/girepository*.odin
 
@@ -248,6 +261,7 @@ girepository:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_GI\1$##' \
         -e 's#^_GI\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 gdk-pixbuf-setup:
     cd shared/gdk-pixbuf && meson setup \
         --reconfigure \
@@ -264,6 +278,7 @@ gdk-pixbuf-setup:
 gdk-pixbuf-clean:
     rm -rf shared/gdk-pixbuf/_build
 
+[unix]
 gdk-pixbuf:
     {{ RUNIC }} gdk-pixbuf/rune.yml
     sed gdk-pixbuf/gdk-pixbuf.odin -i \
@@ -274,6 +289,7 @@ gdk-pixbuf:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Gdk\1$##' \
         -e 's#^_Gdk\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 cairo-setup:
     cd shared/cairo && meson setup \
         --default-library static \
@@ -284,15 +300,18 @@ cairo-setup:
         -Dtests=disabled \
         _build
 
+[unix]
 cairo-build:
     meson compile -C shared/cairo/_build -j{{ num_cpus() }}
     @mkdir -p lib/{{ os() }}/{{ arch() }}
     ln -srf shared/cairo/_build/src/libcairo.a lib/{{ os() }}/{{ arch() }}/
 
+[unix]
 cairo-clean:
     rm -rf shared/cairo/_build \
            lib/{{ os() }}/{{ arch() }}/libcairo.a
 
+[unix]
 cairo:
     {{ RUNIC }} cairo/rune.yml
     sed cairo/cairo.odin -i \
@@ -305,6 +324,7 @@ cairo:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)_t\s*::\s*_cairo_\1$##' \
         -e 's#^_cairo_\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1_t :: \2#' \
 
+[unix]
 pango-setup:
     cd shared/pango && meson setup \
          --reconfigure \
@@ -312,6 +332,7 @@ pango-setup:
     ninja -C shared/pango/_build \
       'pango/pango-enum-types.h' \
 
+[unix]
 pango:
     rm -f pango/pango*.odin
 
@@ -327,6 +348,7 @@ pango:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_Pango\1$##' \
         -e 's#^_Pango\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 pangocairo:
     {{ RUNIC }} pango/pangocairo/rune.yml
     sed pango/pangocairo/pangocairo.odin -i \
@@ -334,6 +356,7 @@ pangocairo:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_PangoCairo\1$##' \
         -e 's#^_PangoCairo\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#' \
 
+[unix]
 graphene-setup:
     cd shared/graphene && meson setup \
        --reconfigure \
@@ -345,6 +368,7 @@ graphene-setup:
        -Dinstalled_tests=false \
        _build
 
+[unix]
 graphene:
     {{ RUNIC }} graphene/rune.yml
     sed graphene/graphene*.odin -i \
@@ -353,6 +377,7 @@ graphene:
         -e 's#^\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*_graphene_\1$##' \
         -e 's#^_graphene_\([a-zA-Z][a-zA-Z_0-9]*\)\s*::\s*\(.*\)$#\1 :: \2#'
 
+[unix]
 gtk-setup:
   cd shared/gtk && meson setup \
      --reconfigure \
@@ -376,11 +401,14 @@ gtk-setup:
 
   rm -rf shared/gtk/subprojects/.wraplock
 
+[unix]
 gtk-build:
     meson compile -C shared/gtk/_build -j{{ num_cpus() }}
 
     @mkdir -p lib/{{ os() }}/{{ arch() }}
     ln -sfr shared/gtk/_build/gtk/libgtk.a lib/{{ os() }}/{{ arch() }}/libgtk.a
+
+[unix]
 gtk-clean:
     rm -rf shared/gtk/_build
 
@@ -485,9 +513,11 @@ gtk-generate-type-casts:
         odinfmt -w "$OUTPUT_FILE"
     fi
 
+[unix]
 gtk-layer-shell:
     {{ RUNIC }} gtk/layer-shell/rune.yml
 
+[unix]
 adwaita-setup:
     cd shared/adwaita && meson setup \
           --reconfigure \
@@ -571,6 +601,7 @@ adwaita-generate-type-casts:
         odinfmt -w "$OUTPUT_FILE"
     fi
 
+[unix]
 adwaita-clean:
     rm -rf \
        shared/adwaita/_build
