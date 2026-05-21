@@ -61,6 +61,55 @@ jobs:
           build/hello-cairo
 
 
+  linux-aarch64:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: extractions/setup-just@v4
+        with:
+          just-version: '1.51.0'
+      - uses: laytan/setup-odin@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release: dev-2026-05
+      - uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: libgtk-4-dev libadwaita-1-dev
+          version: 2
+
+      - name: check
+        run: |
+          just check glib/gio '' \
+               check glib/girepository '' \
+               check glib/gmodule '' \
+               check glib/gobject '' \
+               check glib '' \
+               check cairo '' \
+               check gdk-pixbuf '' \
+               check graphene '' \
+               check pango '' \
+               check pango/pangocairo '' \
+               check helper '' \
+               check gtk '' \
+               check gtk/layer-shell '' \
+               check adwaita ''
+
+      - name: examples
+        run: |
+          just example gtk-snake '' \
+               example hello-cairo '' \
+               example hello-gdk-pixbuf '' \
+               example hello-gio '' \
+               example hello-glib '' \
+               example hello-gmodule '' \
+               example hello-gobject '' \
+               example hello-gtk '' \
+               example hello-pango '' \
+               example widget-template-manual '' \
+               example widget-template-with-helper ''
+
+
   windows-x86_64:
     runs-on: windows-2025
 
