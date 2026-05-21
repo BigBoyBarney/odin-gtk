@@ -760,6 +760,9 @@ install-windows-runtime BIN_DIR GVSBUILD_RELEASE=WINDOWS_GVSBUILD_RELEASE: (down
             }
     }
 
+windows-gvsbuild-version RELEASE=WINDOWS_GVSBUILD_RELEASE:
+    @echo "{{ RELEASE }}"
+
 [unix]
 clean-windows-gvsbuild:
     rm -r shared/gvsbuild

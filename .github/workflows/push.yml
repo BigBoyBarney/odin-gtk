@@ -134,7 +134,22 @@ jobs:
           release: dev-2026-05
       - uses: ilammy/msvc-dev-cmd@v1
 
+      - name: create windows runtime cache key
+        id: windows-runtime-cache-key
+        run: |
+           $output_entry = "key=windows-runtime-" -join (just windows-gvsbuild-version)
+           echo $output_entry >> $env:GITHUB_OUTPUT
+      - name: cache windows runtime
+        id: cache-windows-runtime
+        uses: actions/cache@v5
+        with:
+          key: ${{ steps.windows-runtime-cache-key.outputs.key }}
+          path: |
+            build/*.dll
+            build/share
+            build/etc
       - name: install windows runtime
+        if: steps.cache-windows-runtime.outputs.cache-hit != 'true'
         run: just install-windows-runtime 'build'
 
       - name: check
