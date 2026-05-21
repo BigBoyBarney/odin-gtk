@@ -137,7 +137,7 @@ jobs:
       - name: create windows runtime cache key
         id: windows-runtime-cache-key
         run: |
-           $output_entry = "key=windows-runtime-" -join (just windows-gvsbuild-version)
+           $output_entry = "key=windows-runtime-" + (just windows-gvsbuild-version)
            echo $output_entry >> $env:GITHUB_OUTPUT
       - name: cache windows runtime
         id: cache-windows-runtime
