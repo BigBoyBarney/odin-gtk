@@ -4,7 +4,11 @@ import glib "../glib"
 import gobj "../glib/gobject"
 import gio "../glib/gio"
 
-foreign import lib "system:glycin-2"
+when ODIN_OS == .Linux {
+	foreign import lib "system:glycin-2"
+} else {
+	#panic("Glycin is currently only supported on Linux.")
+}
 
 Loader             :: _Gly_Loader
 _Gly_Loader        :: struct {}
