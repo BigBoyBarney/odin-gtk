@@ -700,7 +700,6 @@ install-windows-runtime BIN_DIR GVSBUILD_RELEASE=WINDOWS_GVSBUILD_RELEASE: (down
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}" -Force | Out-Null
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}/share" -Force | Out-Null
     New-Item -ItemType Directory -Path "{{ BIN_DIR }}/etc" -Force | Out-Null
-    New-Item -ItemType Directory -Path "C:\temp" -Force | Out-Null
 
     # Copy DLL files, excluding ones containing "mm"
     Get-ChildItem -Path "shared/gvsbuild/extract/bin" -Filter "*.dll" -File |
