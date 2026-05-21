@@ -14,23 +14,23 @@ main :: proc() {
 	gtk.init()
 
 	app := adw.application_new("some.example", .NONE)
-    defer gobj.object_unref(app)
+	defer gobj.object_unref(app)
 
-    gobj.signal_connect(app, "activate", show_window, nil)
-    gobj.signal_connect(app, "startup",  startup,     nil)
+	gobj.signal_connect(app, "activate", show_window, nil)
+	gobj.signal_connect(app, "startup",  startup,     nil)
 
-    gio.application_run(app)
+	gio.application_run(app)
 }
 
 startup :: proc "c" (app: ^adw.Application) {
 	// Add the window, as per usual.
 	_app_window := adw.application_window_new(cast(^gtk.Application)app)
-    app_window    = cast(^adw.ApplicationWindow)_app_window
-    gtk.application_add_window(cast(^gtk.Application)app, cast(^gtk.Window)_app_window)
+	app_window   = cast(^adw.ApplicationWindow)_app_window
+	gtk.application_add_window(cast(^gtk.Application)app, cast(^gtk.Window)_app_window)
 
-    // Load the file with glycin.
-    // `loader_new` spins up a sandbox, so this is going to be significantly
-    // slower for small images.
+	// Load the file with glycin.
+	// `loader_new` spins up a sandbox, so this is going to be significantly
+	// slower for small images.
 	file   := gio.file_new_for_path(#directory + "Odin.jxl")
 	loader := gly.loader_new(file)
 	image  := gly.loader_load(loader, nil)
@@ -56,5 +56,5 @@ startup :: proc "c" (app: ^adw.Application) {
 }
 
 show_window :: proc "c" (app: ^adw.Application) {
-    gtk.window_present(cast(^gtk.Window)app_window)
+	gtk.window_present(cast(^gtk.Window)app_window)
 }
