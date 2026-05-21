@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   test:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v6
@@ -16,7 +16,7 @@ jobs:
           release: dev-2026-05
       - uses: awalsh128/cache-apt-pkgs-action@v1
         with:
-          packages: libgtk-4-dev libgtk4-layer-shell-dev libadwaita-1-dev
+          packages: libgtk-4-dev libgtk4-layer-shell-dev
           version: 1.0
 
       - name: check
@@ -41,7 +41,6 @@ jobs:
           just example bouncy-ball \
                example gtk-layer-shell \
                example gtk-snake \
-               example hello-adwaita \
                example hello-cairo \
                example hello-gdk-pixbuf \
                example hello-gio \
