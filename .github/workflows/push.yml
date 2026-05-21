@@ -16,7 +16,7 @@ jobs:
           release: dev-2026-05
       - uses: awalsh128/cache-apt-pkgs-action@v1
         with:
-          packages: libgtk-4-dev libgtk4-layer-shell-dev
+          packages: libgtk-4-dev
           version: 1.0
 
       - name: check
@@ -38,9 +38,7 @@ jobs:
 
       - name: examples
         run: |
-          just example bouncy-ball \
-               example gtk-layer-shell \
-               example gtk-snake \
+          just example gtk-snake \
                example hello-cairo \
                example hello-gdk-pixbuf \
                example hello-gio \
