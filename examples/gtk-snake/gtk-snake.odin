@@ -630,13 +630,14 @@ main :: proc() {
     defer gobj.object_unref(app)
 
     gobj.signal_connect(app, "activate", activate)
+    gobj.signal_connect(app, "startup",  startup)
 
     status := gio.application_run(app)
 
     assert(status == 0)
 }
 
-activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
+startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     window := gtk.WINDOW(gtk.application_window_new(app))
 
     gtk.window_set_default_size(
@@ -663,5 +664,9 @@ activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
     gobj.signal_connect(drawing_area, "realize", init)
 
     gtk.window_set_child(window, gtk.WIDGET(drawing_area))
+}
+
+activate :: proc "c" (app: ^gtk.Application, _: rawptr) {
+    window := gtk.application_get_active_window(app)
     gtk.window_present(window)
 }

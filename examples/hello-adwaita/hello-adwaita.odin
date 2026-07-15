@@ -7,7 +7,7 @@ import gobj "../../glib/gobject"
 import gtk "../../gtk"
 import "core:os"
 
-activate_cb :: proc "c" (app: ^gtk.Application) {
+startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     window := gtk.WINDOW(gtk.application_window_new(app))
 
     label := gtk.label_new("Hello, enjoy this spinner :-)")
@@ -29,6 +29,10 @@ activate_cb :: proc "c" (app: ^gtk.Application) {
     gtk.window_set_title(window, "Hello Libadwaita")
     gtk.window_set_default_size(window, 200, 200)
     gtk.window_set_child(window, gtk.WIDGET(box))
+}
+
+activate :: proc "c" (app: ^gtk.Application, _: rawptr) {
+    window := gtk.application_get_active_window(app)
     gtk.window_present(window)
 }
 
@@ -65,8 +69,10 @@ main :: proc() {
     context = glib.create_context()
 
     app := adw.application_new("runic.hello-adwaita", .NONE)
+    defer gobj.object_unref(app)
 
-    gobj.signal_connect(app, "activate", activate_cb)
+    gobj.signal_connect(app, "activate", activate)
+    gobj.signal_connect(app, "startup",  startup)
 
     status := gio.application_run(app)
     if status != 0 {
