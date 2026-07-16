@@ -174,7 +174,7 @@ startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
 
     // This will get called when we click the button.
     my_button_clicked :: proc "c" (button: ^gtk.Button, _: rawptr) {
-        parent := gtk.widget_get_parent(cast(^gtk.Widget)button)
+        parent := gtk.widget_get_parent(gtk.WIDGET(button))
         my_box := cast(^My_Box)parent
 
         my_box.button_clicked += 1

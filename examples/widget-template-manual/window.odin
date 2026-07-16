@@ -161,13 +161,13 @@ main :: proc() {
 startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     // I like to prefix generic GTK variables with `_` as a note to myself.
     _window := adw.application_window_new(app)
-    window := cast(^adw.ApplicationWindow)_window
+    window := adw.APPLICATION_WINDOW(_window)
 
     // We create our custom box here, initialised as per its init function.
     my_box_g_type := my_box_get_type()
     _my_box := gobj.object_new(my_box_g_type, nil)
 
-    adw.application_window_set_content(window, cast(^gtk.Widget)_my_box)
+    adw.application_window_set_content(window, gtk.WIDGET(_my_box))
 }
 
 // We present the window whenever the `activate` signal is emitted.
