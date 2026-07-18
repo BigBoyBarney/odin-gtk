@@ -17,6 +17,7 @@ main :: proc() {
     defer gobj.object_unref(app)
 
     gobj.signal_connect(app, "activate", activate)
+    gobj.signal_connect(app, "startup",  startup)
 
     status := gio.application_run(app)
 
@@ -25,7 +26,7 @@ main :: proc() {
     }
 }
 
-activate :: proc "c" (app: ^gtk.Application, user_data: glib.pointer) {
+startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     window := gtk.WINDOW(gtk.application_window_new(app))
 
     css := gtk.css_provider_new()
@@ -64,6 +65,10 @@ Shell example!
     gtk.box_append(box, button)
 
     gtk.window_set_child(window, cast(^gtk.Widget)box)
+}
+
+activate :: proc "c" (app: ^gtk.Application, _: rawptr) {
+    window  := gtk.application_get_active_window(app)
     gtk.window_present(window)
 }
 

@@ -28,9 +28,9 @@ My_Box :: struct {
 }
 
 main :: proc() {
-    context = glib.create_context()
-
     // We must initialise GTK, otherwise our parent class, `gtk.Box` is not valid.
+    // Normally this is called automatically during the `startup` signal, but we
+    // register things before that.
     gtk.init()
 
     /*
@@ -71,7 +71,7 @@ main :: proc() {
 }
 
 // We run this when the `startup` signal is emitted to set up our window.
-startup :: proc "c" (app: ^gtk.Application) {
+startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     // I like to prefix generic variables with `_` as a note to myself.
     _window := adw.application_window_new(app)
     window := adw.APPLICATION_WINDOW(_window)
@@ -173,8 +173,8 @@ startup :: proc "c" (app: ^gtk.Application) {
     ) {}
 
     // This will get called when we click the button.
-    my_button_clicked :: proc "c" (button: ^gtk.Button, data: glib.pointer) {
-        parent := gtk.widget_get_parent(cast(^gtk.Widget)button)
+    my_button_clicked :: proc "c" (button: ^gtk.Button, _: rawptr) {
+        parent := gtk.widget_get_parent(gtk.WIDGET(button))
         my_box := cast(^My_Box)parent
 
         my_box.button_clicked += 1
@@ -199,7 +199,7 @@ startup :: proc "c" (app: ^gtk.Application) {
 }
 
 // We present the window whenever the `activate` signal is emitted.
-show_window :: proc "c" (app: ^gtk.Application) {
+show_window :: proc "c" (app: ^gtk.Application, _: rawptr) {
     window := gtk.application_get_active_window(app)
     gtk.window_present(window)
 }
