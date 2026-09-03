@@ -3,6 +3,8 @@ package gobject
 import glib ".."
 import "base:intrinsics"
 
+GTK_SAFE_CAST :: #config(GTK_SAFE_CAST, ODIN_OPTIMIZATION_MODE < .Speed)
+
 signal_connect :: #force_inline proc "c" (
     instance: glib.pointer,
     detailed_signal: cstring,
@@ -59,12 +61,13 @@ type_cast :: #force_inline proc "contextless" (
     intrinsics.type_is_proc(TypeProc) &&
     intrinsics.type_proc_return_count(TypeProc) == 1 &&
     intrinsics.type_proc_return_type(TypeProc, 0) == Type {
-    when #config(GTK_SAFE_CAST, true) {
+
+    when GTK_SAFE_CAST {
         return(
             cast(^T)type_check_instance_cast(
                 cast(^TypeInstance)instance,
                 g_type(),
-            ) \
+            )
         )
     } else {
         return cast(^T)instance

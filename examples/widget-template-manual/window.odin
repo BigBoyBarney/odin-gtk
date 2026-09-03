@@ -52,7 +52,7 @@ my_box_get_type :: proc "contextless" () -> (g_type: gobj.Type) {
     // These could be defined outside of this proc too, but it's nicer to have them contained here.
 
     // This handles everything that's related to the overall widget class.
-    class_init :: proc "c" (class: ^gobj.TypeClass, data: glib.pointer) {
+    class_init :: proc "c" (class: ^gobj.TypeClass, _: rawptr) {
         gtk.widget_class_set_template_from_resource(
             cast(^gtk.WidgetClass)class,
             "/example/box.ui",
@@ -83,10 +83,7 @@ my_box_get_type :: proc "contextless" () -> (g_type: gobj.Type) {
     }
 
     // This handles the individual instances of the widget.
-    instance_init :: proc "c" (
-        instance: ^gobj.TypeInstance,
-        class_data: glib.pointer,
-    ) {
+    instance_init :: proc "c" (instance: ^gobj.TypeInstance, _: rawptr) {
         gtk.widget_init_template(gtk.WIDGET(instance))
 
         /*
@@ -109,7 +106,7 @@ my_box_get_type :: proc "contextless" () -> (g_type: gobj.Type) {
     }
 
     // This will get called when we click the button.
-    my_button_clicked :: proc "c" (button: ^gtk.Button, data: glib.pointer) {
+    my_button_clicked :: proc "c" (button: ^gtk.Button, _: rawptr) {
         parent := gtk.widget_get_parent(gtk.WIDGET(button))
         my_box := cast(^My_Box)parent
 
@@ -131,9 +128,9 @@ my_box_get_type :: proc "contextless" () -> (g_type: gobj.Type) {
 
 
 main :: proc() {
-    context = glib.create_context()
-
     // We must initialise GTK, otherwise our parent class, `gtk.Box` is not valid.
+    // Normally this is called automatically during the `startup` signal, but we
+    // register things before that.
     gtk.init()
 
     // We load the resource file that was compiled by `glib-compile-resources`
@@ -161,20 +158,20 @@ main :: proc() {
 }
 
 // We run this when the `startup` signal is emitted to set up our window.
-startup :: proc "c" (app: ^gtk.Application) {
+startup :: proc "c" (app: ^gtk.Application, _: rawptr) {
     // I like to prefix generic GTK variables with `_` as a note to myself.
     _window := adw.application_window_new(app)
-    window := cast(^adw.ApplicationWindow)_window
+    window := adw.APPLICATION_WINDOW(_window)
 
     // We create our custom box here, initialised as per its init function.
     my_box_g_type := my_box_get_type()
     _my_box := gobj.object_new(my_box_g_type, nil)
 
-    adw.application_window_set_content(window, cast(^gtk.Widget)_my_box)
+    adw.application_window_set_content(window, gtk.WIDGET(_my_box))
 }
 
 // We present the window whenever the `activate` signal is emitted.
-show_window :: proc "c" (app: ^gtk.Application) {
+show_window :: proc "c" (app: ^gtk.Application, _: rawptr) {
     window := gtk.application_get_active_window(app)
     gtk.window_present(window)
 }
